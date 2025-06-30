@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title href="/">Enchères</title>
+</head>
+<body>
+
+<header th:replace="~{fragments/fragment-entete::entete}"></header>
+
+<form action="" method="post">
+	<a href="">S'inscrire</a>
+	<a href="">Se connecter</a>
+	<h2>Filtres :</h2>
+		<ul class="" th:each="item : ${listefilms}">
+			<a class="">
+			<li>
+				<label for="Categories">Catégories :</label> 
+				<input type="text" id="Categories" name="categories" disabled th:value required>
+			</li>
+			<li>
+				<img alt ="loupe"  src="/images/loupe.png">
+				<input type="text" placeholder="Le nom de l'article contient..."></input>
+			</li>
+			<li> 
+					<button type="submit">Rechercher</button>  
+			</li>
+			<li>
+			<div class="">
+				<img alt="photoArticle" th:src="">
+
+				<input type="text" id="Article" name="nomArticle" >
+				 <!-- th:value="${}"  --> 
+				<label for="prix">Prix :</label> 
+				<input type="text" id="miseAPrix" name="prix" >
+				 <!-- th:value="${}"  --> 
+				<label for="classement">Classement :</label>
+				<input type="text" id="classement" name="classement" >
+				 <!-- th:value="${filmid.genre.titre}"  --> 
+				<label for="finEnchere">Fin de l'enchère :</label>
+				<input type="text" id="finEnchere" name="finEnchere" >
+				 <!-- th:value="${filmid.genre.titre}"  --> 
+				<label for="retrait">Retrait :</label>
+				<input type="text" id="retrait" name="retrait" >
+				 <!-- th:value="${filmid.genre.titre}"  --> 
+				 <label for="vendeur">Vendeur :</label>
+				<input type="text" id="vendeur" name="vendeur" >
+				 <!-- th:value="${filmid.genre.titre}"  --> 
+			</div>
+			</li>
+		</ul>
+
+	</form>
+<footer></footer>
+</body>
+</html>
