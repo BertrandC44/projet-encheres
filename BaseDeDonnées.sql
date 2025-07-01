@@ -15,7 +15,7 @@ CREATE TABLE [UTILISATEUR](
 	[nom] [NVARCHAR](150) NOT NULL,
 	[prenom] [NVARCHAR](150) NOT NULL,
 	[email] [NVARCHAR](250) NOT NULL,
-	[telephone] [VARCHAR](10),
+	[telephone] [VARCHAR](10) NOT NULL,
 	[rue] [NVARCHAR](200) NOT NULL,
 	[codePostal] VARCHAR (5) NOT NULL,
 	[ville] [NVARCHAR](150) NOT NULL,
