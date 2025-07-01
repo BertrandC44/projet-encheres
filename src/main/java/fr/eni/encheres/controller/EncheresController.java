@@ -12,15 +12,22 @@ public class EncheresController {
 		return "encheres";
 	}
 	
-	@GetMapping("/connexion")
-	public String connexion() {
+	@GetMapping("/encheres")
+	public String indexBis() {
 		System.out.println("Clic vers Index");
+		return "encheres";
+	}
+	
+
+	@GetMapping("/encheres/connexion")
+	public String connexion() {
+		System.out.println("Clic vers Connexion");
 		return "connexion";
 	}
 	
-	@GetMapping("/inscription")
+	@GetMapping("/encheres/inscription")
 	public String inscription() {
-		System.out.println("Clic vers Index");
+		System.out.println("Clic vers Inscription");
 		return "inscription";
 	}
 

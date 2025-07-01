@@ -1,24 +1,52 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head th.insert="~{fragments/liens::liens}">
 <meta charset="UTF-8">
 <title href="/encheres">Enchères</title>
-<link rel="icon" data-th-href="@{/images/logoENI.png}" sizes="32x32">
-<link rel="stylesheet" th:href="@{/css/general.css}">
 </head>
 <body>
 
-<header th:replace="~{fragments/fragment-entete::entete}"></header>
+<header th:replace="~{fragments/entete::entete}"></header>
 
 <form action="" method="post">
-	<a href="">S'inscrire</a>
-	<a href="">Se connecter</a>
+<!--  -->
+	<div>
+		<a href="/encheres/inscription"> <!-- th:if="${membreEnSession == null and membreEnSession.id == 0}"-->S'inscrire</a>
+		<a href="/encheres/connexion"> <!--  th:if="${membreEnSession == null and membreEnSession.id == 0}"-->Se connecter</a>
+		<a href="/encheres/vente"> <!--  th:if="${membreEnSession != null and membreEnSession.id != 0}"-->Vendre un article</a>
+		<a href="/encheres/profil"> <!--  th:if="${membreEnSession != null and membreEnSession.id != 0}"-->Voir mon profil</a>
+		<a href="/encheres"> <!--  th:if="${membreEnSession != null and membreEnSession.id != 0}"-->Déconnexion</a>
+	</div>
 	<h2>Filtres :</h2>
+		<ul > <!--  th:if="${membreEnSession != null and membreEnSession.id != 0}"-->
+			<label for="achats">Achats :</label>
+			<li >
+				<input type="radio" id="radio" name="enchereouvertes"><label for="achats">  enchères ouvertes</label>
+				<input type="radio" id="radio" name="mesencheresencours"><label for="achats">  mes enchères en cours</label>
+				<input type="radio" id="radio" name="mesencheresremportees"><label for="achats">  mes enchères remportées</label>
+			</li> 
+			<label for="ventes">Mes ventes :</label> 
+			<li >
+				<input type="radio" id="radio" name="mesventeencours"><label for="ventes">  mes ventes en cours</label>
+				<input type="radio" id="radio" name="mesencheresencours"><label for="ventes">  ventes non débutées</label>
+				<input type="radio" id="radio" name="mesencheresremportees"><label for="ventes">  ventes terminées</label>
+			</li>
+		
+		</ul>
+		<ul th:if="${membreEnSession != null and membreEnSession.id != 0}">
+			<li>
+			<input type="checkbox" id="sesouvenirdemoi" name="sesouvenirdemoi"  th:value required>
+				<label for="sesouvenirdemoi">Se souvenir de moi</label> 
+				<a href="/inscription">Créer un compte</a>
+			</li>
+		</ul>
+	
+	
 		<ul class="" >  <!-- th:each="item : ${listefilms}" -->
 			<a class="">
 			<li>
-				<label for="Categories">Catégories :</label> 
-				<input type="text" id="Categories" name="categories" disabled th:value required>
+				<label for="categories">Catégories :</label> 
+				<input type="text" id="categories" name="categories" disabled th:value required>
 			</li>
 			<li class="recherche">
 				<img alt ="loupe"  width=10 src="/images/loupe.png">
@@ -31,22 +59,22 @@
 			<div class="vueenchere">
 				<img class="photoarticle" alt="photoArticle" width=50 th:src="@{/images/article1.png}"> <!--  Lien vers photo (BDD?)-->
 
-				<input type="text" id="article" name="nomArticle" >
+				<input type="text" id="article" name="nomArticle" disabled>
 				 <!-- th:value="${}"  --> 
 				<label for="prix">Prix :</label> 
-				<input type="text" id="miseaprix" name="prix" >
+				<input type="text" id="miseaprix" name="prix" disabled>
 				 <!-- th:value="${}"  --> 
 				<label for="classement">Classement :</label>
-				<input type="text" id="classement" name="classement" >
+				<input type="text" id="classement" name="classement" disabled>
 				 <!-- th:value="${filmid.genre.titre}"  --> 
 				<label for="finEnchere">Fin de l'enchère :</label>
-				<input type="text" id="finenchere" name="finEnchere" >
+				<input type="text" id="finenchere" name="finEnchere" disabled>
 				 <!-- th:value="${filmid.genre.titre}"  --> 
 				<label for="retrait">Retrait :</label>
-				<input type="text" id="retrait" name="retrait" >
+				<input type="text" id="retrait" name="retrait" disabled>
 				 <!-- th:value="${filmid.genre.titre}"  --> 
 				 <label for="vendeur">Vendeur :</label>
-				<input type="text" id="vendeur" name="vendeur" >
+				<input type="text" id="vendeur" name="vendeur" disabled>
 				 <!-- th:value="${filmid.genre.titre}"  --> 
 			</div>
 			</li>
