@@ -2,30 +2,32 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title href="/connexion">Insert title here</title>
+<link rel="icon" data-th-href="@{/images/logoENI.png}" sizes="32x32">
+<link rel="stylesheet" th:href="@{/css/general.css}">
 </head>
 <body>
 <header th:replace="~{fragments/fragment-entete::entete}"></header>
 <form action="" method="post">
 	<h1>Connectez-vous</h1>
-		<ul class="" th:each="item : ${listefilms}">
+		<ul class="" > <!-- th:each="item : ${listefilms}" -->
 			<a class="">
 			<li>
 				<label for="pseudo">Identifiant :</label> 
-				<input type="text" id="inputPseudo" name="pseudo"  th:value required>
+				<input type="text" id="inputpseudo" name="pseudo"  th:value required>
 			</li>
 			<li>
-				<label for="motDePasse">Mot de passe :</label> 
-				<input type="text" id="motDePasse" name="motDePasse"  th:value required>
+				<label for="motdepasse">Mot de passe :</label> 
+				<input type="text" id="motdepasse" name="motdepasse"  th:value required>
 			</li>
 			<li> 
 				<button type="submit">Connexion</button>  
 			</li>
 			<li>
 
-				<input type="checkbox" id="seSouvenirDeMoi" name="seSouvenirDeMoi"  th:value required>
-				<label for="seSouvenirDeMoi">Se souvenir de moi</label> 
-				<a href="">S'inscrire</a>
+				<input type="checkbox" id="sesouvenirdemoi" name="sesouvenirdemoi"  th:value required>
+				<label for="sesouvenirdemoi">Se souvenir de moi</label> 
+				<a href="/inscription">Créer un compte</a>
 
 			</li>
 		</ul>
