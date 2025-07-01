@@ -28,9 +28,7 @@ public class Utilisateur {
 	}
 
 	public Utilisateur(String pseudo, String nom, String prenom, String email, String telephone, String rue,
-			String codePostal, String ville, String motDePasse, int credit, boolean admin, List<Article> articles,
-			List<Enchere> encheres) {
-
+			String codePostal, String ville, String motDePasse, int credit, boolean admin) {
 		this.pseudo = pseudo;
 		this.nom = nom;
 		this.prenom = prenom;
@@ -42,14 +40,12 @@ public class Utilisateur {
 		this.motDePasse = motDePasse;
 		this.credit = credit;
 		this.admin = admin;
-		this.articles = articles;
-		this.encheres = encheres;
+
 	}
 
 	public Utilisateur(long idUtilisateur, String pseudo, String nom, String prenom, String email, String telephone,
-			String rue, String codePostal, String ville, String motDePasse, int credit, boolean admin,
-			List<Article> articles, List<Enchere> encheres) {
-		this(pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, credit, admin, articles, encheres);
+			String rue, String codePostal, String ville, String motDePasse, int credit, boolean admin) {
+		this(pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, credit, admin);
 		this.idUtilisateur = idUtilisateur;
 	}
 	

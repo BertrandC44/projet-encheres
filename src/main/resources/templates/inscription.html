@@ -1,70 +1,66 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head th:insert="~{fragments/liens::liens}">
 <meta charset="UTF-8">
 <title>ENI-Enchères</title>
-
-
-<link rel="icon" href="../images/logoENI.png" />
-<link rel="stylesheet" href="../css/form.css" />
 
 </head>
 
 
 <body>
-	  <!-- 
-	<header th:replace="~{fragments/fragment-entete::entete}"></header>
- -->
+ 
+	<header th:replace="~{fragments/entete::entete}"></header>
+
 
 
 	<main>
-		<form action="" method="post">
+		<form th:action="@{/encheres}" method="post"  th:object="${utilisateur}">
 		<h2>Créer un compte</h2>
 		<ul>
 	
 			<li>
-			<label for="pseudo">Pseudo :</label>
-			<input type="text" name="pseudo" id="pseudo"/>
+			<label>Pseudo :</label>
+			<input type="text" th:field="*{pseudo}" id="pseudo"/>
 			</li>
 			
 			<li>
-			<label for="nom">Nom :</label>
-			<input type="text" name="nom" id="nom"/>
+			<label>Nom :</label>
+			<input type="text" th:field="*{nom}" id="nom"/>
 			</li>
 			
 			<li>
-			<label for="prenom">Prénom :</label>
-			<input type="text" name="prenom" id="prenom" />
+			<label>Prénom :</label>
+			<input type="text" th:field="*{prenom}" id="prenom" />
 			</li>
 			
 			<li>
-			<label for="email">Email :</label>
-			<input type="text" name="email" id="email" />
+			<label>Email :</label>
+			<input type="text" th:field="*{email}" id="email" />
 			</li>
 			
 			<li>
-			<label for="tel"> Téléphone :</label>
-			<input type="text" name="tel" id="tel" />
+			<label> Téléphone :</label>
+			<input type="text" name="*{tel}" id="tel" />
 			</li>
 			
 			<li>
-			<label for="rue">Rue :</label>
-			<input type="text" name="rue" id="rue" />
+			<label>Rue :</label>
+			<input type="text" th:field="*{rue}" id="rue" />
 			</li>
 			
 			<li>
-			<label for="cpo">Code postal :</label>
-			<input type="text" name="cpo" id="cpo" />
+			<label>Code postal :</label>
+			<input type="text" th:field="*{codePostal}" id="cpo" />
 			</li>
 			
 			<li>
-			<label for="ville">Ville :</label>
-			<input type="text" name="ville" id="ville" />
+			<label>Ville :</label>
+			<input type="text" th:field="*{ville}" id="ville" />
 			</li>
 			
 			<li>
-			<label for="mdp">Mot de passe :</label>
-			<input type="text" name="mdp" id="mdp" />
+			<label>Mot de passe :</label>
+			<input type="text" th:field="*{motDePasse}" id="mdp" />
 			</li>
 			
 			<li>
