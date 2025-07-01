@@ -4,11 +4,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
-import fr.eni.tp.filmotheque.bo.Film;
+import fr.eni.encheres.bll.EncheresService;
+import fr.eni.encheres.bo.Enchere;
 
+@SessionAttributes({"membreEnSession"})
 @Controller
 public class EncheresController {
+	
+	private EncheresService encheresService;
+
+	/**
+	 * @param encheresService
+	 */
+	public EncheresController(EncheresService encheresService) {
+		this.encheresService = encheresService;
+	}
+
 
 	@GetMapping("/")
 	public String index() {
@@ -16,6 +29,7 @@ public class EncheresController {
 		return "encheres";
 	}
 	
+
 	@GetMapping("/encheres")
 	public String indexBis() {
 		System.out.println("Clic vers Index");
@@ -35,16 +49,20 @@ public class EncheresController {
 		return "inscription";
 	}
 	
-	@GetMapping("/Enchereid/detail")
-	public String afficherUnFilmId(@RequestParam(name = "id") long i, Model model) {
-		Film unFilm = filmService.consulterFilmParId(i);
-		model.addAttribute("filmid", unFilm);
+	@GetMapping("/enchereid/detail")
+	public String afficherEnchereId(@RequestParam(name = "id") long i, Model model) {
+		Enchere uneEnchere = encheresService.consulterArticleParId(i);
+		model.addAttribute("articleid", uneEnchere);
 		String acteurFilm = "";
 
 		model.addAttribute("acteur", acteurFilm);
 
-		System.out.println(unFilm);
-		return "filmsid";
+		
+		return "encheresid";
 	}
 
+	@GetMapping("/encheres/detail")
+	public String detailEnchere() {
+		return"enchere-en-cours";
+	}
 }

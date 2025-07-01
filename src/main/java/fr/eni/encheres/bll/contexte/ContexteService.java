@@ -1,6 +1,6 @@
 package fr.eni.encheres.bll.contexte;
 
-import fr.eni.tp.filmotheque.bo.Utilisateur;
+import fr.eni.encheres.bo.Utilisateur;
 
 public interface ContexteService {
 	

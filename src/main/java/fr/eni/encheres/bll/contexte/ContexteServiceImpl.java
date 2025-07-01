@@ -1,7 +1,14 @@
 package fr.eni.encheres.bll.contexte;
 
-import fr.eni.encheres.bo.Utilisateur;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
 
+import fr.eni.encheres.bo.Utilisateur;
+import fr.eni.encheres.dal.UtilisateurDAO;
+
+
+@Service
+@Primary
 public class ContexteServiceImpl implements ContexteService {
 	
 	private UtilisateurDAO utilisateurDao;
