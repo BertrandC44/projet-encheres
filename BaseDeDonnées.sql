@@ -28,7 +28,7 @@ CREATE TABLE [UTILISATEUR](
 CREATE TABLE [ARTICLE](
 	[idArticle] int PRIMARY KEY IDENTITY,
 	[nomArticle] [NVARCHAR](15) NOT NULL,
-	[descritpion] [NVARCHAR](255) NOT NULL,
+	[description] [NVARCHAR](255) NOT NULL,
 	[dateDebutEncheres] date NOT NULL,
 	[dateFinEncheres] date NOT NULL,
 	[miseAPrix] int NOT NULL,
