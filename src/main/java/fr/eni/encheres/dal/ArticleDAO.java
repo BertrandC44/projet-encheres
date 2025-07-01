@@ -6,5 +6,11 @@ import fr.eni.encheres.bo.Article;
 
 public interface ArticleDAO {
 
-	List<Article> consulterArticle();
+	List<Article> consulterArticles();
+	
+	Article consulterArticleParId(long id);
+	
+	void creerVente(Article article);
+	
+	void annulerVente(Article article);
 }
