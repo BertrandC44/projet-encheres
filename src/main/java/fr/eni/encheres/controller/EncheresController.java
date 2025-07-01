@@ -2,6 +2,7 @@ package fr.eni.encheres.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class EncheresController {
@@ -24,9 +25,16 @@ public class EncheresController {
 		return "inscription";
 	}
 
+
 	@GetMapping("/encheres/detail")
-	public String detailEnchere() {
+	public String afficherDetailEnchere() {
 		return"enchere-en-cours";
+	}
+	
+	@PostMapping("/encheres")
+		public String detailEnchere() {
+		return"encheres";
+		
 	}
 	
 }

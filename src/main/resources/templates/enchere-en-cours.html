@@ -3,15 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <title>Enchères en cours</title>
+<link rel="icon" data-th-href="@{/images/logoENI.png}" sizes="32x32">
+<link rel="stylesheet" th:href="@{/css/general.css}">
 </head>
 <body>
-<header>
-	<h1>ENI-Enchères</h1>
-</header>
+<header th:replace="~{fragments/entete::entete}"></header>
 <main>
-	<form action="/encheres/detail" method="post">
-		<h1 th:text="${nomArticle}"></h1>
+	<form action="/encheres" method="post">
+		<h2 th:text="${nomArticle}"></h2>
+		<ul>
+			<li>
+				<label for="mOffre">Meilleure offre : </label>
+				<!--<input type="text" id="inputMOffre" name="" th:value="${}"> -->
+			</li>
+			<li>
+				<label for="miseAPrix">Mise à prix : </label>
+				<input type="text" id="miseAPrix" name="miseAPrix" th:text="${miseAPrix} + ' points'" disabled >
+			</li>
+			<li>
+				<label for="dateFinEncheres">Fin de l'enchère : </label>
+				<input type="date" id="dateFinEncheres" name="dateFinEncheres" th:text="${dateFinEncheres}" disabled>
+			</li>
+			<li>
+				<label for="retrait">Retrait : </label>
+				<input type="text" id="retrait" name="retrait" th:text="${rue} + ' ' + ${codePostal} + ' ' + ${ville}" disabled>
+			</li>
+			<li>
+				<label for="vendeur">Vendeur : </label>
+				<input type="text" id="vendeur" name="vendeur" th:text="${pseudo}" disabled>
+			</li>
+			<li>
+				<button type="submit" name="annuler" >Annuler la vente</button>
+				<button type="submit">Back</button>
+			</li>
 		
+		
+		
+		</ul>
 	</form>
 </main>
 
