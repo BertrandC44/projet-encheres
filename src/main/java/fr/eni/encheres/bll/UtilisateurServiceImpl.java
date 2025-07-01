@@ -5,24 +5,35 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import fr.eni.encheres.bo.Utilisateur;
+import fr.eni.encheres.dal.ArticleDAO;
+import fr.eni.encheres.dal.UtilisateurDAO;
 
 @Service
 public class UtilisateurServiceImpl implements UtilisateurService{
+	
+	private UtilisateurDAO utilisateurDAO;
+
+	
 
 	@Override
 	public List<Utilisateur> consulterUtilisateurs() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Utilisateur> lstUtilisateurs = utilisateurDAO.consulterUtilisateurs();
+//		if (lstUtilisateurs != null) {
+//			for (Utilisateur utilisateur : lstUtilisateurs) {
+//				utilisateur.setEmail(null);
+//			}
+//		}
+		return lstUtilisateurs;
 	}
 
 	@Override
 	public Utilisateur consulterUtilisateursParId(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Utilisateur utilisateur = utilisateurDAO.utilisateurparId(id);
+		return utilisateur;
 	}
 
 	@Override
-	public Utilisateur crediter(int credit) {
+	public int consulterCredit(Utilisateur utilisateur) {
 		// TODO Auto-generated method stub
 		return null;
 	}
