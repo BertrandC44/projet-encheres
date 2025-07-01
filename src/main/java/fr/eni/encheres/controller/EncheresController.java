@@ -14,14 +14,18 @@ public class EncheresController {
 	
 	@GetMapping("/connexion")
 	public String connexion() {
-		System.out.println("Clic vers Index");
+		System.out.println("Clic vers Connexion");
 		return "connexion";
 	}
 	
 	@GetMapping("/inscription")
 	public String inscription() {
-		System.out.println("Clic vers Index");
+		System.out.println("Clic vers Inscription");
 		return "inscription";
 	}
 
+	@GetMapping("/encheres/detail")
+	public String detailEnchere() {
+		return"enchere-en-cours";
+	}
 }
