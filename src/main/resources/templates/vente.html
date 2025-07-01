@@ -9,56 +9,85 @@
 <body>
 	<header th:replace="~{fragments/entete::entete}"></header>
 	<main>
-	<form action="/encheres/vente" method="post" enctype="multipart/form-data">
+	<form action="/encheres/vente" method="post"()th:object="${article}">
 	
 		<h2> Nouvelle ventre</h2>
 		<ul class="flex-outer">
 		
 		<label for="article">Article</label>
-		<input type ="text" id="article" name="article">
+		<input type ="text" id="article" name="article" th:field="*{nomArticle}">
 		
 		<label for="categorie">Catégorie</label>
-		<select name="categorie" id="categorie">
+		<select name="categorie" id="categorie" th:field="*{categorie}">
 		<option value=""> Choisir une catégorie
 		</option>
-		<option value ="electromenager">electromenager</option>
+		<th:block th:each="entry :${categorie}">
+			<option th:value="${entry.key}" th:data-img="${entry.value}" th:text="${entry.key}"></option>
+			</th:block>
+			</select>
+			
+			<br><br>
+			
+		<!-- <option value ="electromenager">electromenager</option>
 		<option value ="meuble">meuble</option>
 		<option value ="loisir">loisir</option>
 		<option value ="truc">truc</option>
-		</select>
+		</select> -->
 		
 		<label for="description">Description :</label>
-		<textarea id="description" name="description" rows="5" col="50"></textarea>
+		<textarea id="description" name="description" rows="5" col="50" th:field="*{description}"></textarea>
 		
-		
+		s
 		<label for="photo">Photo de l'article :</label>
-		<select id ="photo">
-		<option style="</select>
 		
-		<input type="file" id="upload" name="upload" accept="image/png, image/jpeg" />
+		<div>
+			<input type="radio" id="chaise" name="image" value="0" required>
+			<label for="chaise">Chaise</label>
+			<img src="/images/chaise-en-bois.jpg" alt="image d'une chaise en bois" style="width:200px;height:200px;"/>
+			</div>
+			
+			<div>
+			<input type="radio" id="clavier" name="image" value="1" required>
+			<label for="clavier">Clavier</label>
+			<img src="/images/clavier.jpg" alt="image d'un clavier" style="width:200px;height:200px;"/>
+			</div>
+			
+			<div>
+			<input type="radio" id="tennis" name="image" value="2" required>
+			<label for="tennis">Tennis</label>
+			<img src="/images/tennis.png" alt="image d'une raquette de tennis" style="width:200px;height:200px;"/>
+			</div>
+			
+			<div> 
+			<input type="radio" id="tondeuse" name="image" value="3" required>
+			<label for="tondeuse"> Tondeuse</label>
+			<img src="/images/tondeuse.png" alt="image d'une tondeuse" style="width:200px;height:200px;"/>
+			</div>
+		
+		
+		<!-- <input type="file" id="upload" name="upload" accept="image/png, image/jpeg" />
 		<br> <br>
-		<img id="preview" style="max-width : 300px; display: none;" alt="Aperçu">
+		<img id="preview" style="max-width : 300px; display: none" alt="Aperçu"> -->
 		
 		
 		<label for="prixInit">Prix initial :</label>
-		<input type="number" id="prixInit" name="prixInit" min="1" max="100000"/>
+		<input type="number" id="prixInit" name="prixInit" min="1" max="100000" th:field="*{miseAPrix}"/>
 		
 		<label for="debutEnchere">Début de l'enchère :</label>
-		<input type="datetime-local" id="debutEnchere" name="debutEnchere">
+		<input type="datetime-local" id="debutEnchere" name="debutEnchere" th:field="*{dateDebutEncheres}">
 		
 		<label for="finEnchere">Fin de l'enchère :</label>
-		<input type="datetime-local" id="finEnchere" name="finEnchere">
+		<input type="datetime-local" id="finEnchere" name="finEnchere" th:field="*{dateFinEncheres}">
 		
 		<label>Retrait :</label>
-		<tr th:each="retrait : ${retrait}">
-		<td th:text="${retrait.rue}"></td>
-		<td th:text="${retrait.codePostal}"></td>
-		<td th:text="${retrait.ville}"></td>
+		<input type="text" id="retrait" name="retrait" th:field="*{retrait}">
 		
 		<button type="submit">Enregistrer</button>
 		<button type="reset"> Annuler</button>
 		
 			</form>
+			
+			
 			
 				<!-- <script>
 					

@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import fr.eni.encheres.bo.Article;
+
 @Controller
 public class EncheresController {
 
@@ -36,18 +38,20 @@ public class EncheresController {
 	}
 	
 	@GetMapping("/echeres/vente")
-	public String vente() {
+	public String vente(Model model) {
+		Article nouvelArticle = new Article();
+		model.addAttribute("article", nouvelArticle);
 		System.out.println("afficher les ventes");
 		return "vente";
 	}
 
-	@PostMapping()
-	public String ventePost(@RequestParam("description") String description,@RequestParam("article") String article, Model model) {
-		String imageUrl = null;
+	//@PostMapping()
+	//public String ventePost(@RequestParam(name="description") String description,@RequestParam(name="article") String article,@RequestParam(name="image") int image, Model model) {
+	
 		
 		
 		
-		return null;
-	}
+		//return null;
+	//}
 	
 }
