@@ -18,19 +18,19 @@
 			</li>
 			<li>
 				<label for="miseAPrix">Mise à prix : </label>
-				<input type="text" id="miseAPrix" name="miseAPrix" th:text="${miseAPrix} + ' points'" disabled >
+				<input type="text" id="miseAPrix" name="miseAPrix" th:text="${article.miseAPrix} + ' points'" disabled >
 			</li>
 			<li>
 				<label for="dateFinEncheres">Fin de l'enchère : </label>
-				<input type="date" id="dateFinEncheres" name="dateFinEncheres" th:text="${dateFinEncheres}" disabled>
+				<input type="date" id="dateFinEncheres" name="dateFinEncheres" th:text="${article.dateFinEncheres}" disabled>
 			</li>
 			<li>
 				<label for="retrait">Retrait : </label>
-				<input type="text" id="retrait" name="retrait" th:text="${rue} + ' ' + ${codePostal} + ' ' + ${ville}" disabled>
+				<input type="text" id="retrait" name="retrait" th:text="${article.retrait.rue} + ' ' + ${article.retrait.codePostal} + ' ' + ${article.retrait.ville}" disabled>
 			</li>
 			<li>
 				<label for="vendeur">Vendeur : </label>
-				<input type="text" id="vendeur" name="vendeur" th:text="${pseudo}" disabled>
+				<input type="text" id="vendeur" name="vendeur" th:text="${article.utilisateur.pseudo}" disabled>
 			</li>
 			<li>
 				<button type="submit" name="annuler" >Annuler la vente</button>
