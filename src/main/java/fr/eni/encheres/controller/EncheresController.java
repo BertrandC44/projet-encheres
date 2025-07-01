@@ -52,7 +52,7 @@ public class EncheresController {
 
 	@PostMapping("/encheres/vente")
 	public String ventePost(@ModelAttribute Article article) {
-		this.encheresService.creerArticle(article);
+		this.encheresService.creerVente(article);
 		
 		return "redirect:/encheres";
 	}

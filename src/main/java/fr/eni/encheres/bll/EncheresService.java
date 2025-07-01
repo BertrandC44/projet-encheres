@@ -12,33 +12,22 @@ public interface EncheresService {
 	
 	List<Enchere> consulterEncheres();
 	
-	Enchere consulterEnchereParId(long id);
-	
 	List<Categorie> consulterCategories();
 	
 	Categorie consulterCategorieParId(long id);
-	
-	List<Utilisateur> consulterUtilisateurs();
-	
-	Utilisateur consulterUtilisateursParId(long id);
-	
-	Utilisateur crediter(int credit);
-	
-	Utilisateur debiter(int debit);
 	
 	List<Article> consulterArticles();
 	
 	Article consulterArticleParId(long id);
 	
 	Article rechercheParMotCle(String motCle);
+
+	void creerVente(Article article);
+
+	void annulerVente(Article article);
 	
-	void creerArticle(Article article);
+	void encherir(long idArticle,int credit);
 	
-	void annulerEnchere(Enchere enchere);
-	
-	void creerUtilisateur(Utilisateur utilisateur);
-	
-	void supprimerUtilisateur(Utilisateur utilisateur);
 	
 
 }

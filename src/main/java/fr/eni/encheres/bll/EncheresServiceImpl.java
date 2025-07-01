@@ -18,11 +18,6 @@ public class EncheresServiceImpl implements EncheresService{
 		return null;
 	}
 
-	@Override
-	public Enchere consulterEnchereParId(long idEnchere) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public List<Categorie> consulterCategories() {
@@ -36,29 +31,6 @@ public class EncheresServiceImpl implements EncheresService{
 		return null;
 	}
 
-	@Override
-	public List<Utilisateur> consulterUtilisateurs() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Utilisateur consulterUtilisateursParId(long idUtilisateur) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Utilisateur crediter(int credit) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Utilisateur debiter(int debit) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public List<Article> consulterArticles() {
@@ -78,30 +50,23 @@ public class EncheresServiceImpl implements EncheresService{
 		return null;
 	}
 
-	
 
 	@Override
-	public void annulerEnchere(Enchere enchere) {
+	public void creerVente(Article article) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void annulerVente(Article article) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void creerUtilisateur(Utilisateur utilisateur) {
+	public void encherir(long idArticle, int credit) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public void supprimerUtilisateur(Utilisateur utilisateur) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void creerArticle(Article article) {
-		// TODO Auto-generated method stub
-		
-	}
-
+}
 }
