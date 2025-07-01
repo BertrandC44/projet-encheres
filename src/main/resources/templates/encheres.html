@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title href="/encheres">Enchères</title>
+<link rel="icon" data-th-href="@{/images/logoENI.png}" sizes="32x32">
+<link rel="stylesheet" th:href="@{/css/general.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments/fragment-entete::entete}"></header>
+
+<form action="" method="post">
+	<a href="">S'inscrire</a>
+	<a href="">Se connecter</a>
+	<h2>Filtres :</h2>
+		<ul class="" >  <!-- th:each="item : ${listefilms}" -->
+			<a class="">
+			<li>
+				<label for="Categories">Catégories :</label> 
+				<input type="text" id="Categories" name="categories" disabled th:value required>
+			</li>
+			<li class="recherche">
+				<img alt ="loupe"  width=10 src="/images/loupe.png">
+				<input type="text" placeholder="Le nom de l'article contient..."></input>
+			</li>
+			<li> 
+					<button type="submit">Rechercher</button>  
+			</li>
+			<li>
+			<div class="vueenchere">
+				<img class="photoarticle" alt="photoArticle" width=50 th:src="@{/images/article1.png}"> <!--  Lien vers photo (BDD?)-->
+
+				<input type="text" id="article" name="nomArticle" >
+				 <!-- th:value="${}"  --> 
+				<label for="prix">Prix :</label> 
+				<input type="text" id="miseaprix" name="prix" >
+				 <!-- th:value="${}"  --> 
+				<label for="classement">Classement :</label>
+				<input type="text" id="classement" name="classement" >
+				 <!-- th:value="${filmid.genre.titre}"  --> 
+				<label for="finEnchere">Fin de l'enchère :</label>
+				<input type="text" id="finenchere" name="finEnchere" >
+				 <!-- th:value="${filmid.genre.titre}"  --> 
+				<label for="retrait">Retrait :</label>
+				<input type="text" id="retrait" name="retrait" >
+				 <!-- th:value="${filmid.genre.titre}"  --> 
+				 <label for="vendeur">Vendeur :</label>
+				<input type="text" id="vendeur" name="vendeur" >
+				 <!-- th:value="${filmid.genre.titre}"  --> 
+			</div>
+			</li>
+		</ul>
+
+	</form>
+<footer></footer>
+</body>
+</html>
