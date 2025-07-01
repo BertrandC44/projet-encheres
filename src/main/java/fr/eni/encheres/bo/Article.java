@@ -1,6 +1,8 @@
 package fr.eni.encheres.bo;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Article {
 
@@ -16,6 +18,8 @@ public class Article {
 	private Utilisateur utilisateur;
 	private Categorie categorie;
 	private Retrait retrait;
+	private List<Enchere> encheres = new ArrayList<Enchere>();
+
 
 	public Article() {
 	}
@@ -33,6 +37,7 @@ public class Article {
 		this.utilisateur = utilisateur;
 		this.categorie = categorie;
 		this.retrait = retrait;
+
 	}
 
 	public Article(long idArticle, String nomArticle, String description, LocalDate dateDebutEncheres,
@@ -129,6 +134,14 @@ public class Article {
 
 	public void setRetrait(Retrait retrait) {
 		this.retrait = retrait;
+	}
+	
+	public List<Enchere> getEncheres() {
+		return encheres;
+	}
+
+	public void setEncheres(List<Enchere> encheres) {
+		this.encheres = encheres;
 	}
 
 	@Override
