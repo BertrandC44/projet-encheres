@@ -1,5 +1,6 @@
 package fr.eni.encheres.bo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Categorie {
@@ -7,21 +8,21 @@ public class Categorie {
 	private long idCategorie;
 	private String libelle;
 	
-	private List<Article> articles;
+	private List<Article> articles = new ArrayList<Article>();
 
 
 	public Categorie() {
 	}
 
 	
-	public Categorie(String libelle, List<Article> articles) {
+	public Categorie(String libelle) {
 		this.libelle = libelle;
-		this.articles = articles;
+	
 	}
 
 
-	public Categorie(long idCategorie, String libelle, List<Article> articles) {
-		this(libelle, articles);
+	public Categorie(long idCategorie, String libelle) {
+		this(libelle);
 		this.idCategorie = idCategorie;
 		
 	}
