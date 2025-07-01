@@ -1,7 +1,11 @@
 package fr.eni.encheres.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import fr.eni.tp.filmotheque.bo.Film;
 
 @Controller
 public class EncheresController {
@@ -29,6 +33,18 @@ public class EncheresController {
 	public String inscription() {
 		System.out.println("Clic vers Inscription");
 		return "inscription";
+	}
+	
+	@GetMapping("/Enchereid/detail")
+	public String afficherUnFilmId(@RequestParam(name = "id") long i, Model model) {
+		Film unFilm = filmService.consulterFilmParId(i);
+		model.addAttribute("filmid", unFilm);
+		String acteurFilm = "";
+
+		model.addAttribute("acteur", acteurFilm);
+
+		System.out.println(unFilm);
+		return "filmsid";
 	}
 
 }
