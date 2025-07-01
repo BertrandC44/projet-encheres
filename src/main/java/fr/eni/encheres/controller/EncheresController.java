@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import fr.eni.encheres.bll.EncheresService;
-import fr.eni.encheres.bo.Enchere;
+import fr.eni.encheres.bo.Article;
 
 @SessionAttributes({"membreEnSession"})
 @Controller
@@ -51,12 +51,11 @@ public class EncheresController {
 	
 	@GetMapping("/enchereid/detail")
 	public String afficherEnchereId(@RequestParam(name = "id") long i, Model model) {
-		Enchere uneEnchere = encheresService.consulterArticleParId(i);
-		model.addAttribute("articleid", uneEnchere);
+		Article unArticle = encheresService.consulterArticleParId(i);
+		model.addAttribute("articleid", unArticle);
 		String acteurFilm = "";
 
 		model.addAttribute("acteur", acteurFilm);
-
 		
 		return "encheresid";
 	}

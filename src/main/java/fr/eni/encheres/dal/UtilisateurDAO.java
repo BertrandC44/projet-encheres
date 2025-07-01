@@ -6,13 +6,13 @@ import fr.eni.encheres.bo.Utilisateur;
 
 public interface UtilisateurDAO {
 	
-	public List<Utilisateur> findAll();
+	public List<Utilisateur> consulterUtilisateurs();
 	
-	public Utilisateur findById(long id);
+	public Utilisateur utilisateurparId(long id);
 
-	public Utilisateur findByEmail(String email);
+	public Utilisateur utilisateurparEmail(String email);
 	
-	public void createUtilisateur(Utilisateur utilisateur);
+	public void creerUtilisateur(Utilisateur utilisateur);
 	
 	public void supprimerUtilisateur(Utilisateur utilisateur);
 	

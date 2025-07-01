@@ -27,7 +27,7 @@ public class ContexteServiceImpl implements ContexteService {
 	@Override
 	public Utilisateur charger(String email) {
 		// TODO Auto-generated method stub
-		return this.utilisateurDao.findByEmail(email);
+		return this.utilisateurDao.utilisateurparEmail(email);
 	}
 
 }

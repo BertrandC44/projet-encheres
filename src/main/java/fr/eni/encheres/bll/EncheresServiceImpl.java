@@ -7,19 +7,12 @@ import org.springframework.stereotype.Service;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
-import fr.eni.encheres.bo.Utilisateur;
 
 @Service
 public class EncheresServiceImpl implements EncheresService{
 
 	@Override
 	public List<Enchere> consulterEncheres() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Article consulterArticleParId(long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -36,29 +29,6 @@ public class EncheresServiceImpl implements EncheresService{
 		return null;
 	}
 
-	@Override
-	public List<Utilisateur> consulterUtilisateurs() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Utilisateur consulterUtilisateursParId(long idUtilisateur) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Utilisateur crediter(int credit) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Utilisateur debiter(int debit) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public List<Article> consulterArticles() {
@@ -78,26 +48,21 @@ public class EncheresServiceImpl implements EncheresService{
 		return null;
 	}
 
+
 	@Override
-	public void creerEnchere(Enchere enchere) {
+	public void creerVente(Article article) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void annulerEnchere(Enchere enchere) {
+	public void annulerVente(Article article) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void creerUtilisateur(Utilisateur utilisateur) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void supprimerUtilisateur(Utilisateur utilisateur) {
+	public void encherir(long idArticle, int credit) {
 		// TODO Auto-generated method stub
 		
 	}
