@@ -62,7 +62,7 @@ public class EncheresController {
 		return "inscription";
 	}
 	
-	@PostMapping("/enchères")
+	@PostMapping("/encheres")
 	public String creerUtilisateur(@Valid @ModelAttribute Utilisateur utilisateur, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return "inscription";
