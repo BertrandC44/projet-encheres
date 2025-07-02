@@ -6,11 +6,11 @@ import fr.eni.encheres.bo.Utilisateur;
 
 public interface UtilisateurService {
 
-List<Utilisateur> consulterUtilisateurs();
+	List<Utilisateur> consulterUtilisateurs();
 	
 	Utilisateur consulterUtilisateursParId(long id);
 	
-	Utilisateur crediter(int credit);
+	int consulterCredit(Utilisateur utilisateur);
 	
 	Utilisateur debiter(int debit);
 	

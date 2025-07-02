@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
-import fr.eni.encheres.bo.Utilisateur;
 
 @Service
 public class EncheresServiceImpl implements EncheresService{
@@ -17,7 +16,6 @@ public class EncheresServiceImpl implements EncheresService{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 	@Override
 	public List<Categorie> consulterCategories() {

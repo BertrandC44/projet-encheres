@@ -8,7 +8,10 @@ public interface UtilisateurDAO {
 	
 	public List<Utilisateur> consulterUtilisateurs();
 	
-	public Utilisateur utilisateurParId(long id);
+
+	public Utilisateur utilisateurparId(long id);
+
+	public Utilisateur utilisateurparEmail(String email);
 	
 	public void creerUtilisateur(Utilisateur utilisateur);
 	

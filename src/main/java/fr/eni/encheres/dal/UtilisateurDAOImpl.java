@@ -14,12 +14,14 @@ import fr.eni.encheres.bo.Utilisateur;
 @Repository
 public class UtilisateurDAOImpl implements UtilisateurDAO{
 
+
 	private static final String FIND_ALL = "SELECT * FROM UTILISATEUR";
 	private static final String FIND_BY_ID = "SELECT * FROM UTILISATEUR WHERE idUtilisateur=:idUtilisateur";
 	private static final String CREATE_UTILISATEUR = "INSERT INTO UTILISATEUR(pseudo,nom,prenom,email,telephone,rue,codePostal,ville,motDePasse,credit,administrateur) VALUES (:pseudo,:nom,:prenom,:email,:telephone,:rue,:codePostal,:ville,:motDePasse,100,0)";
 	private static final String DELETE_BY_ID = "DELETE FROM UTILISATEUR WHERE idUtilisateur=:idUtilisateur";
 	private static final String FIND_CREDIT = "SELECT credit FROM UTILISATEUR WHERE idUtilisateur=:idUtilisateur";
 	private static final String UPDATE_CREDIT = "UPDATE UTILISATEUR SET credit =:credit WHERE idUtilisateur =:idUtilisateur ";
+
 	
 	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -34,9 +36,18 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 	}
 
 	@Override
-	public Utilisateur utilisateurParId(long idUtilisateur) {
+	public Utilisateur utilisateurparId(long idUtilisateur) {
+
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idUtilisateur", idUtilisateur);
+		
+		return namedParameterJdbcTemplate.queryForObject(FIND_BY_ID, map, new BeanPropertyRowMapper<>(Utilisateur.class));
+	}
+	
+	@Override
+	public Utilisateur utilisateurparEmail(String email) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("email", email);
 		
 		return namedParameterJdbcTemplate.queryForObject(FIND_BY_ID, map, new BeanPropertyRowMapper<>(Utilisateur.class));
 	}
