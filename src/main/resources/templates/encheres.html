@@ -11,18 +11,18 @@
 <form action="" method="post">
 <!--  -->
 
-	<th:block data-th-if="${membreEnSession == null or membreEnSession.id == 0}">
+	<th:block data-th-if="${utilisateurEnSession == null or utilisateurEnSession.id == 0}">
 		<a href="/encheres/inscription">S'inscrire</a>
 		<a href="/encheres/connexion">Se connecter</a>
 	</th:block>
-	<th:block data-th-if="${membreEnSession != null and membreEnSession.id > 0}">
+	<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.id > 0}">
 		<a href="/encheres/vente">Vendre un article</a>
 		<a href="/encheres/profil">Voir mon profil</a>
 		<a href="/encheres/deconnexion">Déconnexion</a>
 	</th:block>
 		
 	<h2>Filtres :</h2>
-	<th:block data-th-if="${membreEnSession != null and membreEnSession.id > 0}">
+	<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.id > 0}">
 		<ul>
 			<label for="achats">Achats :</label>
 			<input type="radio"  id="achats" value="Achats" name="achats/ventes">
@@ -44,7 +44,7 @@
 		</ul>
 	</th:block>
  
-		<ul th:if="${membreEnSession != null and membreEnSession.id != 0}">
+		<ul th:if="${utilisateurEnSession != null and utilisateurEnSession.id != 0}">
 			<li>
 			<input type="checkbox" id="sesouvenirdemoi" name="sesouvenirdemoi"  th:value required>
 				<label for="sesouvenirdemoi">Se souvenir de moi</label> 
