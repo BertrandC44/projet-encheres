@@ -71,7 +71,7 @@ public class EncheresController {
 		return "inscription";
 	}
 	
-	@PostMapping("/encheres")
+	@PostMapping("/encheres/inscription")
 	public String creerUtilisateur(@Valid @ModelAttribute Utilisateur utilisateur, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return "inscription";
@@ -79,6 +79,7 @@ public class EncheresController {
 		} else {
 			try {
 				utilisateurService.creerUtilisateur(utilisateur);
+				this.addUtilisateurEnSession();
 				return "redirect:/encheres";
 		
 			} catch (BusinessException e) {
