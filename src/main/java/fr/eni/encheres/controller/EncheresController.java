@@ -115,7 +115,7 @@ public class EncheresController {
 		return"enchere-en-cours";
 	}
 	
-	@PostMapping("/encheres")
+	@PostMapping("/detail/retour")
 		public String retourDetailEnchere() {
 		return"encheres";
 		
