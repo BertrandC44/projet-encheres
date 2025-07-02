@@ -2,36 +2,48 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title href="/connexion">Insert title here</title>
+<title href="/encheres/connexion">Insert title here</title>
 <link rel="icon" data-th-href="@{/images/logoENI.png}" sizes="32x32">
+<link rel="stylesheet" th:href="@{/css/connexion.css}">
 <link rel="stylesheet" th:href="@{/css/general.css}">
+
+<!-- icon pour le formulaire oui -->
+<link rel="stylesheet" href=
+"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 <body>
 <header th:replace="~{fragments/entete::entete}"></header>
-<form action="" method="post">
-	<h1>Connectez-vous</h1>
-		<ul class="" > <!-- th:each="item : ${listefilms}" -->
-			<a class="">
-			<li>
+		
+	<main>
+
+		<form class="login-form" action="" method="post">
+		<h1>Se Connecter</h1>
+			<div class="form-input">
 				<label for="pseudo">Identifiant :</label> 
-				<input type="text" id="inputpseudo" name="pseudo"  th:value required>
-			</li>
-			<li>
-				<label for="motdepasse">Mot de passe :</label> 
-				<input type="text" id="motdepasse" name="motdepasse"  th:value required>
-			</li>
-			<li> 
-				<button type="submit">Connexion</button>  
-			</li>
-			<li>
-
-				<input type="checkbox" id="sesouvenirdemoi" name="sesouvenirdemoi"  th:value required>
-				<label for="sesouvenirdemoi">Se souvenir de moi</label> 
+				<i class="fa fa-user icon"></i>
+				<input type="text"  placeholder="Identifiant" id="inputpseudo" name="pseudo" class="form-control"  >
+				
+				</div>
+				
+			<div class="form-input">
+				<label for="motdepasse">Mot de passe :</label>
+				<i class="fa fa-lock icon"></i>
+				<input type="password"  placeholder="Mot de passe" id="motdepasse" name="motdepasse" class="form-control"  >
+				 
+			</div>
+			
+				<button type="submit" class="form-button">Connexion</button>  
+			<div>
+			
+			<input type="checkbox" id="sesouvenirdemoi" name="sesouvenirdemoi"  >
+			<label for="sesouvenirdemoi">Se souvenir de moi</label>
+			</div>	 
 				<a href="/inscription">Créer un compte</a>
+				
+			</form>
 
-			</li>
-		</ul>
-
-	</form>
+	
+	</main>
 </body>
 </html>

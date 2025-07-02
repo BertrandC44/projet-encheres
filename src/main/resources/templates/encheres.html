@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head th.insert="~{fragments/liens::liens}">
+<link rel="stylesheet" th:href="@{/css/general.css}">
 <meta charset="UTF-8">
 <title href="/encheres">Enchères</title>
 </head>
@@ -20,16 +21,18 @@
 	<h2>Filtres :</h2>
 		<ul > <!--  th:if="${membreEnSession != null and membreEnSession.id != 0}"-->
 			<label for="achats">Achats :</label>
+			<input type="radio"  id="achats" value="Achats" name="achats/ventes">
 			<li >
-				<input type="radio" id="radio" name="enchereouvertes"><label for="achats">  enchères ouvertes</label>
-				<input type="radio" id="radio" name="mesencheresencours"><label for="achats">  mes enchères en cours</label>
-				<input type="radio" id="radio" name="mesencheresremportees"><label for="achats">  mes enchères remportées</label>
-			</li> 
-			<label for="ventes">Mes ventes :</label> 
+				<input type="checkbox" id="encheresOuvertes" name="encheresOuvertes"><label for="encheresOuvertes">  enchères ouvertes</label>
+				<input type="checkbox" id="mesEncheresEnCours" name="mesEncheresEnCours"><label for="mesEncheresEnCours">  mes enchères en cours</label>
+				<input type="checkbox" id="mesEncheresEemportees" name="mesEncheresEemportees"><label for="mesEncheresEmportees">  mes enchères remportées</label>
+			</li>
+			<label for="mesVentes">Mes ventes :</label>
+			<input type="radio"  id="mesVentes" value="Mes ventes" name="achats/ventes">
 			<li >
-				<input type="radio" id="radio" name="mesventeencours"><label for="ventes">  mes ventes en cours</label>
-				<input type="radio" id="radio" name="mesencheresencours"><label for="ventes">  ventes non débutées</label>
-				<input type="radio" id="radio" name="mesencheresremportees"><label for="ventes">  ventes terminées</label>
+				<input type="checkbox" id="mesVentesEnCours" name="mesVentesEnCours"><label for="mesVentesEnCours">  mes ventes en cours</label>
+				<input type="checkbox" id="ventesNonDebutees" name="ventesNonDebutees"><label for="ventesNonDebutees">  ventes non débutées</label>
+				<input type="checkbox" id="ventesTerminees" name="ventesTerminees"><label for="ventesTerminees">  ventes terminées</label>
 			</li>
 		
 		</ul>

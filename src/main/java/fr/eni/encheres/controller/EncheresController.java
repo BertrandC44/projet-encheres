@@ -33,13 +33,7 @@ public class EncheresController {
 		System.out.println("Clic vers Index");
 		return "encheres";
 	}
-	
 
-	@GetMapping("/encheres")
-	public String indexBis() {
-		System.out.println("Clic vers Index");
-		return "encheres";
-	}
 	
 
 	@GetMapping("/encheres/connexion")
@@ -74,6 +68,12 @@ public class EncheresController {
 		
 	}
 	
+	@PostMapping("/encheres")
+	public String detailEnchere() {
+	return"encheres";
+	
+}
+	
 	@GetMapping("/encheres/vente")
 	public String vente(Model model) {
 		Article nouvelArticle = new Article();
@@ -97,11 +97,7 @@ public class EncheresController {
 		return"enchere-en-cours";
 	}
 	
-	@PostMapping("/encheres")
-		public String detailEnchere() {
-		return"encheres";
-		
-	}
+	
 	
 
 
