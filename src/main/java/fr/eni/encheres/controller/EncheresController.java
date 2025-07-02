@@ -68,7 +68,7 @@ public class EncheresController {
 		return "inscription";
 	}
 	
-	@PostMapping("/encheres")
+	@PostMapping("/encheres/inscription")
 	public String creerUtilisateur(@Valid @ModelAttribute Utilisateur utilisateur, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return "inscription";
@@ -96,6 +96,7 @@ public class EncheresController {
 		return "redirect:/encheres";
 	}
 	
+
 	
 	@GetMapping("/encheres/vente")
 	public String vente(Model model) {
@@ -120,15 +121,16 @@ public class EncheresController {
 		return"enchere-en-cours";
 	}
 	
-	@PostMapping("/detail/retour")
-		public String retourDetailEnchere() {
-		return"encheres";
-		
+	
+	@GetMapping("encheres/profil")
+	public String afficherProfil() {
+		return"profil";
 	}
+
 	
 	@PostMapping("/encheres/connexion")
-	public String connexion(@RequestParam(name = "idUtilisateur") int idUtilisateur, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) {
-		Utilisateur utilisateur = this.contexteService.charger(idUtilisateur);
+	public String connexion(@RequestParam(name = "pseudo") String pseudo, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) {
+		Utilisateur utilisateur = this.contexteService.charger(pseudo);
 		if(utilisateur != null) {
 			utilisateurEnSession.setIdUtilisateur(utilisateur.getIdUtilisateur());
 			utilisateurEnSession.setPseudo(utilisateur.getPseudo());

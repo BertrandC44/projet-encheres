@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head th.insert="~{fragments/liens::liens}">
+<link rel="stylesheet" th:href="@{/css/general.css}">
 <meta charset="UTF-8">
 <title href="/encheres">Enchères</title>
 </head>
@@ -8,7 +9,6 @@
 
 <header th:replace="~{fragments/entete::entete}"></header>
 
-<form action="" method="post">
 
 
 	<th:block data-th-if="${utilisateurEnSession == null or utilisateurEnSession.idUtilisateur == 0}">
@@ -23,6 +23,7 @@
 		
 	<h2>Filtres :</h2>
 	<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">
+
 		<ul>
 			<label for="achats">Achats :</label>
 			<input type="radio"  id="achats" value="Achats" name="achats/ventes">
@@ -30,8 +31,6 @@
 				<input type="checkbox" id="encheresOuvertes" name="encheresOuvertes"><label for="encheresOuvertes">  enchères ouvertes</label>
 				<input type="checkbox" id="mesEncheresEnCours" name="mesEncheresEnCours"><label for="mesEncheresEnCours">  mes enchères en cours</label>
 				<input type="checkbox" id="mesEncheresEemportees" name="mesEncheresEemportees"><label for="mesEncheresEmportees">  mes enchères remportées</label>
-
-			</li>
 
 			<label for="mesVentes">Mes ventes :</label>
 			<input type="radio"  id="mesVentes" value="Mes ventes" name="achats/ventes">
@@ -44,16 +43,7 @@
 		</ul>
 	</th:block>
  
-		<ul th:if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur != 0}">
-			<li>
-			<input type="checkbox" id="sesouvenirdemoi" name="sesouvenirdemoi"  th:value required>
-				<label for="sesouvenirdemoi">Se souvenir de moi</label> 
-				<a href="/inscription">Créer un compte</a>
-			</li>
-		</ul>
-	
-	
-		<ul class="" >  <!-- th:each="item : ${listefilms}" -->
+		<ul class="" > 
 			<a class="">
 			<li>
 				<label for="categories">Catégories :</label> 
@@ -71,27 +61,27 @@
 				<img class="photoarticle" alt="photoArticle" width=50 th:src="@{/images/article1.png}"> <!--  Lien vers photo (BDD?)-->
 
 				<input type="text" id="article" name="nomArticle" disabled>
-				 <!-- th:value="${}"  --> 
+				
 				<label for="prix">Prix :</label> 
 				<input type="text" id="miseaprix" name="prix" disabled>
-				 <!-- th:value="${}"  --> 
+				
 				<label for="classement">Classement :</label>
 				<input type="text" id="classement" name="classement" disabled>
-				 <!-- th:value="${filmid.genre.titre}"  --> 
+				 
 				<label for="finEnchere">Fin de l'enchère :</label>
 				<input type="text" id="finenchere" name="finEnchere" disabled>
-				 <!-- th:value="${filmid.genre.titre}"  --> 
+				 
 				<label for="retrait">Retrait :</label>
 				<input type="text" id="retrait" name="retrait" disabled>
-				 <!-- th:value="${filmid.genre.titre}"  --> 
+				  
 				 <label for="vendeur">Vendeur :</label>
 				<input type="text" id="vendeur" name="vendeur" disabled>
-				 <!-- th:value="${filmid.genre.titre}"  --> 
+				
 			</div>
 			</li>
 		</ul>
 
-	</form>
+
 <footer></footer>
 </body>
 </html>
