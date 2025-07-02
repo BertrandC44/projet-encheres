@@ -6,16 +6,16 @@ import fr.eni.encheres.bo.Utilisateur;
 
 public interface UtilisateurDAO {
 	
-	public List<Utilisateur> findAll();
+	public List<Utilisateur> consulterUtilisateurs();
 	
-	public Utilisateur findById(long id);
+	public Utilisateur utilisateurParId(long id);
 	
-	public void createUtilisateur(Utilisateur utilisateur);
+	public void creerUtilisateur(Utilisateur utilisateur);
 	
 	public void supprimerUtilisateur(Utilisateur utilisateur);
 	
-	public void crediter(int credit);
+	public int consulterCredit(Utilisateur utilisateur);
 	
-	public void debiter(int debit);
+	public void majCredit(int credit);
 
 }
