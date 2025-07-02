@@ -19,8 +19,8 @@ public class ContexteServiceImpl implements ContexteService {
 
 
 	@Override
-	public Utilisateur charger(int id) {
-		return this.utilisateurDao.utilisateurparId(id);
+	public Utilisateur charger(String pseudo) {
+		return this.utilisateurDao.utilisateurParPseudo(pseudo);
 	}
 
 }
