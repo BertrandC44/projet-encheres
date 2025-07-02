@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head th.insert="~{fragments/liens::liens}">
+<link rel="stylesheet" th:href="@{/css/general.css}">
+<meta charset="UTF-8">
+<title href="/encheres">Enchères</title>
+</head>
+<body>
+ 
+<header th:replace="~{fragments/entete::entete}"></header>
+ 
+ 
+	<th:block data-th-if="${utilisateurEnSession == null or utilisateurEnSession.idUtilisateur == 0}">
+		<a href="/encheres/inscription">S'inscrire</a>
+		<a href="/encheres/connexion">Se connecter</a>
+	</th:block>
+	<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">
+		<a href="/encheres/vente">Vendre un article</a>
+		<a href="/encheres/profil">Voir mon profil</a>
+		<a href="/encheres/deconnexion">Déconnexion</a>
+	</th:block>
+		
+	<h2>Filtres :</h2>
+	<th:block data-th-if="${utilisateurEnSession != null or utilisateurEnSession.idUtilisateur > 0}">
+		<ul>
+		<div>
+			<label for="achats">Achats :</label>
+			<input type="radio"  id="achats" value="Achats" name="achats/ventes">
+			<li >
+				<input type="checkbox" id="encheresOuvertes" name="encheresOuvertes"><label for="encheresOuvertes">  enchères ouvertes</label>
+				<input type="checkbox" id="mesEncheresEnCours" name="mesEncheresEnCours"><label for="mesEncheresEnCours">  mes enchères en cours</label>
+				<input type="checkbox" id="mesEncheresEmportees" name="mesEncheresEmportees"><label for="mesEncheresEmportees">  mes enchères remportées</label>
+		</div>
+		
+		<div>
+			<label for="mesVentes">Mes ventes :</label>
+			<input type="radio"  id="mesVentes" value="Mes ventes" name="achats/ventes">
+			<li >
+				<input type="checkbox" id="mesVentesEnCours" name="mesVentesEnCours"><label for="mesVentesEnCours">  mes ventes en cours</label>
+				<input type="checkbox" id="ventesNonDebutees" name="ventesNonDebutees"><label for="ventesNonDebutees">  ventes non débutées</label>
+				<input type="checkbox" id="ventesTerminees" name="ventesTerminees"><label for="ventesTerminees">  ventes terminées</label>
+			</li>
+		</div>
+		</ul>
+	</th:block>
+ 
+		
+	
+	
+		<ul class="" >
+			<a class="">
+			<li>
+				<label for="categories">Catégories :</label>
+				<input type="text" id="categories" name="categories" disabled th:value required>
+			</li>
+			<li class="recherche">
+				<img alt ="loupe"  width=10 src="/images/loupe.png">
+				<input type="text" placeholder="Le nom de l'article contient..."></input>
+			</li>
+			<li>
+					<button type="submit">Rechercher</button>  
+			</li>
+			<li>
+			<div class="vueenchere">
+				<img class="photoarticle" alt="photoArticle" width=50 th:src="@{/images/article1.png}">
+ 
+				<input type="text" id="article" name="nomArticle" disabled>
+				 
+				<label for="prix">Prix :</label>
+				<input type="text" id="miseaprix" name="prix" disabled>
+
+				<label for="classement">Classement :</label>
+				<input type="text" id="classement" name="classement" disabled>
+
+				<label for="finEnchere">Fin de l'enchère :</label>
+				<input type="text" id="finenchere" name="finEnchere" disabled>
+
+				<label for="retrait">Retrait :</label>
+				<input type="text" id="retrait" name="retrait" disabled>
+
+				 <label for="vendeur">Vendeur :</label>
+				<input type="text" id="vendeur" name="vendeur" disabled>
+
+			</div>
+			</li>
+		</ul>
+ 
+ 
+<footer></footer>
+</body>
+</html>
+ 
