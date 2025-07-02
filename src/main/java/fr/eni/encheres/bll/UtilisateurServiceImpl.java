@@ -12,8 +12,10 @@ import fr.eni.encheres.exception.BusinessException;
 public class UtilisateurServiceImpl implements UtilisateurService{
 	
 	private UtilisateurDAO utilisateurDAO;
-	
-	
+
+	public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO) {
+		this.utilisateurDAO = utilisateurDAO;
+	}
 
 	@Override
 	public List<Utilisateur> consulterUtilisateurs() {
@@ -54,13 +56,15 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	}
 
 	@Override
-	public void creerUtilisateur(Utilisateur utilisateur) {
+	public void creerUtilisateur(Utilisateur utilisateur) throws BusinessException {
 		BusinessException be = new BusinessException();
 		
 		boolean isValid = isEmailValide(utilisateur.getEmail(), be);
 		
 		if(isValid) {
 			utilisateurDAO.creerUtilisateur(utilisateur);
+		}else {
+			throw be;
 		}
 	}
 

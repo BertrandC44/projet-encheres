@@ -16,6 +16,7 @@ import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bll.UtilisateurServiceImpl;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Utilisateur;
+import fr.eni.encheres.exception.BusinessException;
 import jakarta.validation.Valid;
 
 
@@ -73,7 +74,7 @@ public class EncheresController {
 				return "redirect:/encheres";
 		
 			} catch (BusinessException e) {
-				e.getMessages().forEach(m->{
+				e.getErrors().forEach(m->{
 					ObjectError error = new ObjectError("globalError", m);
 					bindingResult.addError(error);
 				});
