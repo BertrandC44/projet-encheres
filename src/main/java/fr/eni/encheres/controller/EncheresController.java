@@ -60,7 +60,7 @@ public class EncheresController {
 		return "inscription";
 	}
 	
-	@PostMapping("/enchères")
+	@PostMapping("/encheres")
 	public String creerUtilisateur(@Valid @ModelAttribute Utilisateur utilisateur, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return "inscription";
@@ -113,7 +113,7 @@ public class EncheresController {
 		return"enchere-en-cours";
 	}
 	
-	@PostMapping("/encheres")
+	@PostMapping("/detail/retour")
 		public String retourDetailEnchere() {
 		return"encheres";
 		
