@@ -16,11 +16,15 @@
 	<main>
 		<form th:action="@{/encheres}" method="post"  th:object="${utilisateur}">
 		<h2>Créer un compte</h2>
+		<p th:if="${#fields.hasErrors('global')}" th:errors="*{global}">Incorrect date</p>
+		
 		<ul>
 	
 			<li>
 			<label>Pseudo :</label>
 			<input type="text" th:field="*{pseudo}" id="pseudo"/>
+			<p th:if="${#fields.hasErrors('pseudo')}" th:errors="*{pseudo}"></p>
+			
 			</li>
 			
 			<li>
@@ -36,6 +40,8 @@
 			<li>
 			<label>Email :</label>
 			<input type="text" th:field="*{email}" id="email" />
+			<p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+			
 			</li>
 			
 			<li>
@@ -74,7 +80,7 @@
 				</li>
 				
 				<li>
-				<button type="submit">Annuler</button>
+				<button type="submit" name="annuler">Annuler</button>
 				</li>
 			</div>
 			
