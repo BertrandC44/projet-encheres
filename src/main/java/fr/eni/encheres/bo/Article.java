@@ -13,7 +13,7 @@ public class Article {
 	private LocalDate dateFinEncheres;
 	private int miseAPrix;
 	private int prixVente;
-	private boolean etatVente;
+	private int etatVente;
 
 	private Utilisateur utilisateur;
 	private Categorie categorie;
@@ -25,7 +25,7 @@ public class Article {
 	}
 
 	public Article(String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres,
-			int miseAPrix, int prixVente, boolean etatVente, Utilisateur utilisateur, Categorie categorie,
+			int miseAPrix, int prixVente, int etatVente, Utilisateur utilisateur, Categorie categorie,
 			Retrait retrait) {
 		this.nomArticle = nomArticle;
 		this.description = description;
@@ -41,7 +41,7 @@ public class Article {
 	}
 
 	public Article(long idArticle, String nomArticle, String description, LocalDate dateDebutEncheres,
-			LocalDate dateFinEncheres, int miseAPrix, int prixVente, boolean etatVente, Utilisateur utilisateur,
+			LocalDate dateFinEncheres, int miseAPrix, int prixVente, int etatVente, Utilisateur utilisateur,
 			Categorie categorie, Retrait retrait) {
 		this(nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, utilisateur,
 				categorie, retrait);
@@ -104,11 +104,11 @@ public class Article {
 		this.prixVente = prixVente;
 	}
 
-	public boolean isEtatVente() {
+	public int getEtatVente() {
 		return etatVente;
 	}
 
-	public void setEtatVente(boolean etatVente) {
+	public void setEtatVente(int etatVente) {
 		this.etatVente = etatVente;
 	}
 
