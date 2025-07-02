@@ -8,8 +8,13 @@
 <body>
  
 <header th:replace="~{fragments/entete::entete}"></header>
+<<<<<<< HEAD
  
  
+=======
+
+
+>>>>>>> e65eefe9d02e336001b119a9e007f6542d8d3edb
 	<th:block data-th-if="${utilisateurEnSession == null or utilisateurEnSession.idUtilisateur == 0}">
 		<a href="/encheres/inscription">S'inscrire</a>
 		<a href="/encheres/connexion">Se connecter</a>
@@ -47,7 +52,11 @@
 		
 	
 	
+<<<<<<< HEAD
 		<ul class="" >
+=======
+		<ul class="" > 
+>>>>>>> e65eefe9d02e336001b119a9e007f6542d8d3edb
 			<a class="">
 			<li>
 				<label for="categories">Catégories :</label>
@@ -65,6 +74,7 @@
 				<img class="photoarticle" alt="photoArticle" width=50 th:src="@{/images/article1.png}"> <!--  Lien vers photo (BDD?)-->
  
 				<input type="text" id="article" name="nomArticle" disabled>
+<<<<<<< HEAD
 				 <!-- th:value="${}"  -->
 				<label for="prix">Prix :</label>
 				<input type="text" id="miseaprix" name="prix" disabled>
@@ -86,6 +96,29 @@
 		</ul>
  
  
+=======
+
+				<label for="prix">Prix :</label> 
+				<input type="text" id="miseaprix" name="prix" disabled>
+			
+				<label for="classement">Classement :</label>
+				<input type="text" id="classement" name="classement" disabled>
+		
+				<label for="finEnchere">Fin de l'enchère :</label>
+				<input type="text" id="finenchere" name="finEnchere" disabled>
+				 
+				<label for="retrait">Retrait :</label>
+				<input type="text" id="retrait" name="retrait" disabled>
+			
+				 <label for="vendeur">Vendeur :</label>
+				<input type="text" id="vendeur" name="vendeur" disabled>
+				
+			</div>
+			</li>
+		</ul>
+
+
+>>>>>>> e65eefe9d02e336001b119a9e007f6542d8d3edb
 <footer></footer>
 </body>
 </html>

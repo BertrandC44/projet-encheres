@@ -13,14 +13,12 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	
 	private UtilisateurDAO utilisateurDAO;
 
-	
-	/**
-	 * @param utilisateurDAO
-	 */
+
 	public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO) {
-		super();
 		this.utilisateurDAO = utilisateurDAO;
 	}
+
+
 
 	@Override
 	public List<Utilisateur> consulterUtilisateurs() {
