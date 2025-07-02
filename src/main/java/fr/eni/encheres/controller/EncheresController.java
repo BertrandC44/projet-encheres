@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import fr.eni.encheres.bll.EncheresService;
 import fr.eni.encheres.bll.UtilisateurService;
+
 import fr.eni.encheres.bll.UtilisateurServiceImpl;
 import fr.eni.encheres.bll.contexte.ContexteService;
+
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.BusinessException;
@@ -30,11 +32,13 @@ public class EncheresController {
 	private UtilisateurService utilisateurService;
 	private ContexteService contexteService;
 
+
 	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ContexteService contexteService) {
 		this.encheresService = encheresService;
 		this.utilisateurService = utilisateurService;
 		this.contexteService = contexteService;
 		
+
 	}
 
 
@@ -58,6 +62,7 @@ public class EncheresController {
 		System.out.println("Clic vers Connexion");
 		return "connexion";
 	}
+	
 	
 	@GetMapping("/encheres/inscription")
 	public String afficherInscription(Model model) {
@@ -86,7 +91,6 @@ public class EncheresController {
 			
 		}
 	}
-	
 	
 
 	@GetMapping("/encheres/deconnexion")

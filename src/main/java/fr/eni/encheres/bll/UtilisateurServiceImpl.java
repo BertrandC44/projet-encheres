@@ -12,8 +12,10 @@ import fr.eni.encheres.exception.BusinessException;
 public class UtilisateurServiceImpl implements UtilisateurService{
 	
 	private UtilisateurDAO utilisateurDAO;
-	
-	
+
+	public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO) {
+		this.utilisateurDAO = utilisateurDAO;
+	}
 
 	/**
 	 * @param utilisateurDAO
@@ -69,7 +71,11 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		
 		if(isValid) {
 			utilisateurDAO.creerUtilisateur(utilisateur);
-		}else {
+
+
+		} else {
+
+
 			throw be;
 		}
 		
