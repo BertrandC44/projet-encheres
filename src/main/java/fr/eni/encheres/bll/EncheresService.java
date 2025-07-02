@@ -5,7 +5,7 @@ import java.util.List;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
-import fr.eni.encheres.bo.Retrait;
+
 import fr.eni.encheres.bo.Utilisateur;
 
 public interface EncheresService {
@@ -21,9 +21,9 @@ public interface EncheresService {
 	Article consulterArticleParId(long id);
 	
 	Article rechercheParMotCle(String motCle);
-	
+
 	void creerVente(Article article);
-	
+
 	void annulerVente(Article article);
 	
 	void encherir(long idArticle,int credit);
