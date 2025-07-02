@@ -5,14 +5,14 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import fr.eni.encheres.bo.Utilisateur;
-import fr.eni.encheres.dal.ArticleDAO;
 import fr.eni.encheres.dal.UtilisateurDAO;
+import fr.eni.encheres.exception.BusinessException;
 
 @Service
 public class UtilisateurServiceImpl implements UtilisateurService{
 	
 	private UtilisateurDAO utilisateurDAO;
-
+	
 	
 
 	@Override
@@ -34,26 +34,77 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 
 	@Override
 	public int consulterCredit(Utilisateur utilisateur) {
-		// TODO Auto-generated method stub
-		return 0;
+		return utilisateur.getCredit();
 	}
 
 	@Override
-	public Utilisateur debiter(int debit) {
-		// TODO Auto-generated method stub
-		return null;
+	public void debiter(int debit, Utilisateur utilisateur) {
+		int solde = utilisateur.getCredit();
+		if (solde > debit) {
+			solde -= debit;
+			utilisateur.setCredit(solde);
+		}
+	}
+	
+	@Override
+	public void credit(int credit, Utilisateur utilisateur) {
+		int solde = utilisateur.getCredit();
+		solde += credit;
+		utilisateur.setCredit(solde);
 	}
 
 	@Override
 	public void creerUtilisateur(Utilisateur utilisateur) {
-		// TODO Auto-generated method stub
+		BusinessException be = new BusinessException();
 		
+		boolean isValid = isEmailValide(utilisateur.getEmail(), be);
+		
+		if(isValid) {
+			utilisateurDAO.creerUtilisateur(utilisateur);
+		}
 	}
 
 	@Override
 	public void supprimerUtilisateur(Utilisateur utilisateur) {
-		// TODO Auto-generated method stub
+		BusinessException be = new BusinessException();
+		
+		if(isAdmin(utilisateur.getIdUtilisateur(), be)) {
+			utilisateurDAO.supprimerUtilisateur(utilisateur);
+		}
+		
 		
 	}
+
+	@Override
+	public boolean isEmailValide(String email, BusinessException be) {
+		if(utilisateurDAO.isEmailValide(email)) {
+			return true;
+		}be.add("Vous avez déjà un compte créé");
+		return false;
+	}
+
+	@Override
+	public boolean isCompteExist(long idUtilisateur, BusinessException be) {
+		if(utilisateurDAO.isExist(idUtilisateur)) {
+			return true;
+		}be.add("Ce compte n'existe pas");
+		return false;
+	}
+
+	@Override
+	public boolean isAdmin(long idUtilisateur, BusinessException be) {
+		if (utilisateurDAO.isAdmin(idUtilisateur)) {
+			return true;
+		}be.add("Action non autorisée, vous n'êtes pas administrateur du site");
+		return false;
+	}
+	
+	
+	
+	
+
+
+
+
 
 }

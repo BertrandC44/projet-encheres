@@ -33,14 +33,7 @@ public class EncheresController {
 		System.out.println("Clic vers Index");
 		return "encheres";
 	}
-	
 
-	@GetMapping("/encheres")
-	public String indexBis() {
-		System.out.println("Clic vers Index");
-		return "encheres";
-	}
-	
 
 	@GetMapping("/encheres/connexion")
 	public String connexion() {
