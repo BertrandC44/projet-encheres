@@ -55,6 +55,7 @@ public class EncheresServiceImpl implements EncheresService{
 		
 	}
 
+
 	@Override
 	public void annulerVente(Article article) {
 		// TODO Auto-generated method stub
@@ -65,6 +66,5 @@ public class EncheresServiceImpl implements EncheresService{
 	public void encherir(long idArticle, int credit) {
 		// TODO Auto-generated method stub
 		
-	}
-
+}
 }

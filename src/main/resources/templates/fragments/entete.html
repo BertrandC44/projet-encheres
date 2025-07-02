@@ -1,5 +1,16 @@
 <header th:fragment="entete">
 
+<img src="images/marteau_logo.png" alt="Logo de marteau d'enchères" style="width:50px;height:50px;"/>
+<h1>ENI - Enchères</h1>
+</header>
+
+<!--  
+
+	<header th:fragment="entete">
+		<div> <img alt ="logoenchere" width=65 th:src="@{/images/logoenchere.png}"></div>
+		<h1 id="nav-title"><a th:href="@{/encheres}">ENI-Enchères</a></h1>
+
+
 <h1><a th:href="@{/}">ENI - Enchères</a></h1>
 <th:block data-th-if="${membreEnSession != null and membreEnSession.id > 0}">
 		<p>Membre : </p>
