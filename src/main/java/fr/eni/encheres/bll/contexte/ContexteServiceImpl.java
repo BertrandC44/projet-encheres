@@ -13,18 +13,14 @@ public class ContexteServiceImpl implements ContexteService {
 	
 	private UtilisateurDAO utilisateurDao;
 	
-	/**
-	 * Constructeur
-	 * @param utilisateurDao
-	 */
 	public ContexteServiceImpl(UtilisateurDAO utilisateurDao) {
 		this.utilisateurDao = utilisateurDao;
 	}
 
 
 	@Override
-	public Utilisateur charger(String email) {
-		return this.utilisateurDao.utilisateurparEmail(email);
+	public Utilisateur charger(int id) {
+		return this.utilisateurDao.utilisateurparId(id);
 	}
 
 }

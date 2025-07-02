@@ -3,17 +3,32 @@ package fr.eni.encheres.bo;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+
 public class Utilisateur {
 
 	private long idUtilisateur;
+	@NotBlank
+	@Pattern(regexp = "^[A-Za-z0-9_]+$")
 	private String pseudo;
+	@NotBlank
 	private String nom;
+	@NotBlank
 	private String prenom;
+	@NotBlank
+	@Pattern(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$\" />")
 	private String email;
+	@NotBlank
 	private String telephone;
+	@NotBlank
 	private String rue;
+	@NotBlank
 	private String codePostal;
+	@NotBlank
 	private String ville;
+	@NotBlank
 	private String motDePasse;
 	private int credit;
 	private boolean admin;

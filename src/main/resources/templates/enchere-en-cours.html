@@ -9,7 +9,7 @@
 <body>
 <header th:replace="~{fragments/entete::entete}"></header>
 <main>
-	<form action="/encheres" method="post">
+	<form action="/detail/retour" method="post">
 		<h2 th:text="${nomArticle}"></h2>
 		<ul>
 			<li>
@@ -33,7 +33,7 @@
 				<input type="text" id="vendeur" name="vendeur" th:text="${article.utilisateur.pseudo}" disabled>
 			</li>
 			<li>
-				<button type="submit" name="annuler" >Annuler la vente</button>
+				<button type="submit" name="annulerVente" >Annuler la vente</button>
 				<button type="submit">Back</button>
 			</li>
 		

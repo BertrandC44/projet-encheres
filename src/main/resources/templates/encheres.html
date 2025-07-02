@@ -11,22 +11,27 @@
 
 <form action="" method="post">
 <!--  -->
-	<div>
-		<a href="/encheres/inscription"> <!-- th:if="${membreEnSession == null and membreEnSession.id == 0}"-->S'inscrire</a>
-		<a href="/encheres/connexion"> <!--  th:if="${membreEnSession == null and membreEnSession.id == 0}"-->Se connecter</a>
-		<a href="/encheres/vente"> <!--  th:if="${membreEnSession != null and membreEnSession.id != 0}"-->Vendre un article</a>
-		<a href="/encheres/profil"> <!--  th:if="${membreEnSession != null and membreEnSession.id != 0}"-->Voir mon profil</a>
-		<a href="/encheres"> <!--  th:if="${membreEnSession != null and membreEnSession.id != 0}"-->Déconnexion</a>
-	</div>
+
+	<th:block data-th-if="${utilisateurEnSession == null or utilisateurEnSession.id == 0}">
+		<a href="/encheres/inscription">S'inscrire</a>
+		<a href="/encheres/connexion">Se connecter</a>
+	</th:block>
+	<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.id > 0}">
+		<a href="/encheres/vente">Vendre un article</a>
+		<a href="/encheres/profil">Voir mon profil</a>
+		<a href="/encheres/deconnexion">Déconnexion</a>
+	</th:block>
+		
 	<h2>Filtres :</h2>
-		<ul > <!--  th:if="${membreEnSession != null and membreEnSession.id != 0}"-->
+	<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.id > 0}">
+		<ul>
 			<label for="achats">Achats :</label>
 			<input type="radio"  id="achats" value="Achats" name="achats/ventes">
 			<li >
 				<input type="checkbox" id="encheresOuvertes" name="encheresOuvertes"><label for="encheresOuvertes">  enchères ouvertes</label>
 				<input type="checkbox" id="mesEncheresEnCours" name="mesEncheresEnCours"><label for="mesEncheresEnCours">  mes enchères en cours</label>
 				<input type="checkbox" id="mesEncheresEemportees" name="mesEncheresEemportees"><label for="mesEncheresEmportees">  mes enchères remportées</label>
-			</li>
+
 			<label for="mesVentes">Mes ventes :</label>
 			<input type="radio"  id="mesVentes" value="Mes ventes" name="achats/ventes">
 			<li >
@@ -36,7 +41,9 @@
 			</li>
 		
 		</ul>
-		<ul th:if="${membreEnSession != null and membreEnSession.id != 0}">
+	</th:block>
+ 
+		<ul th:if="${utilisateurEnSession != null and utilisateurEnSession.id != 0}">
 			<li>
 			<input type="checkbox" id="sesouvenirdemoi" name="sesouvenirdemoi"  th:value required>
 				<label for="sesouvenirdemoi">Se souvenir de moi</label> 

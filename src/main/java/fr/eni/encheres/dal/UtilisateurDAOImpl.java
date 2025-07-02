@@ -21,8 +21,9 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 	private static final String DELETE_BY_ID = "DELETE FROM UTILISATEUR WHERE idUtilisateur=:idUtilisateur";
 	private static final String FIND_CREDIT = "SELECT credit FROM UTILISATEUR WHERE idUtilisateur=:idUtilisateur";
 	private static final String UPDATE_CREDIT = "UPDATE UTILISATEUR SET credit =:credit WHERE idUtilisateur =:idUtilisateur ";
-
-	
+	private static final String COUNT_EMAIL = "SELECT COUNT(email) FROM UTILISATEUR WHERE email =:email";
+	private static final String COUNT_ID = "SELECT COUNT(*) FROM UTILISATEUR WHERE idUtilisateur =:idUtilisateur";
+	private static final String IS_ADMIN = "SELECT administrateur FROM UTILISATEUR WHERE idUtilisateur =:idUtilisateur";
 	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -103,6 +104,37 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		namedParameterJdbcTemplate.update(UPDATE_CREDIT, map);
 		
 	}
+
+	@Override
+	public boolean isEmailValide(String email) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("email", email);
+		
+		Integer nbEmail = namedParameterJdbcTemplate.queryForObject(COUNT_EMAIL, map, Integer.class);
+		return nbEmail ==0 ;
+	}
+
+	@Override
+	public boolean isExist(long idUtilisateur) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idUtilisateur", idUtilisateur);
+		
+		Integer nbCompte = namedParameterJdbcTemplate.queryForObject(COUNT_ID, map, Integer.class);
+		return nbCompte ==1;
+	}
+
+	@Override
+	public boolean isAdmin(long idUtilisateur) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idUtilisateur", idUtilisateur);
+		
+		Integer isAdmin = namedParameterJdbcTemplate.queryForObject(IS_ADMIN, map, Integer.class);
+		
+		return isAdmin == 1;
+	}
+	
+	
+	
 
 
 }

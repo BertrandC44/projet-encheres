@@ -3,6 +3,7 @@ package fr.eni.encheres.bll;
 import java.util.List;
 
 import fr.eni.encheres.bo.Utilisateur;
+import fr.eni.encheres.exception.BusinessException;
 
 public interface UtilisateurService {
 
@@ -12,10 +13,18 @@ public interface UtilisateurService {
 	
 	int consulterCredit(Utilisateur utilisateur);
 	
-	Utilisateur debiter(int debit);
+	void debiter(int debit,Utilisateur utilisateur);
 	
-	void creerUtilisateur(Utilisateur utilisateur);
+	void credit(int credit,Utilisateur utilisateur);
+	
+	void creerUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	
 	void supprimerUtilisateur(Utilisateur utilisateur);
+
+	boolean isEmailValide(String email, BusinessException be);
+	
+	boolean isCompteExist(long idUtilisateur, BusinessException be);
+	
+	boolean isAdmin(long idUtilisateur, BusinessException be);
 	
 }

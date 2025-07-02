@@ -14,6 +14,7 @@
 </head>
 <body>
 <header th:replace="~{fragments/entete::entete}"></header>
+<<<<<<< HEAD
 		
 	<main>
 
@@ -42,6 +43,38 @@
 				<a href="/inscription">Créer un compte</a>
 				
 			</form>
+=======
+
+<form th:action="@{/encheres}" method="post" th:="${utilisateur}">
+	<h1>Connectez-vous</h1>
+		<ul class="" >
+			<a class="">
+			
+			<li>
+				<label for="pseudo">Identifiant :</label> 
+				<input type="text" id="pseudo" th:field="*{pseudo}"  th:value required>
+			</li>
+			
+			<li>
+				<label for="motdepasse">Mot de passe :</label> 
+				<input type="text" id="motdepasse" th:field="*{motDePasse}"  th:value required>
+			</li>
+			
+			<li>
+			<input type="hidden" name="id" th:field="*{idUtilisateur}">
+			</li>
+			
+			<li> 
+				<button type="submit">Connexion</button>  
+			</li>
+			<li>
+
+
+				<input type="checkbox" id="sesouvenirdemoi" name="sesouvenirdemoi"  th:value>
+
+				<label for="sesouvenirdemoi">Se souvenir de moi</label> 
+				<a href="/encheres/inscription">Créer un compte</a>
+>>>>>>> 4fae5bebb060f1cd4e48912fd7cb5d5dc9ae4e1f
 
 	
 	</main>
