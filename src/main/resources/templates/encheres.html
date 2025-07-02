@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head th.insert="~{fragments/liens::liens}">
+<link rel="stylesheet" th:href="@{/css/general.css}">
 <meta charset="UTF-8">
 <title href="/encheres">Enchères</title>
 </head>
@@ -30,8 +31,6 @@
 				<input type="checkbox" id="encheresOuvertes" name="encheresOuvertes"><label for="encheresOuvertes">  enchères ouvertes</label>
 				<input type="checkbox" id="mesEncheresEnCours" name="mesEncheresEnCours"><label for="mesEncheresEnCours">  mes enchères en cours</label>
 				<input type="checkbox" id="mesEncheresEemportees" name="mesEncheresEemportees"><label for="mesEncheresEmportees">  mes enchères remportées</label>
-
-			</li>
 
 			<label for="mesVentes">Mes ventes :</label>
 			<input type="radio"  id="mesVentes" value="Mes ventes" name="achats/ventes">

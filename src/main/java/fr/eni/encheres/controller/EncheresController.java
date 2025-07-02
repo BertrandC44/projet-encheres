@@ -99,6 +99,7 @@ public class EncheresController {
 		return "redirect:/encheres";
 	}
 	
+
 	
 	@GetMapping("/encheres/vente")
 	public String vente(Model model) {
@@ -123,11 +124,7 @@ public class EncheresController {
 		return"enchere-en-cours";
 	}
 	
-	@PostMapping("/detail/retour")
-		public String retourDetailEnchere() {
-		return"encheres";
-		
-	}
+
 	
 	@PostMapping("/encheres/connexion")
 	public String connexion(@RequestParam(name = "idUtilisateur") int idUtilisateur, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) {
