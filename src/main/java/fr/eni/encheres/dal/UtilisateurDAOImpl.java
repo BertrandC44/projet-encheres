@@ -14,10 +14,13 @@ import fr.eni.encheres.bo.Utilisateur;
 @Repository
 public class UtilisateurDAOImpl implements UtilisateurDAO{
 
-	private static final String FIND_ALL = "SELECT * FROM UTILISATEURS";
-	private static final String FIND_BY_ID = "SELECT * FROM UTILISATEURS WHERE idUtilisateur=:idUtilisateur";
-	private static final String FIND_BY_EMAIL = "SELECT * FROM UTILISATEURS WHERE email=:email";
-	private static final String CREATE_UTILISATEUR = "INSERT INTO UTILISATEUR(pseudo,nom,prenom,email,telephone,rue,codePostal,ville,motDePasse,credit,administrateur) VALUES (:pseudo,:nom,:prenom,:email,:telephone,:rue,:codePostal,:ville,:motDePasse,200,false)";
+
+	private static final String FIND_ALL = "SELECT * FROM UTILISATEUR";
+	private static final String FIND_BY_ID = "SELECT * FROM UTILISATEUR WHERE idUtilisateur=:idUtilisateur";
+	private static final String CREATE_UTILISATEUR = "INSERT INTO UTILISATEUR(pseudo,nom,prenom,email,telephone,rue,codePostal,ville,motDePasse,credit,administrateur) VALUES (:pseudo,:nom,:prenom,:email,:telephone,:rue,:codePostal,:ville,:motDePasse,100,0)";
+	private static final String DELETE_BY_ID = "DELETE FROM UTILISATEUR WHERE idUtilisateur=:idUtilisateur";
+	private static final String FIND_CREDIT = "SELECT credit FROM UTILISATEUR WHERE idUtilisateur=:idUtilisateur";
+	private static final String UPDATE_CREDIT = "UPDATE UTILISATEUR SET credit =:credit WHERE idUtilisateur =:idUtilisateur ";
 
 	
 	
@@ -34,6 +37,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 
 	@Override
 	public Utilisateur utilisateurparId(long idUtilisateur) {
+
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idUtilisateur", idUtilisateur);
 		
@@ -76,20 +80,29 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 
 	@Override
 	public void supprimerUtilisateur(Utilisateur utilisateur) {
-		// TODO Auto-generated method stub
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idUtilisateur", utilisateur.getIdUtilisateur());
 		
+		namedParameterJdbcTemplate.update(DELETE_BY_ID, map);
 	}
 
 	@Override
-	public void crediter(int credit) {
-		// TODO Auto-generated method stub
+	public int consulterCredit(Utilisateur utilisateur) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idUtilisateur",utilisateur.getIdUtilisateur());
+		
+		return namedParameterJdbcTemplate.queryForObject(FIND_CREDIT, map, new BeanPropertyRowMapper<>(Integer.class));
+	}
+	
+
+	@Override
+	public void majCredit(int credit) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("credit", credit);
+		
+		namedParameterJdbcTemplate.update(UPDATE_CREDIT, map);
 		
 	}
 
-	@Override
-	public void debiter(int debit) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

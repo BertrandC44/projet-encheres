@@ -35,7 +35,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	@Override
 	public int consulterCredit(Utilisateur utilisateur) {
 		// TODO Auto-generated method stub
-		return null;
+		return 0;
 	}
 
 	@Override

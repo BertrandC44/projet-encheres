@@ -13,9 +13,8 @@ public class ContexteServiceImpl implements ContexteService {
 	
 	private UtilisateurDAO utilisateurDao;
 	
-	
-	
 	/**
+	 * Constructeur
 	 * @param utilisateurDao
 	 */
 	public ContexteServiceImpl(UtilisateurDAO utilisateurDao) {
@@ -23,10 +22,8 @@ public class ContexteServiceImpl implements ContexteService {
 	}
 
 
-
 	@Override
 	public Utilisateur charger(String email) {
-		// TODO Auto-generated method stub
 		return this.utilisateurDao.utilisateurparEmail(email);
 	}
 

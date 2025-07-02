@@ -8,6 +8,7 @@ public interface UtilisateurDAO {
 	
 	public List<Utilisateur> consulterUtilisateurs();
 	
+
 	public Utilisateur utilisateurparId(long id);
 
 	public Utilisateur utilisateurparEmail(String email);
@@ -16,8 +17,8 @@ public interface UtilisateurDAO {
 	
 	public void supprimerUtilisateur(Utilisateur utilisateur);
 	
-	public void crediter(int credit);
+	public int consulterCredit(Utilisateur utilisateur);
 	
-	public void debiter(int debit);
+	public void majCredit(int credit);
 
 }
