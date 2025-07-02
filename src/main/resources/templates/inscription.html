@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-<head th:insert="~{fragments/liens::liens}">
+<link rel="icon" data-th-href="@{/images/logoENI.png}" sizes="32x32">
+<link rel="stylesheet" th:href="@{/css/connexion.css}">
+<link rel="stylesheet" th:href="@{/css/general.css}">
 <meta charset="UTF-8">
 <title>ENI-Enchères</title>
 
@@ -9,80 +11,79 @@
 
 <body>
  
-	<header th:replace="~{fragments/entete::entete}"></header>
-
+<header th:replace="~{fragments/entete::entete}"></header>
 
 
 	<main>
-		<form th:action="@{/encheres}" method="post"  th:object="${utilisateur}">
-		<h2>Créer un compte</h2>
+		<form class="login-form" th:action="@{/encheres}" method="post"  th:object="${utilisateur}">
+		<h1>Créer un compte</h1>
 		<p th:if="${#fields.hasErrors('global')}" th:errors="*{global}">Incorrect date</p>
 		
 		<ul>
 	
-			<li>
+			<li class="form-input">
 			<label>Pseudo :</label>
 			<input type="text" th:field="*{pseudo}" id="pseudo"/>
 			<p th:if="${#fields.hasErrors('pseudo')}" th:errors="*{pseudo}"></p>
 			
 			</li>
 			
-			<li>
+			<li class="form-input">
 			<label>Nom :</label>
 			<input type="text" th:field="*{nom}" id="nom"/>
 			</li>
 			
-			<li>
+			<li class="form-input">
 			<label>Prénom :</label>
 			<input type="text" th:field="*{prenom}" id="prenom" />
 			</li>
 			
-			<li>
+			<li class="form-input">
 			<label>Email :</label>
 			<input type="text" th:field="*{email}" id="email" />
 			<p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
 			
 			</li>
 			
-			<li>
+			<li class="form-input">
 			<label> Téléphone :</label>
 
 			<input type="text" th:field="*{telephone}" id="telephone" />
 
 			</li>
 			
-			<li>
+			<li class="form-input">
 			<label>Rue :</label>
 			<input type="text" th:field="*{rue}" id="rue" />
 			</li>
 			
-			<li>
+			<li class="form-input">
 			<label>Code postal :</label>
 			<input type="text" th:field="*{codePostal}" id="cpo" />
 			</li>
 			
-			<li>
+			<li class="form-input">
 			<label>Ville :</label>
 			<input type="text" th:field="*{ville}" id="ville" />
 			</li>
 			
-			<li>
+			<li class="form-input">
 			<label>Mot de passe :</label>
-			<input type="text" th:field="*{motDePasse}" id="mdp" />
+			<input type="password" th:field="*{motDePasse}" id="mdp" />
 			</li>
 			
-			<li>
+			<li class="form-input">
 			<label for="confMdp">Confirmation :</label>
-			<input type="text" name="confMdp" id="confMdp" />
+			<input type="password" name="confMdp" id="confMdp" />
 			</li>
 			
 			<div class="btn">
-				<li>
-				<button type="submit">Créer</button>
+				<li >
+				<button class="form-button" type="submit">Créer</button>
 				</li>
 				
-				<li>
-				<button type="submit" name="annuler">Annuler</button>
+				<li >
+				<button class="form-button" type="submit" name="annuler">Annuler</button>
 				</li>
 			</div>
 			
