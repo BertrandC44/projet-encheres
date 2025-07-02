@@ -20,5 +20,11 @@ public interface UtilisateurDAO {
 	public int consulterCredit(Utilisateur utilisateur);
 	
 	public void majCredit(int credit);
+	
+	public boolean isEmailValide(String email);
+	
+	boolean isExist(long idUtilisateur);
+	
+	boolean isAdmin(long idUtilisateur);
 
 }
