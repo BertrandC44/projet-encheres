@@ -13,10 +13,6 @@ public class ContexteServiceImpl implements ContexteService {
 	
 	private UtilisateurDAO utilisateurDao;
 	
-	/**
-	 * Constructeur
-	 * @param utilisateurDao
-	 */
 	public ContexteServiceImpl(UtilisateurDAO utilisateurDao) {
 		this.utilisateurDao = utilisateurDao;
 	}

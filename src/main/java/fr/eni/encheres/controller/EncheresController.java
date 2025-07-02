@@ -27,21 +27,6 @@ public class EncheresController {
 		this.encheresService = encheresService;
 	}
 
-
-	@GetMapping("/")
-	public String index() {
-		System.out.println("Clic vers Index");
-		return "encheres";
-	}
-	
-
-	@GetMapping("/encheres")
-	public String indexBis() {
-		System.out.println("Clic vers Index");
-		return "encheres";
-	}
-	
-
 	@GetMapping("/encheres/connexion")
 	public String connexion() {
 		System.out.println("Clic vers Connexion");

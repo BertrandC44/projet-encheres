@@ -1,5 +1,6 @@
 package fr.eni.encheres.dal;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -14,7 +15,7 @@ import fr.eni.encheres.bo.Enchere;
 public class EnchereDAOImpl implements EnchereDAO{
 	
 	private static final String FIND_ALL = "SELECT * FROM ENCHERE";
-	private static final String UPDATE_ENCHERE = "UPDATE ENCHERE SET montantEnchere=:montantEnchere WHERE idArticle=idArticle";
+	private static final String INSERT_ENCHERE = "INSERT INTO ENCHERE (dateEnchere, montantEnchere, idUtilisateur, idArticle) VALUES (:dateEnchere, :montantEnchere, :idUtilisateur, :idArticle)";
 	
 	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -34,12 +35,13 @@ public class EnchereDAOImpl implements EnchereDAO{
 	}
 
 	@Override
-	public void encherir(long idArticle, int credit) {
+	public void encherir(LocalDate dateEnchere, int montantEnchere, int idUtilisateur, long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("dateEnchere", dateEnchere);
+		map.addValue("montantEnchere", montantEnchere);
+		map.addValue("idUtilisateur", idUtilisateur);
 		map.addValue("idArticle", idArticle);
-		map.addValue("montantEnchere", credit);
-		this.namedParameterJdbcTemplate.update(UPDATE_ENCHERE, map);
-		
+		this.namedParameterJdbcTemplate.update(INSERT_ENCHERE, map);
 	}
 
 }
