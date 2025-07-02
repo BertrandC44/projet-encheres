@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import fr.eni.encheres.bll.EncheresService;
 import fr.eni.encheres.bll.UtilisateurService;
-
-import fr.eni.encheres.bll.UtilisateurServiceImpl;
 import fr.eni.encheres.bll.contexte.ContexteService;
-
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.BusinessException;
@@ -125,6 +122,11 @@ public class EncheresController {
 		return"enchere-en-cours";
 	}
 	
+	
+	@GetMapping("encheres/profil")
+	public String afficherProfil() {
+		return"profil";
+	}
 
 	
 	@PostMapping("/encheres/connexion")
