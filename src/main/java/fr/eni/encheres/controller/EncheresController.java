@@ -2,29 +2,35 @@ package fr.eni.encheres.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-
-
-
-
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.bind.annotation.ModelAttribute;
-
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.eni.encheres.bll.EncheresService;
+import fr.eni.encheres.bll.UtilisateurService;
+import fr.eni.encheres.bll.UtilisateurServiceImpl;
 import fr.eni.encheres.bo.Article;
+import fr.eni.encheres.bo.Utilisateur;
+import jakarta.validation.Valid;
 
-@SessionAttributes({"membreEnSession"})
+
 @Controller
+@SessionAttributes({"membreEnSession"})
 public class EncheresController {
+
+    private final UtilisateurServiceImpl utilisateurServiceImpl;
 	
 	private EncheresService encheresService;
+	private UtilisateurService utilisateurService;
 
-	public EncheresController(EncheresService encheresService) {
+	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, UtilisateurServiceImpl utilisateurServiceImpl) {
 		this.encheresService = encheresService;
+		this.utilisateurServiceImpl = utilisateurServiceImpl;
 	}
 
 
@@ -34,13 +40,12 @@ public class EncheresController {
 		return "encheres";
 	}
 	
-
 	@GetMapping("/encheres")
-	public String indexBis() {
-		System.out.println("Clic vers Index");
+	public String encheres() {
+		System.out.println("afficher les enchères");
 		return "encheres";
+		
 	}
-	
 
 	@GetMapping("/encheres/connexion")
 	public String connexion() {
@@ -49,30 +54,41 @@ public class EncheresController {
 	}
 	
 	@GetMapping("/encheres/inscription")
-	public String inscription() {
-		System.out.println("Clic vers Inscription");
+	public String afficherInscription(Model model) {
+		Utilisateur utilisateur = new Utilisateur();
+		model.addAttribute("utilisateur", utilisateur);
 		return "inscription";
 	}
 	
-	@GetMapping("/enchereid/detail")
-	public String afficherEnchereId(@RequestParam(name = "id") long i, Model model) {
-		Article unArticle = encheresService.consulterArticleParId(i);
-		model.addAttribute("articleid", unArticle);
-		String acteurFilm = "";
-
-		model.addAttribute("acteur", acteurFilm);
+	@PostMapping("/enchères")
+	public String creerUtilisateur(@Valid @ModelAttribute Utilisateur utilisateur, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return "inscription";
+			
+		} else {
+			try {
+				utilisateurService.creerUtilisateur(utilisateur);
+				return "redirect:/encheres";
 		
-		return "encheresid";
+			} catch (BusinessException e) {
+				e.getMessages().forEach(m->{
+					ObjectError error = new ObjectError("globalError", m);
+					bindingResult.addError(error);
+				});
+			return "inscription";
+			}
+			
+		}
 	}
+	
+	
 
-
-
-	@GetMapping("/encheres")
-	public String encheres() {
-		System.out.println("afficher les enchères");
-		return "encheres";
-		
+	@GetMapping("/encheres/deconnexion")
+	public String finSession(SessionStatus sessionStatus) {
+		sessionStatus.setComplete();
+		return "redirect:/encheres";
 	}
+	
 	
 	@GetMapping("/encheres/vente")
 	public String vente(Model model) {
@@ -98,7 +114,7 @@ public class EncheresController {
 	}
 	
 	@PostMapping("/encheres")
-		public String detailEnchere() {
+		public String retourDetailEnchere() {
 		return"encheres";
 		
 	}
