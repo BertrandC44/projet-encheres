@@ -13,24 +13,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import fr.eni.encheres.bll.EncheresService;
 import fr.eni.encheres.bll.UtilisateurService;
-import fr.eni.encheres.bll.UtilisateurServiceImpl;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Utilisateur;
+import fr.eni.encheres.exception.BusinessException;
 import jakarta.validation.Valid;
 
 
 @Controller
-@SessionAttributes({"membreEnSession"})
+@SessionAttributes({"utilisateurEnSession"})
 public class EncheresController {
 
-    private final UtilisateurServiceImpl utilisateurServiceImpl;
 	
 	private EncheresService encheresService;
 	private UtilisateurService utilisateurService;
 
-	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, UtilisateurServiceImpl utilisateurServiceImpl) {
+	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService) {
 		this.encheresService = encheresService;
-		this.utilisateurServiceImpl = utilisateurServiceImpl;
+		this.utilisateurService = utilisateurService;
 	}
 
 
@@ -55,6 +54,7 @@ public class EncheresController {
 		return "connexion";
 	}
 	
+	
 	@GetMapping("/encheres/inscription")
 	public String afficherInscription(Model model) {
 		Utilisateur utilisateur = new Utilisateur();
@@ -73,7 +73,7 @@ public class EncheresController {
 				return "redirect:/encheres";
 		
 			} catch (BusinessException e) {
-				e.getMessages().forEach(m->{
+				e.getErrors().forEach(m->{
 					ObjectError error = new ObjectError("globalError", m);
 					bindingResult.addError(error);
 				});
@@ -82,7 +82,6 @@ public class EncheresController {
 			
 		}
 	}
-	
 	
 
 	@GetMapping("/encheres/deconnexion")
