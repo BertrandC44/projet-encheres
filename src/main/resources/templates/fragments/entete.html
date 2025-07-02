@@ -10,5 +10,11 @@
 		<div> <img alt ="logoenchere" width=65 th:src="@{/images/logoenchere.png}"></div>
 		<h1 id="nav-title"><a th:href="@{/encheres}">ENI-Enchères</a></h1>
 
+
+<h1><a th:href="@{/}">ENI - Enchères</a></h1>
+<th:block data-th-if="${membreEnSession != null and membreEnSession.id > 0}">
+		<p>Membre : </p>
+		<p th:text="${membreEnSession.prenom}"></p>
+	</th:block>
 </header>
--->
+
