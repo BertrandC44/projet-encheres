@@ -76,6 +76,7 @@ public class EncheresController {
 		} else {
 			try {
 				utilisateurService.creerUtilisateur(utilisateur);
+				this.addUtilisateurEnSession();
 				return "redirect:/encheres";
 		
 			} catch (BusinessException e) {
