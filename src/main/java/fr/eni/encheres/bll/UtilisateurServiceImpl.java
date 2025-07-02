@@ -17,6 +17,14 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		this.utilisateurDAO = utilisateurDAO;
 	}
 
+	/**
+	 * @param utilisateurDAO
+	 */
+	public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO) {
+		super();
+		this.utilisateurDAO = utilisateurDAO;
+	}
+
 	@Override
 	public List<Utilisateur> consulterUtilisateurs() {
 		List<Utilisateur> lstUtilisateurs = utilisateurDAO.consulterUtilisateurs();
@@ -64,10 +72,13 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		if(isValid) {
 			utilisateurDAO.creerUtilisateur(utilisateur);
 
+
 		} else {
+
 
 			throw be;
 		}
+		
 	}
 
 	@Override

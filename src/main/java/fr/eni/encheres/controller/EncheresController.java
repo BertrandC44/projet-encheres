@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import fr.eni.encheres.bll.EncheresService;
 import fr.eni.encheres.bll.UtilisateurService;
+
+import fr.eni.encheres.bll.UtilisateurServiceImpl;
+import fr.eni.encheres.bll.contexte.ContexteService;
+
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.BusinessException;
@@ -26,10 +30,15 @@ public class EncheresController {
 	
 	private EncheresService encheresService;
 	private UtilisateurService utilisateurService;
+	private ContexteService contexteService;
 
-	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService) {
+
+	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ContexteService contexteService) {
 		this.encheresService = encheresService;
 		this.utilisateurService = utilisateurService;
+		this.contexteService = contexteService;
+		
+
 	}
 
 
@@ -118,6 +127,47 @@ public class EncheresController {
 		public String retourDetailEnchere() {
 		return"encheres";
 		
+	}
+	
+	@PostMapping("/encheres/connexion")
+	public String connexion(@RequestParam(name = "idUtilisateur") int idUtilisateur, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) {
+		Utilisateur utilisateur = this.contexteService.charger(idUtilisateur);
+		if(utilisateur != null) {
+			utilisateurEnSession.setIdUtilisateur(utilisateur.getIdUtilisateur());
+			utilisateurEnSession.setPseudo(utilisateur.getPseudo());
+			utilisateurEnSession.setNom(utilisateur.getNom());
+			utilisateurEnSession.setPrenom(utilisateur.getPrenom());
+			utilisateurEnSession.setEmail(utilisateur.getEmail());
+			utilisateurEnSession.setTelephone(utilisateur.getTelephone());
+			utilisateurEnSession.setRue(utilisateur.getRue());
+			utilisateurEnSession.setCodePostal(utilisateur.getCodePostal());
+			utilisateurEnSession.setVille(utilisateur.getVille());
+			utilisateurEnSession.setMotDePasse(utilisateur.getMotDePasse());
+//			utilisateurEnSession.setCredit(utilisateur.getCredit());
+//			utilisateurEnSession.setAdmin(utilisateur.isAdmin());
+
+		
+		}else {
+			utilisateurEnSession.setIdUtilisateur(0);
+			utilisateurEnSession.setPseudo(null);
+			utilisateurEnSession.setNom(null);
+			utilisateurEnSession.setPrenom(null);
+			utilisateurEnSession.setEmail(null);
+			utilisateurEnSession.setTelephone(null);
+			utilisateurEnSession.setRue(null);
+			utilisateurEnSession.setCodePostal(null);
+			utilisateurEnSession.setVille(null);
+			utilisateurEnSession.setMotDePasse(null);
+//			utilisateurEnSession.setCredit(0);
+//			utilisateurEnSession.setAdmin(null);
+		}
+		return "redirect:/encheres";	
+	}
+	
+	@ModelAttribute("utilisateurEnSession")
+	public Utilisateur addUtilisateurEnSession() {
+		System.out.println("Utilisateur en session");
+		return new Utilisateur();
 	}
 	
 
