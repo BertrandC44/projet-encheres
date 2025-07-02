@@ -8,7 +8,8 @@ public interface UtilisateurDAO {
 	
 	public List<Utilisateur> consulterUtilisateurs();
 	
-
+	public Utilisateur utilisateurParPseudo(String pseudo);
+	
 	public Utilisateur utilisateurparId(long id);
 
 	public Utilisateur utilisateurparEmail(String email);

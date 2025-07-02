@@ -17,6 +17,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 
 	private static final String FIND_ALL = "SELECT * FROM UTILISATEUR";
 	private static final String FIND_BY_ID = "SELECT * FROM UTILISATEUR WHERE idUtilisateur=:idUtilisateur";
+	private static final String FIND_BY_PSEUDO = "SELECT * FROM UTILISATEUR WHERE pseudo=:pseudo";
 	private static final String CREATE_UTILISATEUR = "INSERT INTO UTILISATEUR(pseudo,nom,prenom,email,telephone,rue,codePostal,ville,motDePasse,credit,administrateur) VALUES (:pseudo,:nom,:prenom,:email,:telephone,:rue,:codePostal,:ville,:motDePasse,100,0)";
 	private static final String DELETE_BY_ID = "DELETE FROM UTILISATEUR WHERE idUtilisateur=:idUtilisateur";
 	private static final String FIND_CREDIT = "SELECT credit FROM UTILISATEUR WHERE idUtilisateur=:idUtilisateur";
@@ -131,6 +132,14 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		Integer isAdmin = namedParameterJdbcTemplate.queryForObject(IS_ADMIN, map, Integer.class);
 		
 		return isAdmin == 1;
+	}
+
+	@Override
+	public Utilisateur utilisateurParPseudo(String pseudo) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("pseudo", pseudo);
+
+		return namedParameterJdbcTemplate.queryForObject(FIND_BY_PSEUDO, map, new BeanPropertyRowMapper<>(Utilisateur.class));
 	}
 	
 	
