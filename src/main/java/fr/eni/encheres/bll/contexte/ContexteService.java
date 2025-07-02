@@ -4,6 +4,6 @@ import fr.eni.encheres.bo.Utilisateur;
 
 public interface ContexteService {
 	
-	public Utilisateur charger(String email) ;
+	public Utilisateur charger(int id) ;
 
 }

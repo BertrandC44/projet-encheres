@@ -15,6 +15,14 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	
 	
 
+	/**
+	 * @param utilisateurDAO
+	 */
+	public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO) {
+		super();
+		this.utilisateurDAO = utilisateurDAO;
+	}
+
 	@Override
 	public List<Utilisateur> consulterUtilisateurs() {
 		List<Utilisateur> lstUtilisateurs = utilisateurDAO.consulterUtilisateurs();
@@ -54,14 +62,17 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	}
 
 	@Override
-	public void creerUtilisateur(Utilisateur utilisateur) {
+	public void creerUtilisateur(Utilisateur utilisateur) throws BusinessException {
 		BusinessException be = new BusinessException();
 		
 		boolean isValid = isEmailValide(utilisateur.getEmail(), be);
 		
 		if(isValid) {
 			utilisateurDAO.creerUtilisateur(utilisateur);
+		}else {
+			throw be;
 		}
+		
 	}
 
 	@Override

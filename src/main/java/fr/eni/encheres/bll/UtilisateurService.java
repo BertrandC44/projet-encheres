@@ -17,7 +17,7 @@ public interface UtilisateurService {
 	
 	void credit(int credit,Utilisateur utilisateur);
 	
-	void creerUtilisateur(Utilisateur utilisateur);
+	void creerUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	
 	void supprimerUtilisateur(Utilisateur utilisateur);
 
