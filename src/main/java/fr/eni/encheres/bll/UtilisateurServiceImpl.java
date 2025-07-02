@@ -63,7 +63,9 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		
 		if(isValid) {
 			utilisateurDAO.creerUtilisateur(utilisateur);
-		}else {
+
+		} else {
+
 			throw be;
 		}
 	}
