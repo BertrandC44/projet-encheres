@@ -6,13 +6,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import fr.eni.encheres.bll.EncheresService;
 import fr.eni.encheres.bll.UtilisateurService;
+
 import fr.eni.encheres.bll.contexte.ContexteService;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Utilisateur;
@@ -21,7 +21,7 @@ import jakarta.validation.Valid;
 
 
 @Controller
-@SessionAttributes({"utilisateurEnSession"})
+//@SessionAttributes({"utilisateurEnSession"})
 public class EncheresController {
 
 	
@@ -170,6 +170,5 @@ public class EncheresController {
 		return new Utilisateur();
 	}
 	
-
 
 }

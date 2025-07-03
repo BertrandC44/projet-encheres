@@ -17,7 +17,6 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		this.utilisateurDAO = utilisateurDAO;
 	}
 
-
 	@Override
 	public List<Utilisateur> consulterUtilisateurs() {
 		List<Utilisateur> lstUtilisateurs = utilisateurDAO.consulterUtilisateurs();

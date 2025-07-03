@@ -5,6 +5,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700;900&display=swap" rel="stylesheet">
 
+
 <h1 ><a id="nav-title" th:href="@{/encheres}" >  ENI-Enchères</a></h1>
 <p> Texte inspirant c'est super cool les enchères </p>
 <p th:if="${utilisateurEnSession !=null && utilisateurEnSession.idUtilisateur > 0}" th:text="'Bonjour ' + ${utilisateurEnSession.prenom} + ' !'">hello</p>
