@@ -5,10 +5,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700;900&display=swap" rel="stylesheet">
 
- 
+
 <h1 id="nav-title"><a th:href="@{/encheres}">ENI-Enchères</a></h1>
 <p> Enchères en chair </p>
 <p th:if="${utilisateurEnSession !=null && utilisateurEnSession.idUtilisateur > 0}" th:text="'Bonjour ' + ${utilisateurEnSession.prenom} + ' !'">hello</p>
+
  
 <th:block data-th-if="${utilisateurEnSession == null or utilisateurEnSession.idUtilisateur == 0}">
 		<a href="/encheres/inscription">S'inscrire</a>
@@ -19,4 +20,7 @@
 		<a href="/encheres/profil">Voir mon profil</a>
 		<a href="/encheres/deconnexion">Déconnexion</a>
 	</th:block>
+
+</header>
+
 
