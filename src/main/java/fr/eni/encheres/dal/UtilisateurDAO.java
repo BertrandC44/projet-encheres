@@ -16,7 +16,11 @@ public interface UtilisateurDAO {
 	
 	public void creerUtilisateur(Utilisateur utilisateur);
 	
+	public void modifierUtilisateur(Utilisateur utilisateur);
+	
 	public void supprimerUtilisateur(Utilisateur utilisateur);
+	
+	public void supprimerMonProfil(Utilisateur utilisateur);
 	
 	public int consulterCredit(Utilisateur utilisateur);
 	
