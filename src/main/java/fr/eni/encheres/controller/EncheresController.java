@@ -8,7 +8,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,9 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import fr.eni.encheres.bll.EncheresService;
 import fr.eni.encheres.bll.UtilisateurService;
 
-import fr.eni.encheres.bll.UtilisateurServiceImpl;
 import fr.eni.encheres.bll.contexte.ContexteService;
-
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.BusinessException;
@@ -26,7 +23,7 @@ import jakarta.validation.Valid;
 
 
 @Controller
-@SessionAttributes({"utilisateurEnSession"})
+//@SessionAttributes({"utilisateurEnSession"})
 public class EncheresController {
 
 	
@@ -129,11 +126,20 @@ public class EncheresController {
 		return"enchere-en-cours";
 	}
 	
+	
+	@GetMapping("encheres/profil")
+	public String afficherProfil(@RequestParam(name="pseudo") String pseudo, Model model) {
+		if (pseudo != null) {
+			Utilisateur utilisateur = utilisateurService.
+			
+		}
+		return"profil";
+	}
 
 	
 	@PostMapping("/encheres/connexion")
 	public String connexion(@RequestParam(name = "pseudo") String pseudo, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) {
-		Utilisateur utilisateur = this.contexteService.charger(pseudo);
+		Utilisateur utilisateur = this.utilisateurService.consulterUtilisateurParPseudo(pseudo);
 		if(utilisateur != null) {
 			utilisateurEnSession.setIdUtilisateur(utilisateur.getIdUtilisateur());
 			utilisateurEnSession.setPseudo(utilisateur.getPseudo());
@@ -172,6 +178,5 @@ public class EncheresController {
 		return new Utilisateur();
 	}
 	
-
 
 }

@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
-<head th.insert="~{fragments/liens::liens}">
-<link rel="stylesheet" th:href="@{/css/general.css}">
+<head th:insert="~{fragments/liens::liens}">
 <meta charset="UTF-8">
-<title href="/encheres">Enchères</title>
+<title>ENI-Enchères</title>
 </head>
 <body>
  
 <header th:replace="~{fragments/entete::entete}"></header>
- 
+
 		
+  
 	<h2>Filtres :</h2>
 	<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">
- 
+
 		<ul>
 			<label for="achats">Achats :</label>
 			<input type="radio"  id="achats" value="Achats" name="achats/ventes">
@@ -31,10 +31,7 @@
 		
 		</ul>
 	</th:block>
- 
-
- 
-		<ul class="" >
+    
 			<a class="">
 			<li>
 				<label for="categories">Catégories :</label>
@@ -82,35 +79,21 @@
 					<span class="compte-rebours" th:attr="data-date-fin=${article.dateFinEncheres}"></span></p> -->
 					</tbody>
 				</table>
-			
-			
-			<!-- <li>
-			<div class="vueenchere">
-				<img class="photoarticle" alt="photoArticle" width=50 th:src="@{/images/article1.png}"> <!--  Lien vers photo (BDD?)
- 
-				<input type="text" id="article" name="nomArticle" disabled>
-				
-				<label for="prix">Prix :</label>
-				<input type="text" id="miseaprix" name="prix" disabled>
-				
-				<label for="classement">Classement :</label>
-				<input type="text" id="classement" name="classement" disabled>
-				
-				<label for="finEnchere">Fin de l'enchère :</label>
-				<input type="text" id="finenchere" name="finEnchere" disabled>
-				
+				 
 				<label for="retrait">Retrait :</label>
 				<input type="text" id="retrait" name="retrait" disabled>
-				  
+
 				 <label for="vendeur">Vendeur :</label>
 				<input type="text" id="vendeur" name="vendeur" disabled>
-				
-				</div>
+
+
 			</div>
 			</li>
 		</ul>
- -->
  
+
+<footer></footer>
 
 </body>
 </html>
+ 
