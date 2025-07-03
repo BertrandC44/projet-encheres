@@ -21,7 +21,6 @@ import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.BusinessException;
-import fr.eni.tp.filmotheque.bo.Genre;
 import jakarta.validation.Valid;
 
 
