@@ -1,27 +1,16 @@
 <!DOCTYPE html>
 <html>
-<head th.insert="~{fragments/liens::liens}">
-<link rel="stylesheet" th:href="@{/css/general.css}">
+<head th:insert="~{fragments/liens::liens}">
 <meta charset="UTF-8">
-<title href="/encheres">Enchères</title>
+<title>ENI-Enchères</title>
 </head>
 <body>
 
 <header th:replace="~{fragments/entete::entete}"></header>
 
-
-	<th:block data-th-if="${utilisateurEnSession == null or utilisateurEnSession.idUtilisateur == 0}">
-		<a href="/encheres/inscription">S'inscrire</a>
-		<a href="/encheres/connexion">Se connecter</a>
-	</th:block>
-	<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">
-		<a href="/encheres/vente">Vendre un article</a>
-		<a href="/encheres/profil">Voir mon profil</a>
-		<a href="/encheres/deconnexion">Déconnexion</a>
-	</th:block>
 		
 	<h2>Filtres :</h2>
-	<th:block data-th-if="${utilisateurEnSession != null or utilisateurEnSession.idUtilisateur > 0}">
+	<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">
 		<ul>
 		<div>
 			<label for="achats">Achats :</label>
