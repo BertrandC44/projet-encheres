@@ -21,7 +21,11 @@ public interface UtilisateurService {
 	
 	void creerUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	
+	void modifierUtilisateur(Utilisateur utilisateur);
+	
 	void supprimerUtilisateur(Utilisateur utilisateur);
+	
+	void supprimerMonProfil(Utilisateur utilisateur);
 
 	boolean isEmailValide(String email, BusinessException be);
 

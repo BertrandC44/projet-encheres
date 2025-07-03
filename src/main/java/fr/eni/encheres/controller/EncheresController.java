@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import fr.eni.encheres.bll.EncheresService;
 import fr.eni.encheres.bll.UtilisateurService;
-
+import fr.eni.encheres.bll.UtilisateurServiceImpl;
 import fr.eni.encheres.bll.contexte.ContexteService;
+import fr.eni.encheres.bll.contexte.ContexteServiceImpl;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
@@ -28,16 +29,22 @@ import jakarta.validation.Valid;
 @SessionAttributes({"utilisateurEnSession"})
 public class EncheresController {
 
+    private final UtilisateurServiceImpl utilisateurServiceImpl;
+
+    private final ContexteServiceImpl contexteServiceImpl;
+
 	
 	private EncheresService encheresService;
 	private UtilisateurService utilisateurService;
 	private ContexteService contexteService;
 
 
-	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ContexteService contexteService) {
+	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ContexteService contexteService, ContexteServiceImpl contexteServiceImpl, UtilisateurServiceImpl utilisateurServiceImpl) {
 		this.encheresService = encheresService;
 		this.utilisateurService = utilisateurService;
 		this.contexteService = contexteService;
+		this.contexteServiceImpl = contexteServiceImpl;
+		this.utilisateurServiceImpl = utilisateurServiceImpl;
 		
 
 	}
@@ -53,7 +60,7 @@ public class EncheresController {
 	@GetMapping("/encheres")
 	public String encheres(Model model) {
 		System.out.println("afficher les enchères");
-		List<Article> articles = encheresService.consulterArticles();
+		List<Article> articles = encheresService.consulterArticlePseudo();
 		model.addAttribute("articles", articles);
 		return "encheres";
 		
@@ -135,9 +142,41 @@ public class EncheresController {
 	}
 	
 
+	@GetMapping("encheres/profil")
+	public String afficherProfil(@RequestParam(name="pseudo") String pseudo, Model model) {
+		Utilisateur utilisateur = utilisateurService.consulterUtilisateurParPseudo(pseudo);
+		if (utilisateur != null) {
+			model.addAttribute("utilisateur", utilisateur);
+		}
+		return"profil";
 
+	}
+	
+	@GetMapping("encheres/profil/modifier")
+	public String afficherModifierProfil(@RequestParam(name="pseudo") String pseudo, Model model) {
+		Utilisateur utilisateur = utilisateurService.consulterUtilisateurParPseudo(pseudo);
+		if (utilisateur != null) {
+			model.addAttribute("utilisateur", utilisateur);
+		}
+		return"modifier-profil";
+	}
+	
+	@PostMapping("encheres/profil/modifier")
+	public String modifierProfil(@ModelAttribute Utilisateur utilisateur) {
+		utilisateurService.modifierUtilisateur(utilisateur);
+		return "redirect:/encheres";
+	}
+
+
+	@GetMapping("/encheres/profil/supprimer")
+	public String supprimerUtilisateur(@ModelAttribute Utilisateur utilisateur) {
+		utilisateurService.supprimerMonProfil(utilisateur);
+		return "redirect:/encheres/connexion";
+	}
+	
 	
 	@PostMapping("/encheres/connexion")
+
 
 	public String connexion(@RequestParam(name = "pseudo") String pseudo,@Valid @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, BindingResult bindingResult,BusinessException be) {
 //		try {
@@ -226,6 +265,7 @@ public class EncheresController {
 ////			utilisateurEnSession.setAdmin(null);
 //			return "redirect:/encheres/connexion";	
 //		}
+
 
 		
 	}

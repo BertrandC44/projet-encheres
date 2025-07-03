@@ -1,14 +1,18 @@
 package fr.eni.encheres.dal;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Utilisateur;
 
 @Repository
@@ -19,7 +23,9 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 	private static final String FIND_BY_ID = "SELECT * FROM UTILISATEUR WHERE idUtilisateur=:idUtilisateur";
 	private static final String FIND_BY_PSEUDO = "SELECT * FROM UTILISATEUR WHERE pseudo=:pseudo";
 	private static final String CREATE_UTILISATEUR = "INSERT INTO UTILISATEUR(pseudo,nom,prenom,email,telephone,rue,codePostal,ville,motDePasse,credit,administrateur) VALUES (:pseudo,:nom,:prenom,:email,:telephone,:rue,:codePostal,:ville,:motDePasse,100,0)";
+	private static final String UPDATE_UTILISATEUR = "UPDATE UTILISATEUR SET pseudo = :pseudo, nom = :nom , prenom = :prenom, email = :email, telephone = :telephone, rue = :rue, codePostal = :codePostal, ville = :ville, motDePasse = :motDePasse WHERE pseudo = :pseudo";
 	private static final String DELETE_BY_ID = "DELETE FROM UTILISATEUR WHERE idUtilisateur=:idUtilisateur";
+	private static final String DELETE_PROFIL = "DELETE FROM UTILISATEUR WHERE idUtilisateur = :idUtilisateur";
 	private static final String FIND_CREDIT = "SELECT credit FROM UTILISATEUR WHERE idUtilisateur=:idUtilisateur";
 	private static final String UPDATE_CREDIT = "UPDATE UTILISATEUR SET credit =:credit WHERE idUtilisateur =:idUtilisateur ";
 	private static final String COUNT_EMAIL = "SELECT COUNT(email) FROM UTILISATEUR WHERE email =:email";
@@ -27,6 +33,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 	private static final String COUNT_ID = "SELECT COUNT(*) FROM UTILISATEUR WHERE idUtilisateur =:idUtilisateur";
 	private static final String IS_ADMIN = "SELECT administrateur FROM UTILISATEUR WHERE idUtilisateur =:idUtilisateur";
  
+	
 	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -64,6 +71,21 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 
 		return namedParameterJdbcTemplate.queryForObject(FIND_BY_PSEUDO, map, new BeanPropertyRowMapper<>(Utilisateur.class));
 	}
+	
+	@Override
+	public void modifierUtilisateur(Utilisateur utilisateur) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("pseudo", utilisateur.getPseudo());
+		map.addValue("nom", utilisateur.getNom());
+		map.addValue("prenom", utilisateur.getPrenom());
+		map.addValue("email", utilisateur.getEmail());
+		map.addValue("telephone", utilisateur.getTelephone());
+		map.addValue("rue", utilisateur.getRue());
+		map.addValue("codePostal", utilisateur.getCodePostal());
+		map.addValue("ville", utilisateur.getVille());
+		map.addValue("motDePasse", utilisateur.getMotDePasse());
+		this.namedParameterJdbcTemplate.update(UPDATE_UTILISATEUR, map);
+	}
 
 	@Override
 	public void creerUtilisateur(Utilisateur utilisateur) {
@@ -89,6 +111,13 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 			utilisateur.setIdUtilisateur(keyHolder.getKey().longValue());
 		}
 		
+	}
+	
+	@Override
+	public void supprimerMonProfil(Utilisateur utilisateur) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idUtilisateur", utilisateur.getIdUtilisateur());
+		namedParameterJdbcTemplate.update(DELETE_PROFIL, map);
 	}
 
 	@Override
@@ -157,7 +186,25 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 
 
 	
-	
+	/*class UtilisateurRowMapper implements RowMapper<Utilisateur>{
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public Utilisateur mapRow(ResultSet rs, int rowNum) throws SQLException {
+			Utilisateur u = new Utilisateur();
+			u.setPseudo(rs.getString("pseudo"));
+			u.setNom(rs.getString("nom"));
+			u.setPrenom(rs.getString("prenom"));
+			u.setEmail(rs.getString("email"));
+			
+			Article article = new Article();
+			article.setIdArticle(rs.getLong("idArticle"));
+			
+			u.setArticles((List<Article>) article);
+			return u;
+		}
+		
+	}*/
 	
 	
 
