@@ -84,8 +84,7 @@ public class EncheresServiceImpl implements EncheresService{
 
 	@Override
 	public void encherir(LocalDate dateEnchere, int montantEnchere, long idUtilisateur, long idArticle) {
-		
-		
+
 	}
 
 
