@@ -29,8 +29,10 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 	private static final String FIND_CREDIT = "SELECT credit FROM UTILISATEUR WHERE idUtilisateur=:idUtilisateur";
 	private static final String UPDATE_CREDIT = "UPDATE UTILISATEUR SET credit =:credit WHERE idUtilisateur =:idUtilisateur ";
 	private static final String COUNT_EMAIL = "SELECT COUNT(email) FROM UTILISATEUR WHERE email =:email";
+	private static final String COUNT_PSEUDO = "SELECT COUNT(pseudo) FROM UTILISATEUR WHERE pseudo =:pseudo";
 	private static final String COUNT_ID = "SELECT COUNT(*) FROM UTILISATEUR WHERE idUtilisateur =:idUtilisateur";
 	private static final String IS_ADMIN = "SELECT administrateur FROM UTILISATEUR WHERE idUtilisateur =:idUtilisateur";
+ 
 	
 	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -152,13 +154,22 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		Integer nbEmail = namedParameterJdbcTemplate.queryForObject(COUNT_EMAIL, map, Integer.class);
 		return nbEmail ==0 ;
 	}
+	
+	@Override
+	public boolean isPseudoValide(String pseudo) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("pseudo", pseudo);
+		
+		Integer nbPseudo = namedParameterJdbcTemplate.queryForObject(COUNT_PSEUDO, map, Integer.class);
+		return nbPseudo == 0 ;
+	}
 
 	@Override
-	public boolean isExist(long idUtilisateur) {
+	public boolean isExist(String pseudo) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
-		map.addValue("idUtilisateur", idUtilisateur);
+		map.addValue("pseudo", pseudo);
 		
-		Integer nbCompte = namedParameterJdbcTemplate.queryForObject(COUNT_ID, map, Integer.class);
+		Integer nbCompte = namedParameterJdbcTemplate.queryForObject(COUNT_PSEUDO, map, Integer.class);
 		return nbCompte ==1;
 	}
 
@@ -171,6 +182,8 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		
 		return isAdmin == 1;
 	}
+
+
 
 	
 	/*class UtilisateurRowMapper implements RowMapper<Utilisateur>{

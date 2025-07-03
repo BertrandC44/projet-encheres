@@ -28,9 +28,13 @@ public interface UtilisateurService {
 	void supprimerMonProfil(Utilisateur utilisateur);
 
 	boolean isEmailValide(String email, BusinessException be);
-	
-	boolean isCompteExist(long idUtilisateur, BusinessException be);
+
+	boolean isPseudoValide(String pseudo, BusinessException be);
 	
 	boolean isAdmin(long idUtilisateur, BusinessException be);
+
+	boolean isCompteExist(String pseudo, BusinessException be);
+
+
 	
 }
