@@ -124,7 +124,11 @@ public class EncheresController {
 	
 	
 	@GetMapping("encheres/profil")
-	public String afficherProfil() {
+	public String afficherProfil(@RequestParam(name="pseudo") String pseudo, Model model) {
+		if (pseudo != null) {
+			Utilisateur utilisateur = utilisateurService.
+			
+		}
 		return"profil";
 	}
 

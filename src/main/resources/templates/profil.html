@@ -7,7 +7,78 @@
 <body>
 
 <header th:replace="~{fragments/entete::entete}"></header>
+	
+<main>
+		<form th:action="@{/encheres/profil}" method="post"  th:object="${utilisateur}">
+		<h2>Profil</h2>
+		
+		<ul>
+	
+			<li>
+			<label>Pseudo :</label>
+			<input type="text" th:field="*{pseudo}" id="pseudo"/>			
+			</li>
+			
+			<li>
+			<label>Nom :</label>
+			<input type="text" th:field="*{nom}" id="nom"/>
+			</li>
+			
+			<li>
+			<label>Prénom :</label>
+			<input type="text" th:field="*{prenom}" id="prenom" />
+			</li>
+			
+			<li>
+			<label>Email :</label>
+			<input type="text" th:field="*{email}" id="email" />			
+			</li>
+			
+			<li>
+			<label> Téléphone :</label>
 
+			<input type="text" th:field="*{telephone}" id="telephone" />
+
+			</li>
+			
+			<li>
+			<label>Rue :</label>
+			<input type="text" th:field="*{rue}" id="rue" />
+			</li>
+			
+			<li>
+			<label>Code postal :</label>
+			<input type="text" th:field="*{codePostal}" id="cpo" />
+			</li>
+			
+			<li>
+			<label>Ville :</label>
+			<input type="text" th:field="*{ville}" id="ville" />
+			</li>
+			
+			<!--  <li>
+			<label>Mot de passe :</label>
+			<input type="text" th:field="*{motDePasse}" id="mdp" />
+			</li>
+			
+			<li>
+			<label for="confMdp">Confirmation :</label>
+			<input type="text" name="confMdp" id="confMdp" />
+			</li>
+			
+			<div class="btn">
+				<li>
+				<button type="submit">Créer</button>
+				</li>-->
+				
+				<li>
+				<button type="submit">Modifier</button>
+				</li>
+			</div>
+			
+		</ul>
+		
+		</form>
 
 
 </body>
