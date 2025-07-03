@@ -131,7 +131,7 @@ public class EncheresController {
 	
 	@PostMapping("/encheres/connexion")
 	public String connexion(@RequestParam(name = "pseudo") String pseudo, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) {
-		Utilisateur utilisateur = this.contexteService.charger(pseudo);
+		Utilisateur utilisateur = this.utilisateurService.consulterUtilisateurParPseudo(pseudo);
 		if(utilisateur != null) {
 			utilisateurEnSession.setIdUtilisateur(utilisateur.getIdUtilisateur());
 			utilisateurEnSession.setPseudo(utilisateur.getPseudo());

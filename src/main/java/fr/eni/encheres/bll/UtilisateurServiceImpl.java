@@ -33,6 +33,11 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		Utilisateur utilisateur = utilisateurDAO.utilisateurparId(id);
 		return utilisateur;
 	}
+	
+	@Override
+	public Utilisateur consulterUtilisateurParPseudo(String pseudo) {
+		return this.utilisateurDAO.utilisateurParPseudo(pseudo);
+	}
 
 	@Override
 	public int consulterCredit(Utilisateur utilisateur) {
@@ -107,6 +112,9 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		}be.add("Action non autorisée, vous n'êtes pas administrateur du site");
 		return false;
 	}
+
+
+
 	
 	
 	
