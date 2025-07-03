@@ -53,8 +53,10 @@ public class EncheresController {
 
 	
 	@GetMapping("/encheres")
-	public String encheres() {
+	public String encheres(Model model) {
 		System.out.println("afficher les enchères");
+		List<Article> articles = encheresService.consulterArticles();
+		model.addAttribute("articles", articles);
 		return "encheres";
 		
 	}
@@ -130,14 +132,20 @@ public class EncheresController {
 	
 	
 	@GetMapping("encheres/profil")
-	public String afficherProfil() {
+	public String afficherProfil(@RequestParam(name="pseudo") String pseudo, Model model) {
+		if (pseudo != null) {
+			Utilisateur utilisateur = utilisateurService.
+			
+		}
 		return"profil";
 	}
 
 	
 	@PostMapping("/encheres/connexion")
-	public String connexion(@Valid @RequestParam(name = "pseudo") String pseudo, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) {
-		Utilisateur utilisateur = this.contexteService.charger(pseudo);
+
+	public String connexion(@RequestParam(name = "pseudo") String pseudo, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) {
+		Utilisateur utilisateur = this.utilisateurService.consulterUtilisateurParPseudo(pseudo);
+
 		if(utilisateur != null) {
 			utilisateurEnSession.setIdUtilisateur(utilisateur.getIdUtilisateur());
 			utilisateurEnSession.setPseudo(utilisateur.getPseudo());
