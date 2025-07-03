@@ -53,11 +53,12 @@
 				
 					<th>Nom</th>
 					<th>Prix de l'article</th>
-					<th>Classement</th>
 					<th>Fin de l'enchere</th>
+					<th>Temps restant </th>
 					<th>Retrait</th>
-					<th>Vendeur</th>
-					<th>Photo de l'article</th>
+					<th>Utilisateur </th>
+					
+					
 					
 				</tr>
 			</thead>	
@@ -65,30 +66,73 @@
 				<tr th:each="a : ${articles}">
 					<td th:text="${a.nomArticle}"></td>
 					<td th:text="${a.miseAPrix}"></td>
-					<td th:text=""></td>
 					<td th:text="${#temporals.format(a.dateFinEncheres,'dd-MM-yyyy HH:mm')}">
-					<td th:text="{a.retrait}"></td>
-					<td th:text="{a.utilisateur}"></td>
-					<td th:text=""></td>
+					<td>
+					
+					<span class="compte-rebours"
+      				th:data-date-debut="${a.dateDebutEncheres}" 
+      				th:data-date-fin="${a.dateFinEncheres}"></span>
+					</td>
+					<td th:text="${a.retrait?.rue + ' ' + a.retrait?.codePostal + ' ' + a.retrait?.ville}"></td>
+					<td th:text="${a.utilisateur?.pseudo}"></td>
+					
 		
 					</tr>
-					<!-- <p> Temps restant :
-					<span class="compte-rebours" th:attr="data-date-fin=${article.dateFinEncheres}"></span></p> -->
+					
 					</tbody>
+					
 				</table>
 
-				<label for="retrait">Retrait :</label>
-				<input type="text" id="retrait" name="retrait" disabled>
-				  
-				 <label for="vendeur">Vendeur :</label>
-				<input type="text" id="vendeur" name="vendeur" disabled>
+				
 				
 			</div>
 			</li>
 		</ul>
  
  
-<footer></footer>
+ <script>
+ 
+ 	function startChrono(element){
+		const dateFin = new Date(element.dataset.dateFin);
+		const dateDebut = new Date(element.dataset.dateDebut);
+		
+		
+ 			function updateChrono(){
+				const maintenant = new Date();
+				
+				
+				if(maintenant < dateDebut){
+					element.textContent = "Enchère non commencée";
+					return;
+					}
+				const diff = dateFin - maintenant;
+				
+					if(diff<= 0){
+						element.textContent = "Enchère terminée";
+						return;
+						}
+					 const jours = Math.floor(diff / (1000 * 60 * 60 * 24));
+					    const heures = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+					    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+					    const secondes = Math.floor((diff % (1000 * 60)) / 1000);
+			
+			element.textContent=
+				`${jours}j${heures.toString().padStart(2,'0')}h`+
+				`${minutes.toString().padStart(2,'0')}m`+
+				`${secondes.toString().padStart(2,'0')}s`;
+				
+				
+ 	}
+ 			updateChrono();
+			        setInterval(updateChrono,1000);
+ 	}
+ 	document.addEventListener('DOMContentLoaded', () => {
+		const elements=document.querySelectorAll(".compte-rebours");
+		elements.forEach(el => startChrono(el));
+ 	});
+
+ 	
+ </script>
 
 </body>
 </html>
