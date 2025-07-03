@@ -78,6 +78,11 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		}
 		
 	}
+	
+	@Override
+	public void modifierUtilisateur(Utilisateur utilisateur) {
+		utilisateurDAO.modifierUtilisateur(utilisateur);
+	}
 
 	@Override
 	public void supprimerUtilisateur(Utilisateur utilisateur) {
@@ -88,6 +93,11 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		}
 		
 		
+	}
+	
+	@Override
+	public void supprimerMonProfil(Utilisateur utilisateur) {
+		utilisateurDAO.supprimerMonProfil(utilisateur);
 	}
 
 	@Override
@@ -113,6 +123,10 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		}be.add("Action non autorisée, vous n'êtes pas administrateur du site");
 		return false;
 	}
+
+	
+
+	
 
 
 
