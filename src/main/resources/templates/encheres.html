@@ -8,8 +8,6 @@
  
 <header th:replace="~{fragments/entete::entete}"></header>
 
-		
-  
 	<h2>Filtres :</h2>
 	<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">
 
@@ -31,7 +29,6 @@
 		
 		</ul>
 	</th:block>
-    
 			<a class="">
 			<li>
 				<label for="categories">Catégories :</label>
@@ -79,21 +76,19 @@
 					<span class="compte-rebours" th:attr="data-date-fin=${article.dateFinEncheres}"></span></p> -->
 					</tbody>
 				</table>
-				 
+
 				<label for="retrait">Retrait :</label>
 				<input type="text" id="retrait" name="retrait" disabled>
-
+				  
 				 <label for="vendeur">Vendeur :</label>
 				<input type="text" id="vendeur" name="vendeur" disabled>
-
-
+				
 			</div>
 			</li>
 		</ul>
  
-
+ 
 <footer></footer>
 
 </body>
 </html>
- 
