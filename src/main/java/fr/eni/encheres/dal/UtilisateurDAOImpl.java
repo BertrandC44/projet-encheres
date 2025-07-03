@@ -53,6 +53,15 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		
 		return namedParameterJdbcTemplate.queryForObject(FIND_BY_ID, map, new BeanPropertyRowMapper<>(Utilisateur.class));
 	}
+	
+	
+	@Override
+	public Utilisateur utilisateurParPseudo(String pseudo) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("pseudo", pseudo);
+
+		return namedParameterJdbcTemplate.queryForObject(FIND_BY_PSEUDO, map, new BeanPropertyRowMapper<>(Utilisateur.class));
+	}
 
 	@Override
 	public void creerUtilisateur(Utilisateur utilisateur) {
@@ -134,13 +143,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		return isAdmin == 1;
 	}
 
-	@Override
-	public Utilisateur utilisateurParPseudo(String pseudo) {
-		MapSqlParameterSource map = new MapSqlParameterSource();
-		map.addValue("pseudo", pseudo);
-
-		return namedParameterJdbcTemplate.queryForObject(FIND_BY_PSEUDO, map, new BeanPropertyRowMapper<>(Utilisateur.class));
-	}
+	
 	
 	
 	

@@ -28,4 +28,5 @@ public interface UtilisateurDAO {
 	
 	boolean isAdmin(long idUtilisateur);
 
+
 }

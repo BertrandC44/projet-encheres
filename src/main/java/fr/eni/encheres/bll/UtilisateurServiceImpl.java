@@ -17,7 +17,6 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		this.utilisateurDAO = utilisateurDAO;
 	}
 
-
 	@Override
 	public List<Utilisateur> consulterUtilisateurs() {
 		List<Utilisateur> lstUtilisateurs = utilisateurDAO.consulterUtilisateurs();
@@ -33,6 +32,11 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	public Utilisateur consulterUtilisateursParId(long id) {
 		Utilisateur utilisateur = utilisateurDAO.utilisateurparId(id);
 		return utilisateur;
+	}
+	
+	@Override
+	public Utilisateur consulterUtilisateurParPseudo(String pseudo) {
+		return this.utilisateurDAO.utilisateurParPseudo(pseudo);
 	}
 
 	@Override
@@ -108,6 +112,9 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		}be.add("Action non autorisée, vous n'êtes pas administrateur du site");
 		return false;
 	}
+
+
+
 	
 	
 	
