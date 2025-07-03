@@ -14,7 +14,6 @@ import fr.eni.encheres.bll.EncheresService;
 import fr.eni.encheres.bll.UtilisateurService;
 
 import fr.eni.encheres.bll.contexte.ContexteService;
-
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.BusinessException;
@@ -69,7 +68,7 @@ public class EncheresController {
 		return "inscription";
 	}
 	
-	@PostMapping("/encheres")
+	@PostMapping("/encheres/inscription")
 	public String creerUtilisateur(@Valid @ModelAttribute Utilisateur utilisateur, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return "inscription";
@@ -77,6 +76,7 @@ public class EncheresController {
 		} else {
 			try {
 				utilisateurService.creerUtilisateur(utilisateur);
+				this.addUtilisateurEnSession();
 				return "redirect:/encheres";
 		
 			} catch (BusinessException e) {
@@ -122,6 +122,11 @@ public class EncheresController {
 		return"enchere-en-cours";
 	}
 	
+	
+	@GetMapping("encheres/profil")
+	public String afficherProfil() {
+		return"profil";
+	}
 
 	
 	@PostMapping("/encheres/connexion")

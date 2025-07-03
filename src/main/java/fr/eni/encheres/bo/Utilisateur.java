@@ -18,7 +18,7 @@ public class Utilisateur {
 	@NotBlank
 	private String prenom;
 	@NotBlank
-	@Pattern(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$\" />")
+	@Pattern(regexp = "[a-z0-9._%+\\-]+@[a-z0-9.\\-]+\\.[a-z]{2,}$")
 	private String email;
 	@NotBlank
 	private String telephone;

@@ -20,6 +20,7 @@
 		
 	<main>
  
+
 		<form class="login-form" th:action="@{/encheres/connexion}" method="post" th:object="${utilisateur}">
 		<h1>Se Connecter</h1>
 			<div class="form-input">
@@ -33,7 +34,7 @@
 				<label for="motdepasse">Mot de passe :</label>
 				<i class="fa fa-lock icon"></i>
 				<input type="password"  placeholder="Mot de passe" id="motdepasse" name="motdepasse" class="form-control" required >
-				
+
 			</div>
 			
 				<button type="submit" class="form-button">Connexion</button>  
@@ -42,6 +43,7 @@
 			<input type="checkbox" id="sesouvenirdemoi" name="sesouvenirdemoi"  >
 			<label for="sesouvenirdemoi">Se souvenir de moi</label>
 			</div>	
+
 				<a href="/encheres/inscription">Créer un compte</a>
 				
 			</form>
