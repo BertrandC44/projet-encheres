@@ -38,6 +38,7 @@ public class EncheresController {
 
 	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ContexteService contexteService) {
 		this.encheresService = encheresService;
+		
 		this.utilisateurService = utilisateurService;
 		this.contexteService = contexteService;
 		
@@ -110,12 +111,12 @@ public class EncheresController {
 		return "encherir";
 	}
 	
-	@PostMapping("/encheres/encherir")
-	public String encherirPost( @ModelAttribute Enchere enchere) {
-		this.encheresService.encherir(enchere.getDateEnchere(), enchere.getMontantEnchere(), enchere.getUtilisateur().getIdUtilisateur(), enchere.getArticle().getIdArticle());
-		
-		return "redirect:/encheres";
-	}
+//	@PostMapping("/encheres/encherir")
+//	public String encherirPost( @ModelAttribute Enchere enchere) {
+//		this.encheresService.encherir(enchere.getDateEnchere(), enchere.getMontantEnchere(), enchere.getUtilisateur().getIdUtilisateur(), enchere.getArticle().getIdArticle());
+//		
+//		return "redirect:/encheres";
+//	}
 	
 	@GetMapping("/encheres/vente")
 	public String vente(Model model) {
