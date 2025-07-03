@@ -19,6 +19,7 @@ import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bll.contexte.ContexteService;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
+import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.BusinessException;
 import jakarta.validation.Valid;
@@ -103,7 +104,18 @@ public class EncheresController {
 		return "redirect:/encheres";
 	}
 	
-
+	@GetMapping("/encheres/encherir")
+	public String encherir() {
+		System.out.println("Clic vers Encherir");
+		return "encherir";
+	}
+	
+	@PostMapping("/encheres/encherir")
+	public String encherirPost( @ModelAttribute Enchere enchere) {
+		this.encheresService.encherir(enchere.getDateEnchere(), enchere.getMontantEnchere(), enchere.getUtilisateur().getIdUtilisateur(), enchere.getArticle().getIdArticle());
+		
+		return "redirect:/encheres";
+	}
 	
 	@GetMapping("/encheres/vente")
 	public String vente(Model model) {
@@ -116,7 +128,6 @@ public class EncheresController {
 	@PostMapping("/encheres/vente")
 	public String ventePost(@ModelAttribute Article article) {
 		this.encheresService.creerVente(article);
-		
 		return "redirect:/encheres";
 	}
 	
@@ -128,16 +139,6 @@ public class EncheresController {
 		return"enchere-en-cours";
 	}
 	
-	
-	@GetMapping("encheres/profil")
-	public String afficherProfil(@RequestParam(name="pseudo") String pseudo, Model model) {
-		if (pseudo != null) {
-			Utilisateur utilisateur = utilisateurService.
-			
-		}
-		return"profil";
-	}
-
 	
 	@PostMapping("/encheres/connexion")
 

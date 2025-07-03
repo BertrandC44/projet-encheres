@@ -15,6 +15,7 @@ import fr.eni.encheres.bo.Enchere;
 public class EnchereDAOImpl implements EnchereDAO {
 	
 	private static final String FIND_ALL = "SELECT * FROM ENCHERE";
+	private static final String FIND_BY_ID = "SELECT * FROM ENCHERE WHERE idArticle = :idArticle";
 	private static final String INSERT_ENCHERE = "INSERT INTO ENCHERE (dateEnchere, montantEnchere, idUtilisateur, idArticle) VALUES (:dateEnchere, :montantEnchere, :idUtilisateur, :idArticle)";
 	
 	
@@ -28,6 +29,13 @@ public class EnchereDAOImpl implements EnchereDAO {
 	public List<Enchere> consulterEncheres() {
 		return namedParameterJdbcTemplate.query(FIND_ALL, new BeanPropertyRowMapper<>(Enchere.class));
 	}
+	
+	@Override
+	public Enchere consulterEnchereParId(long idArticle) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idArticle", idArticle);
+		return namedParameterJdbcTemplate.queryForObject(FIND_BY_ID, map, new BeanPropertyRowMapper<>(Enchere.class));
+	}
 
 	@Override
 	public void encherir(LocalDate dateEnchere, int montantEnchere, int idUtilisateur, long idArticle) {
@@ -38,5 +46,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 		map.addValue("idArticle", idArticle);
 		this.namedParameterJdbcTemplate.update(INSERT_ENCHERE, map);
 	}
+
+
 
 }

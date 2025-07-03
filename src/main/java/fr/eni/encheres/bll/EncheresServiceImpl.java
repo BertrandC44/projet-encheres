@@ -1,5 +1,6 @@
 package fr.eni.encheres.bll;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -7,7 +8,6 @@ import org.springframework.stereotype.Service;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
-import fr.eni.encheres.controller.EncheresController;
 import fr.eni.encheres.dal.ArticleDAO;
 import fr.eni.encheres.dal.CategorieDAO;
 import fr.eni.encheres.dal.EnchereDAO;
@@ -22,8 +22,7 @@ public class EncheresServiceImpl implements EncheresService{
 	private ArticleDAO articleDAO;
 	private UtilisateurDAO utilisateurDAO;
 
-	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO,
-			UtilisateurDAO utilisateurDAO, EncheresController encheresController) {
+	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO,	UtilisateurDAO utilisateurDAO) {
 		this.enchereDAO = enchereDAO;
 		this.categorieDAO = categorieDAO;
 		this.articleDAO = articleDAO;
@@ -33,6 +32,12 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Enchere> consulterEncheres() {
 		return enchereDAO.consulterEncheres();
+	}
+	
+	@Override
+	public Enchere consulterEnchereParId(long idArticle) {
+		// TODO Auto-generated method stub
+		return enchereDAO.consulterEnchereParId(idArticle);
 	}
 
 	@Override
@@ -76,9 +81,12 @@ public class EncheresServiceImpl implements EncheresService{
 		
 	}
 
+
 	@Override
-	public void encherir(long idArticle, int credit) {
+	public void encherir(LocalDate dateEnchere, int montantEnchere, long idUtilisateur, long idArticle) {
 		
 		
-}
+	}
+
+
 }
