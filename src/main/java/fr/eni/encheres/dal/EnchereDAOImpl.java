@@ -12,7 +12,7 @@ import fr.eni.encheres.bo.Enchere;
 
 
 @Repository
-public class EnchereDAOImpl implements EnchereDAO{
+public class EnchereDAOImpl implements EnchereDAO {
 	
 	private static final String FIND_ALL = "SELECT * FROM ENCHERE";
 	private static final String INSERT_ENCHERE = "INSERT INTO ENCHERE (dateEnchere, montantEnchere, idUtilisateur, idArticle) VALUES (:dateEnchere, :montantEnchere, :idUtilisateur, :idArticle)";
@@ -20,12 +20,7 @@ public class EnchereDAOImpl implements EnchereDAO{
 	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	/**
-	 * Constructeur 
-	 * @param namedParameterJdbcTemplate
-	 */
 	public EnchereDAOImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-		super();
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
 

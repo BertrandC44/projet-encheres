@@ -40,7 +40,6 @@ public class EncheresController {
 		this.utilisateurService = utilisateurService;
 		this.contexteService = contexteService;
 		
-
 	}
 
 
