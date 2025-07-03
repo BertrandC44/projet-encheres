@@ -11,6 +11,8 @@ public interface UtilisateurService {
 	
 	Utilisateur consulterUtilisateursParId(long id);
 	
+	public Utilisateur consulterUtilisateurParPseudo(String pseudo) ;
+	
 	int consulterCredit(Utilisateur utilisateur);
 	
 	void debiter(int debit,Utilisateur utilisateur);
