@@ -28,6 +28,6 @@ public interface EncheresService {
 	
 	void encherir(long idArticle,int credit);
 	
-	
+	List<Article> consulterArticlePseudo();
 
 }

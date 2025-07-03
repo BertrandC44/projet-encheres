@@ -21,7 +21,6 @@ import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.BusinessException;
-import fr.eni.tp.filmotheque.bo.Genre;
 import jakarta.validation.Valid;
 
 
@@ -55,7 +54,7 @@ public class EncheresController {
 	@GetMapping("/encheres")
 	public String encheres(Model model) {
 		System.out.println("afficher les enchères");
-		List<Article> articles = encheresService.consulterArticles();
+		List<Article> articles = encheresService.consulterArticlePseudo();
 		model.addAttribute("articles", articles);
 		return "encheres";
 		
@@ -131,14 +130,14 @@ public class EncheresController {
 	}
 	
 	
-	@GetMapping("encheres/profil")
+	/*@GetMapping("encheres/profil")
 	public String afficherProfil(@RequestParam(name="pseudo") String pseudo, Model model) {
 		if (pseudo != null) {
 			Utilisateur utilisateur = utilisateurService.
 			
 		}
 		return"profil";
-	}
+	}*/
 
 	
 	@PostMapping("/encheres/connexion")
