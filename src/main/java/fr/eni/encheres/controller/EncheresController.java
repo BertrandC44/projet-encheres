@@ -1,5 +1,7 @@
 package fr.eni.encheres.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -50,8 +52,10 @@ public class EncheresController {
 
 	
 	@GetMapping("/encheres")
-	public String encheres() {
+	public String encheres(Model model) {
 		System.out.println("afficher les enchères");
+		List<Article> articles = encheresService.consulterArticles();
+		model.addAttribute("articles", articles);
 		return "encheres";
 		
 	}
