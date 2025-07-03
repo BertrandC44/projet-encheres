@@ -18,6 +18,7 @@ import fr.eni.encheres.bll.UtilisateurService;
 
 import fr.eni.encheres.bll.contexte.ContexteService;
 import fr.eni.encheres.bo.Article;
+import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.BusinessException;
 import jakarta.validation.Valid;
@@ -137,6 +138,7 @@ public class EncheresController {
 
 	
 	@PostMapping("/encheres/connexion")
+
 	public String connexion(@RequestParam(name = "pseudo") String pseudo,@Valid @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, BindingResult bindingResult,BusinessException be) {
 //		try {
 //			Utilisateur utilisateur = this.utilisateurService.consulterUtilisateurParPseudo(pseudo);
@@ -224,6 +226,7 @@ public class EncheresController {
 ////			utilisateurEnSession.setAdmin(null);
 //			return "redirect:/encheres/connexion";	
 //		}
+
 		
 	}
 	
@@ -231,6 +234,12 @@ public class EncheresController {
 	public Utilisateur addUtilisateurEnSession() {
 		System.out.println("Utilisateur en session");
 		return new Utilisateur();
+	}
+	
+	//Session Attribute
+	@ModelAttribute("categorieEnSession")
+	public List<Categorie> chargerCategoriesEnSession() {
+		return this.encheresService.consulterCategories();
 	}
 	
 
