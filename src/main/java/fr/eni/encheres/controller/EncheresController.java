@@ -61,7 +61,7 @@ public class EncheresController {
 	@GetMapping("/encheres")
 	public String encheres(Model model) {
 		System.out.println("afficher les enchères");
-		List<Article> articles = encheresService.consulterArticles();
+		List<Article> articles = encheresService.consulterArticlePseudo();
 		model.addAttribute("articles", articles);
 		return "encheres";
 		
@@ -136,7 +136,6 @@ public class EncheresController {
 		return"enchere-en-cours";
 	}
 	
-	
 	@GetMapping("encheres/profil")
 	public String afficherProfil(@RequestParam(name="pseudo") String pseudo, Model model) {
 		Utilisateur utilisateur = utilisateurService.consulterUtilisateurParPseudo(pseudo);
@@ -144,6 +143,7 @@ public class EncheresController {
 			model.addAttribute("utilisateur", utilisateur);
 		}
 		return"profil";
+
 	}
 	
 	@GetMapping("encheres/profil/modifier")

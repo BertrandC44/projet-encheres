@@ -1,14 +1,18 @@
 package fr.eni.encheres.dal;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Utilisateur;
 
 @Repository
@@ -27,6 +31,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 	private static final String COUNT_EMAIL = "SELECT COUNT(email) FROM UTILISATEUR WHERE email =:email";
 	private static final String COUNT_ID = "SELECT COUNT(*) FROM UTILISATEUR WHERE idUtilisateur =:idUtilisateur";
 	private static final String IS_ADMIN = "SELECT administrateur FROM UTILISATEUR WHERE idUtilisateur =:idUtilisateur";
+	
 	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -168,11 +173,25 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 	}
 
 	
+	/*class UtilisateurRowMapper implements RowMapper<Utilisateur>{
 
-	
-
-	
-	
+		@SuppressWarnings("unchecked")
+		@Override
+		public Utilisateur mapRow(ResultSet rs, int rowNum) throws SQLException {
+			Utilisateur u = new Utilisateur();
+			u.setPseudo(rs.getString("pseudo"));
+			u.setNom(rs.getString("nom"));
+			u.setPrenom(rs.getString("prenom"));
+			u.setEmail(rs.getString("email"));
+			
+			Article article = new Article();
+			article.setIdArticle(rs.getLong("idArticle"));
+			
+			u.setArticles((List<Article>) article);
+			return u;
+		}
+		
+	}*/
 	
 	
 
