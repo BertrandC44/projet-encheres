@@ -152,7 +152,7 @@ public class EncheresController {
 
 	}
 	
-	@GetMapping("encheres/profil/modifier")
+	@PostMapping("encheres/profil")
 	public String afficherModifierProfil(@RequestParam(name="pseudo") String pseudo, Model model) {
 		Utilisateur utilisateur = utilisateurService.consulterUtilisateurParPseudo(pseudo);
 		if (utilisateur != null) {
@@ -162,16 +162,26 @@ public class EncheresController {
 	}
 	
 	@PostMapping("encheres/profil/modifier")
-	public String modifierProfil(@ModelAttribute Utilisateur utilisateur) {
-		utilisateurService.modifierUtilisateur(utilisateur);
-		return "redirect:/encheres";
+	public String modifierProfil(@ModelAttribute Utilisateur utilisateur, BindingResult bindingResult) {
+		try {
+			utilisateurService.modifierUtilisateur(utilisateur);
+			return "redirect:/encheres";
+			
+		} catch (BusinessException e) {
+			e.getErrors().forEach(m->{
+				ObjectError error = new ObjectError("globalError", m);
+				bindingResult.addError(error);
+			});
+		return "modifier-profil";
+		}
+		
 	}
 
 
-	@GetMapping("/encheres/profil/supprimer")
+	@GetMapping("/encheres/profil/sup")
 	public String supprimerUtilisateur(@ModelAttribute Utilisateur utilisateur) {
 		utilisateurService.supprimerMonProfil(utilisateur);
-		return "redirect:/encheres/connexion";
+		return "redirect:/encheres/deconnexion";
 	}
 	
 	

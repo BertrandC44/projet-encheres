@@ -8,15 +8,17 @@
 <header th:replace="~{fragments/entete::entete}"></header>
 
 	<main>
-		<form th:action="@{/encheres/profil/modifier}" method="post" th:object=${utilisateur}>
+		<form class="login-form" th:action="@{/encheres/profil/modifier}" method="post" th:object=${utilisateur}>
 		<h2>Mon profil</h2>
-		<input type="hidden" th:field="*{idUtilisateur}" id="idUtilisateur" />
+		<p class="erreur" th:if="${#fields.hasAnyErrors()}" th:text="#{error.message}" ></p>
 		
-		<ul>
+		<ul class="form-list">
 	
 			<li>
 			<label>Pseudo :</label>
-			<input type="text" th:field="*{pseudo}" id="pseudo" />			
+			<input type="text" th:field="*{pseudo}" id="pseudo" />	
+			<p class="erreur" th:if="${#fields.hasErrors('pseudo')}" th:errors="*{pseudo}"></p>
+					
 			</li>
 			
 			<li>
@@ -31,7 +33,9 @@
 			
 			<li>
 			<label>Email :</label>
-			<input type="text" th:field="*{email}" id="email" />			
+			<input type="text" th:field="*{email}" id="email" />
+						<p class="erreur" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+						
 			</li>
 			
 			<li>
@@ -68,22 +72,24 @@
 			
 			<li>
 			<label for="credit">Crédit :</label>
-			<input type="text" th:field="*{credit}" id="credit" disabled/>
+			<span th:text="*{credit}" id="credit" ></span>
 			</li>
 			
-			<div class="btn">
-				<li>
-				<button type="submit">Enregistrer</button>
-				</li>
-				
-				<li>
-				<button type="button"><a th:href="@{/encheres/profil/supprimer}">Supprimer mon compte</button>
-				</li>
-			</div>
 			
+			<li>
+			<button class="form-button" type="submit">Enregistrer</button>
+			</li>
+			</form>
+			
+			<form th:action="@{/encheres/profil/sup}" method="get" th:object=${utilisateur}>
+				<input type="hidden" th:field="*{idUtilisateur}" id="idUtilisateur" />
+				<li>
+				<button class="form-button" type="submit">Supprimer mon compte</button>
+				</li>
+			</form>
 		</ul>
 		
-		</form>
+		
 	</main>
 		
 </body>

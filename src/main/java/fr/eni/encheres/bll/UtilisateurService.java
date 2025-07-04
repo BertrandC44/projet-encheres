@@ -21,7 +21,7 @@ public interface UtilisateurService {
 	
 	void creerUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	
-	void modifierUtilisateur(Utilisateur utilisateur);
+	void modifierUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	
 	void supprimerUtilisateur(Utilisateur utilisateur);
 	
