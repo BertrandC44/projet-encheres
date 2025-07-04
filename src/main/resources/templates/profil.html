@@ -9,63 +9,64 @@
 <header th:replace="~{fragments/entete::entete}"></header>
 	
 	<main>
-		<form th:action="@{/encheres/profil}" method="post" th:object=${utilisateur}>
+		<form class="login-form" th:action="@{/encheres/profil}" method="post" th:object=${utilisateur}>
 		<h2 th:text="*{pseudo}"></h2>
+		<input type="hidden" th:field="*{pseudo}" id="pseudo" />
 		
-		<ul>
+		<ul class="form-list">
 	
 			<li>
 			<label>Pseudo :</label>
-			<input type="text" th:field="*{pseudo}" id="pseudo" disabled/>			
+			<span th:text="*{pseudo}" id="pseudo"></span>			
 			</li>
 			
 			<li>
 			<label>Nom :</label>
-			<input type="text" th:field="*{nom}" id="nom" disabled/>
+			<span th:text="*{nom}" id="nom"></span>
 			</li>
 			
 			<li>
 			<label>Prénom :</label>
-			<input type="text" th:field="*{prenom}" id="prenom" disabled/>
+			<span th:text="*{prenom}" id="prenom"></span>
 			</li>
 			
 			<li>
 			<label>Email :</label>
-			<input type="text" th:field="*{email}" id="email" disabled/>			
+			<span th:text="*{email}" id="email"></span>			
 			</li>
 			
 			<li>
 			<label> Téléphone :</label>
 
-			<input type="text" th:field="*{telephone}" id="telephone" disabled/>
+			<span th:text="*{telephone}" id="telephone"></span>
 
 			</li>
 			
 			<li>
 			<label>Rue :</label>
-			<input type="text" th:field="*{rue}" id="rue" disabled/>
+			<span th:text="*{rue}" id="rue"></span>
 			</li>
 			
 			<li>
 			<label>Code postal :</label>
-			<input type="text" th:field="*{codePostal}" id="cpo" disabled/>
+			<span th:text="*{codePostal}" id="cpo"></span>
 			</li>
 			
 			<li>
 			<label>Ville :</label>
-			<input type="text" th:field="*{ville}" id="ville" disabled/>
+			<span th:text="*{ville}" id="ville"></span>
 			</li>
 			
 			<li>
 			<label for="credit">Crédit :</label>
-			<input type="text" th:field="*{credit}" id="credit" disabled/>
+			<span th:text="*{credit}" id="credit" disabled></span>
 			</li>
 			
-			<div class="btn">	
-				<li>
-				<button type="submit"><a th:href="@{/encheres/profil/modifier(pseudo=${utilisateur.pseudo})}">Modifier</a></button>
-				</li>
-			</div>
+				
+			<li>
+			<button type="submit" class="form-button">Modifier</button>
+			</li>
+			
 			
 		</ul>
 		

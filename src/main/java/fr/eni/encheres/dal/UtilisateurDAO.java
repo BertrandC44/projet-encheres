@@ -20,10 +20,7 @@ public interface UtilisateurDAO {
 	
 	public void supprimerUtilisateur(Utilisateur utilisateur);
 	
-	public void supprimerMonProfil(Utilisateur utilisateur);
-	
 	public int consulterCredit(Utilisateur utilisateur);
-
 	
 	void majCredit(int credit);
 	
@@ -34,6 +31,8 @@ public interface UtilisateurDAO {
 	boolean isAdmin(long idUtilisateur);
 
 	boolean isExist(String pseudo);
+
+	String consulterMdp(String pseudo);
 
 
 

@@ -13,21 +13,28 @@ import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dal.ArticleDAO;
 import fr.eni.encheres.dal.CategorieDAO;
 
+import fr.eni.encheres.dal.CategorieDAO;
+import fr.eni.encheres.dal.EnchereDAO;
+import fr.eni.encheres.dal.UtilisateurDAO;
+
+
 @Service
 public class EncheresServiceImpl implements EncheresService{
 	
-	private ArticleDAO articleDAO;
+	private EnchereDAO enchereDAO;
 	private CategorieDAO categorieDAO;
-	
+	private ArticleDAO articleDAO;
+	private UtilisateurDAO utilisateurDAO;
 	
 
-	public EncheresServiceImpl(ArticleDAO articleDAO, CategorieDAO categorieDAO) {
-		
-		this.articleDAO = articleDAO;
-		this.categorieDAO = categorieDAO;
+	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO, UtilisateurDAO utilisateurDAO) {
+	    this.enchereDAO = enchereDAO;
+	    this.categorieDAO = categorieDAO;
+	    this.articleDAO = articleDAO;
+	    this.utilisateurDAO = utilisateurDAO;
 	}
 
-	//méthode globale pour les images
+	// méthode pour assigner l'image en fonction de l'id de la catégorie
 	private void assignerImageCategorie(Categorie c) {
 	    if (c != null) {
 	        switch ((int) c.getIdCategorie()) {
@@ -39,13 +46,16 @@ public class EncheresServiceImpl implements EncheresService{
 	        }
 	    }
 	}
-	
 	@Override
 	public List<Enchere> consulterEncheres() {
-		// TODO Auto-generated method stub
-		return null;
+	    return enchereDAO.consulterEncheres();
 	}
-
+	
+	@Override
+	public Enchere consulterEnchereParId(long idArticle) {
+	    return enchereDAO.consulterEnchereParId(idArticle);
+	}
+	
 	@Override
 	public List<Categorie> consulterCategories() {
 	    List<Categorie> categories = categorieDAO.consulterCategories();
@@ -57,10 +67,8 @@ public class EncheresServiceImpl implements EncheresService{
 
 	@Override
 	public Categorie consulterCategorieParId(long idCategorie) {
-	Categorie categorie = categorieDAO.consulterCategorieParId(idCategorie);
-	return categorie;
+	    return categorieDAO.consulterCategorieParId(idCategorie);
 	}
-
 
 	@Override
 	public List<Article> consulterArticles() {
@@ -82,11 +90,11 @@ public class EncheresServiceImpl implements EncheresService{
 	
 	@Override
 	public Article consulterArticleParId(long idArticle) {
+
 	    Article article = articleDAO.consulterArticleParId(idArticle);
 	    assignerImageCategorie(article.getCategorie());
 	    return article;
 	}
-
 	@Override
 	public Article rechercheParMotCle(String motCle) {
 		// TODO Auto-generated method stub
@@ -107,10 +115,20 @@ public class EncheresServiceImpl implements EncheresService{
 		
 	}
 
+
 	@Override
-	public void encherir(long idArticle, int credit) {
+	public void encherir(long idUtilisateur, long idArticle, int montantEnchere) {
+		enchereDAO.encherir(idUtilisateur, idArticle, montantEnchere);
+
+	}
+
+	@Override
+	public int montantMax(long idArticle) {
 		// TODO Auto-generated method stub
-		
-}
+
+		return enchereDAO.montantEnchereMax(idArticle);
+	}
+
+
 
 }

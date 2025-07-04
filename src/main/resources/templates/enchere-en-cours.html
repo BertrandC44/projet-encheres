@@ -13,12 +13,19 @@
 		<h2 th:text="${nomArticle}"></h2>
 		<ul>
 			<li>
+				<label for="description">Description : </label>
+				<textarea type="text" id="inputDescription" name="description" th:value="${description}"> </textarea>
+			</li>
+			<li>
 				<label for="mOffre">Meilleure offre : </label>
-				<!--<input type="text" id="inputMOffre" name="" th:value="${}"> -->
+				<input type="text" id="inputMOffre" name="" th:value="${montantEnchere}" disabled >
+				<label for="enchereur"> par</label>
+				<input type="text" id="enchereur" name="enchereur" th:text="${enchere.utilisateur.pseudo}" disabled >
 			</li>
 			<li>
 				<label for="miseAPrix">Mise à prix : </label>
 				<input type="text" id="miseAPrix" name="miseAPrix" th:text="${article.miseAPrix} + ' points'" disabled >
+
 			</li>
 			<li>
 				<label for="dateFinEncheres">Fin de l'enchère : </label>
@@ -34,7 +41,6 @@
 			</li>
 			<li>
 				<button type="submit" name="annulerVente" >Annuler la vente</button>
-				<button type="submit">Back</button>
 			</li>
 		
 		

@@ -39,6 +39,11 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	public Utilisateur consulterUtilisateurParPseudo(String pseudo) {
 		return this.utilisateurDAO.utilisateurParPseudo(pseudo);
 	}
+	
+	@Override
+	public String consulterMdpParPseudo(String pseudo) {
+		return this.utilisateurDAO.consulterMdp(pseudo);
+	}
 
 	@Override
 	public int consulterCredit(Utilisateur utilisateur) {
@@ -80,9 +85,20 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		
 	}
 	
+	
 	@Override
-	public void modifierUtilisateur(Utilisateur utilisateur) {
-		utilisateurDAO.modifierUtilisateur(utilisateur);
+	public void modifierUtilisateur(Utilisateur utilisateur) throws BusinessException {
+		BusinessException be = new BusinessException();
+		
+		boolean isValid = isEmailValide(utilisateur.getEmail(), be);
+		isValid &= isPseudoValide(utilisateur.getPseudo(), be);
+		
+		if (isValid) {
+			utilisateurDAO.modifierUtilisateur(utilisateur);
+		} else {
+			throw be;
+		}
+		
 	}
 
 	@Override
@@ -98,7 +114,10 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	
 	@Override
 	public void supprimerMonProfil(Utilisateur utilisateur) {
-		utilisateurDAO.supprimerMonProfil(utilisateur);
+		if (utilisateur != null) {
+			utilisateurDAO.supprimerUtilisateur(utilisateur);
+		}
+		
 	}
 
 	@Override
@@ -132,6 +151,14 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		}be.add("Action non autorisée, vous n'êtes pas administrateur du site");
 		return false;
 	}
+
+//	@Override
+//	public boolean isMdpValide(String mdp, BusinessException be) {
+//		if (this.consulterMdpParPseudo(mdp).equals(mdp)) {
+//			return true;
+//		}be.add("Mot de passe incorrect");
+//		return false;
+//	}
 
 	
 

@@ -11,7 +11,9 @@ public interface UtilisateurService {
 	
 	Utilisateur consulterUtilisateursParId(long id);
 	
-	public Utilisateur consulterUtilisateurParPseudo(String pseudo) ;
+	Utilisateur consulterUtilisateurParPseudo(String pseudo) ;
+	
+	String consulterMdpParPseudo(String pseudo);
 	
 	int consulterCredit(Utilisateur utilisateur);
 	
@@ -21,7 +23,7 @@ public interface UtilisateurService {
 	
 	void creerUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	
-	void modifierUtilisateur(Utilisateur utilisateur);
+	void modifierUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	
 	void supprimerUtilisateur(Utilisateur utilisateur);
 	
@@ -34,6 +36,8 @@ public interface UtilisateurService {
 	boolean isAdmin(long idUtilisateur, BusinessException be);
 
 	boolean isCompteExist(String pseudo, BusinessException be);
+	
+//	boolean isMdpValide (String mdp, BusinessException be);
 
 
 	

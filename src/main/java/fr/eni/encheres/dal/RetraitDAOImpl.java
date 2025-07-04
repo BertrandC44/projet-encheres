@@ -36,9 +36,6 @@ public class RetraitDAOImpl implements RetraitDAO {
 		}
 		
 		
-		/**
-		 * Classe de mapping pour permettre l'association vers Membre
-		 */
 		class RetraitRowMapper implements RowMapper<Retrait>{
 			@Override
 			public Retrait mapRow(ResultSet rs, int rowNum) throws SQLException {
