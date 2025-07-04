@@ -21,6 +21,7 @@ import fr.eni.encheres.bll.contexte.ContexteServiceImpl;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
+import fr.eni.encheres.dal.CategorieDAO;
 import fr.eni.encheres.exception.BusinessException;
 import jakarta.validation.Valid;
 
@@ -37,6 +38,7 @@ public class EncheresController {
 	private EncheresService encheresService;
 	private UtilisateurService utilisateurService;
 	private ContexteService contexteService;
+	
 
 
 	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ContexteService contexteService, ContexteServiceImpl contexteServiceImpl, UtilisateurServiceImpl utilisateurServiceImpl) {
@@ -48,7 +50,7 @@ public class EncheresController {
 		
 
 	}
-
+	
 
 	@GetMapping("/")
 	public String index() {
@@ -59,11 +61,9 @@ public class EncheresController {
 	
 	@GetMapping("/encheres")
 	public String encheres(Model model) {
-		System.out.println("afficher les enchères");
-		List<Article> articles = encheresService.consulterArticlePseudo();
-		model.addAttribute("articles", articles);
-		return "encheres";
-		
+	    List<Article> articles = encheresService.consulterArticlePseudo();
+	    model.addAttribute("articles", articles);
+	    return "encheres";
 	}
 
 
@@ -120,22 +120,38 @@ public class EncheresController {
 	
 	@GetMapping("/encheres/vente")
 	public String vente(Model model) {
-		Article nouvelArticle = new Article();
-		Categorie categorie = new Categorie();
-		model.addAttribute("article", nouvelArticle);
-		model.addAttribute("categorie", categorie);
-		System.out.println("afficher les ventes");
-		
-		return "vente";
+	    List<Categorie> categories = encheresService.consulterCategories();
+	 
+	    model.addAttribute("article", new Article());
+	    model.addAttribute("categorie", categories);
+	    return "vente";
 	}
 
 	@PostMapping("/encheres/vente")
-	public String ventePost(@ModelAttribute Article article) {
-		this.encheresService.creerVente(article);
-		
-		return "redirect:/encheres";
+	public String ventePost(@ModelAttribute Article article,
+	                        @RequestParam("action") String action,
+	                        Model model) {
+
+	    List<Categorie> categories = encheresService.consulterCategories();
+	    model.addAttribute("categorie", categories);
+
+	    if ("categorieChoisie".equals(action)) {
+	        if (article.getCategorie() != null && article.getCategorie().getIdCategorie() > 0) {
+	            Categorie selectedCategorie = encheresService.consulterCategorieParId(article.getCategorie().getIdCategorie());
+	            article.setCategorie(selectedCategorie);
+	        }
+	        model.addAttribute("article", article);
+	        return "vente";
+	    }
+
+	    if ("validerFormulaire".equals(action)) {
+	        encheresService.creerVente(article);
+	        return "redirect:/encheres";
+	    }
+
+	    model.addAttribute("article", article);
+	    return "vente";
 	}
-	
 
 	@GetMapping("/encheres/detail")
 	public String afficherDetailEnchere(@RequestParam(name="id") long idArticle, Model model) {

@@ -7,7 +7,7 @@ public class Categorie {
 	
 	private long idCategorie;
 	private String libelle;
-	private String image;
+	private String image; //pour lier une image à la catégorie
 	
 	private List<Article> articles = new ArrayList<Article>();
 
