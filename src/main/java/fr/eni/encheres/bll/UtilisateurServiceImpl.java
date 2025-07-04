@@ -39,6 +39,11 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	public Utilisateur consulterUtilisateurParPseudo(String pseudo) {
 		return this.utilisateurDAO.utilisateurParPseudo(pseudo);
 	}
+	
+	@Override
+	public String consulterMdpParPseudo(String pseudo) {
+		return this.utilisateurDAO.consulterMdp(pseudo);
+	}
 
 	@Override
 	public int consulterCredit(Utilisateur utilisateur) {
@@ -79,6 +84,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		}
 		
 	}
+	
 	
 	@Override
 	public void modifierUtilisateur(Utilisateur utilisateur) {
@@ -132,6 +138,14 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		}be.add("Action non autorisée, vous n'êtes pas administrateur du site");
 		return false;
 	}
+
+//	@Override
+//	public boolean isMdpValide(String mdp, BusinessException be) {
+//		if (this.consulterMdpParPseudo(mdp).equals(mdp)) {
+//			return true;
+//		}be.add("Mot de passe incorrect");
+//		return false;
+//	}
 
 	
 
