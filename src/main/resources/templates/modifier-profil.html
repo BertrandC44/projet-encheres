@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head th:insert="~{fragments/liens::liens}">
+<meta charset="UTF-8">
+<title>Modifier le profil</title>
+</head>
+<body>
+<header th:replace="~{fragments/entete::entete}"></header>
+
+	<main>
+		<form class="login-form" th:action="@{/encheres/profil/modifier}" method="post" th:object=${utilisateur}>
+		<h2>Mon profil</h2>
+		<p class="erreur" th:if="${#fields.hasAnyErrors()}" th:text="#{error.message}" ></p>
+		
+		<ul class="form-list">
+	
+			<li>
+			<label>Pseudo :</label>
+			<input type="text" th:field="*{pseudo}" id="pseudo" />	
+			<p class="erreur" th:if="${#fields.hasErrors('pseudo')}" th:errors="*{pseudo}"></p>
+					
+			</li>
+			
+			<li>
+			<label>Nom :</label>
+			<input type="text" th:field="*{nom}" id="nom" />
+			</li>
+			
+			<li>
+			<label>Prénom :</label>
+			<input type="text" th:field="*{prenom}" id="prenom" />
+			</li>
+			
+			<li>
+			<label>Email :</label>
+			<input type="text" th:field="*{email}" id="email" />
+						<p class="erreur" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+						
+			</li>
+			
+			<li>
+			<label> Téléphone :</label>
+
+			<input type="text" th:field="*{telephone}" id="telephone" />
+
+			</li>
+			
+			<li>
+			<label>Rue :</label>
+			<input type="text" th:field="*{rue}" id="rue" />
+			</li>
+			
+			<li>
+			<label>Code postal :</label>
+			<input type="text" th:field="*{codePostal}" id="cpo" />
+			</li>
+			
+			<li>
+			<label>Ville :</label>
+			<input type="text" th:field="*{ville}" id="ville" />
+			</li>
+			
+			<li>
+			<label>Mot de passe :</label>
+			<input type="password" th:field="*{motDePasse}" id="mdp" />
+			</li>
+			
+			<li>
+			<label for="confMdp">Confirmation :</label>
+			<input type="password" name="confMdp" id="confMdp" />
+			</li>
+			
+			<li>
+			<label for="credit">Crédit :</label>
+			<span th:text="*{credit}" id="credit" ></span>
+			</li>
+			
+			
+			<li>
+			<button class="form-button" type="submit">Enregistrer</button>
+			</li>
+			</form>
+			
+			<form th:action="@{/encheres/profil/sup}" method="get" th:object=${utilisateur}>
+				<input type="hidden" th:field="*{idUtilisateur}" id="idUtilisateur" />
+				<li>
+				<button class="form-button" type="submit">Supprimer mon compte</button>
+				</li>
+			</form>
+		</ul>
+		
+		
+	</main>
+		
+</body>
+</html>

@@ -34,6 +34,6 @@ public interface EncheresService {
 	int montantMax(long idArticle);
 	
 	
-	
+	List<Article> consulterArticlePseudo();
 
 }

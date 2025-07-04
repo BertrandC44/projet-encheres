@@ -15,4 +15,5 @@ public interface ArticleDAO {
 	void annulerVente(Article article);
 
 	List<Article> consulterArticlePseudo();
+
 }

@@ -46,7 +46,7 @@ public class RetraitDAOImpl implements RetraitDAO {
 		
 				// Association pour l'article
 				Article article = new Article();
-				article.setIdArticle(rs.getInt("idArticle"));
+				article.setIdArticle(rs.getLong("idArticle"));
 				
 				r.setArticle(article);
 				

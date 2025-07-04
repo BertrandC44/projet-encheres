@@ -8,12 +8,23 @@ import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.dal.ArticleDAO;
+
 import fr.eni.encheres.dal.CategorieDAO;
 import fr.eni.encheres.dal.EnchereDAO;
 import fr.eni.encheres.dal.UtilisateurDAO;
 
+
 @Service
 public class EncheresServiceImpl implements EncheresService{
+	
+	private ArticleDAO articleDAO;
+	
+	
+
+	public EncheresServiceImpl(ArticleDAO articleDAO) {
+		super();
+		this.articleDAO = articleDAO;
+	}
 
 	
 	private EnchereDAO enchereDAO;
@@ -55,6 +66,11 @@ public class EncheresServiceImpl implements EncheresService{
 	}
 
 	@Override
+	public List<Article> consulterArticlePseudo() {
+		return articleDAO.consulterArticlePseudo();
+	}
+	
+	@Override
 	public Article consulterArticleParId(long idArticle) {
 		return articleDAO.consulterArticleParId(idArticle);
 	}
@@ -89,8 +105,10 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public int montantMax(long idArticle) {
 		// TODO Auto-generated method stub
+
 		return enchereDAO.montantEnchereMax(idArticle);
 	}
+
 
 
 }

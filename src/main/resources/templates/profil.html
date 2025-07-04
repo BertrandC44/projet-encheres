@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head th:insert="~{fragments/liens::liens}">
 <meta charset="UTF-8">
 <title>Profil utilisateur</title>
 </head>
@@ -8,78 +8,70 @@
 
 <header th:replace="~{fragments/entete::entete}"></header>
 	
-<main>
-		<form th:action="@{/encheres/profil}" method="post"  th:object="${utilisateur}">
-		<h2>Profil</h2>
+	<main>
+		<form class="login-form" th:action="@{/encheres/profil}" method="post" th:object=${utilisateur}>
+		<h2 th:text="*{pseudo}"></h2>
+		<input type="hidden" th:field="*{pseudo}" id="pseudo" />
 		
-		<ul>
+		<ul class="form-list">
 	
 			<li>
 			<label>Pseudo :</label>
-			<input type="text" th:field="*{pseudo}" id="pseudo"/>			
+			<span th:text="*{pseudo}" id="pseudo"></span>			
 			</li>
 			
 			<li>
 			<label>Nom :</label>
-			<input type="text" th:field="*{nom}" id="nom"/>
+			<span th:text="*{nom}" id="nom"></span>
 			</li>
 			
 			<li>
 			<label>Prénom :</label>
-			<input type="text" th:field="*{prenom}" id="prenom" />
+			<span th:text="*{prenom}" id="prenom"></span>
 			</li>
 			
 			<li>
 			<label>Email :</label>
-			<input type="text" th:field="*{email}" id="email" />			
+			<span th:text="*{email}" id="email"></span>			
 			</li>
 			
 			<li>
 			<label> Téléphone :</label>
 
-			<input type="text" th:field="*{telephone}" id="telephone" />
+			<span th:text="*{telephone}" id="telephone"></span>
 
 			</li>
 			
 			<li>
 			<label>Rue :</label>
-			<input type="text" th:field="*{rue}" id="rue" />
+			<span th:text="*{rue}" id="rue"></span>
 			</li>
 			
 			<li>
 			<label>Code postal :</label>
-			<input type="text" th:field="*{codePostal}" id="cpo" />
+			<span th:text="*{codePostal}" id="cpo"></span>
 			</li>
 			
 			<li>
 			<label>Ville :</label>
-			<input type="text" th:field="*{ville}" id="ville" />
-			</li>
-			
-			<!--  <li>
-			<label>Mot de passe :</label>
-			<input type="text" th:field="*{motDePasse}" id="mdp" />
+			<span th:text="*{ville}" id="ville"></span>
 			</li>
 			
 			<li>
-			<label for="confMdp">Confirmation :</label>
-			<input type="text" name="confMdp" id="confMdp" />
+			<label for="credit">Crédit :</label>
+			<span th:text="*{credit}" id="credit" disabled></span>
 			</li>
 			
-			<div class="btn">
-				<li>
-				<button type="submit">Créer</button>
-				</li>-->
 				
-				<li>
-				<button type="submit">Modifier</button>
-				</li>
-			</div>
+			<li>
+			<button type="submit" class="form-button">Modifier</button>
+			</li>
+			
 			
 		</ul>
 		
 		</form>
-
+	</main>
 
 </body>
 </html>

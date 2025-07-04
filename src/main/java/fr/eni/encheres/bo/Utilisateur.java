@@ -18,7 +18,7 @@ public class Utilisateur {
 	@NotBlank
 	private String prenom;
 	@NotBlank
-	@Pattern(regexp = "[a-z0-9._%+\\-]+@[a-z0-9.\\-]+\\.[a-z]{2,}$")
+	@Pattern(regexp = "^[a-z0-9._%+\\-]+@[a-z0-9.\\-]+\\.[a-z]{2,}$")
 	private String email;
 	@NotBlank
 	private String telephone;
@@ -30,6 +30,9 @@ public class Utilisateur {
 	private String ville;
 	@NotBlank
 	private String motDePasse;
+	@NotBlank
+	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$")
+	private String confMdp;
 	private int credit;
 	private boolean admin;
 	
@@ -125,6 +128,16 @@ public class Utilisateur {
 	public void setMotDePasse(String motDePasse) {
 		this.motDePasse = motDePasse;
 	}
+	
+	
+	public String getConfMdp() {
+		return confMdp;
+	}
+
+	public void setConfMdp(String confMdp) {
+		this.confMdp = confMdp;
+	}
+
 	public int getCredit() {
 		return credit;
 	}
