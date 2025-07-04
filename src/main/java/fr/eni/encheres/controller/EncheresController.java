@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import fr.eni.encheres.bll.EncheresService;
 import fr.eni.encheres.bll.UtilisateurService;
-
+import fr.eni.encheres.bll.UtilisateurServiceImpl;
 import fr.eni.encheres.bll.contexte.ContexteService;
+import fr.eni.encheres.bll.contexte.ContexteServiceImpl;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
@@ -25,9 +26,12 @@ import jakarta.validation.Valid;
 
 
 @Controller
-
 @SessionAttributes({"utilisateurEnSession"})
 public class EncheresController {
+
+    private final UtilisateurServiceImpl utilisateurServiceImpl;
+
+    private final ContexteServiceImpl contexteServiceImpl;
 
 	
 	private EncheresService encheresService;
@@ -35,10 +39,12 @@ public class EncheresController {
 	private ContexteService contexteService;
 
 
-	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ContexteService contexteService) {
+	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ContexteService contexteService, ContexteServiceImpl contexteServiceImpl, UtilisateurServiceImpl utilisateurServiceImpl) {
 		this.encheresService = encheresService;
 		this.utilisateurService = utilisateurService;
 		this.contexteService = contexteService;
+		this.contexteServiceImpl = contexteServiceImpl;
+		this.utilisateurServiceImpl = utilisateurServiceImpl;
 		
 
 	}
@@ -76,25 +82,31 @@ public class EncheresController {
 	}
 	
 	@PostMapping("/encheres/inscription")
-	public String creerUtilisateur(@Valid @ModelAttribute Utilisateur utilisateur, BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			return "inscription";
+	public String creerUtilisateur(@Valid @ModelAttribute Utilisateur utilisateur, BindingResult bindingResult,Model model) {
+		if(utilisateur.getConfMdp().equals(utilisateur.getMotDePasse())) {
 			
-		} else {
-			try {
-				utilisateurService.creerUtilisateur(utilisateur);
-				this.addUtilisateurEnSession();
-				return "redirect:/encheres";
-		
-			} catch (BusinessException e) {
-				e.getErrors().forEach(m->{
-					ObjectError error = new ObjectError("globalError", m);
-					bindingResult.addError(error);
-				});
-			return "inscription";
+			if (bindingResult.hasErrors()) {
+				return "inscription";
+				
+			} else {
+				try {
+					utilisateurService.creerUtilisateur(utilisateur);
+					return "redirect:/encheres";
+			
+				} catch (BusinessException e) {
+					e.getErrors().forEach(m->{
+						ObjectError error = new ObjectError("globalError", m);
+						bindingResult.addError(error);
+					});
+				return "inscription";
+				}
+				
 			}
 			
 		}
+		bindingResult.rejectValue("confMdp","password.mismatch" ,"La confirmation est différente du mot de passe saisi");
+		model.addAttribute("utilisateur",utilisateur);
+		return "inscription";
 	}
 	
 
@@ -132,52 +144,133 @@ public class EncheresController {
 		return"enchere-en-cours";
 	}
 	
-	
-	/*@GetMapping("encheres/profil")
+
+	@GetMapping("encheres/profil")
 	public String afficherProfil(@RequestParam(name="pseudo") String pseudo, Model model) {
-		if (pseudo != null) {
-			Utilisateur utilisateur = utilisateurService.
-			
+		Utilisateur utilisateur = utilisateurService.consulterUtilisateurParPseudo(pseudo);
+		if (utilisateur != null) {
+			model.addAttribute("utilisateur", utilisateur);
 		}
 		return"profil";
-	}*/
 
+	}
+	
+	@GetMapping("encheres/profil/modifier")
+	public String afficherModifierProfil(@RequestParam(name="pseudo") String pseudo, Model model) {
+		Utilisateur utilisateur = utilisateurService.consulterUtilisateurParPseudo(pseudo);
+		if (utilisateur != null) {
+			model.addAttribute("utilisateur", utilisateur);
+		}
+		return"modifier-profil";
+	}
+	
+	@PostMapping("encheres/profil/modifier")
+	public String modifierProfil(@ModelAttribute Utilisateur utilisateur) {
+		utilisateurService.modifierUtilisateur(utilisateur);
+		return "redirect:/encheres";
+	}
+
+
+	@GetMapping("/encheres/profil/supprimer")
+	public String supprimerUtilisateur(@ModelAttribute Utilisateur utilisateur) {
+		utilisateurService.supprimerMonProfil(utilisateur);
+		return "redirect:/encheres/connexion";
+	}
+	
 	
 	@PostMapping("/encheres/connexion")
 
-	public String connexion(@RequestParam(name = "pseudo") String pseudo, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) {
-		Utilisateur utilisateur = this.utilisateurService.consulterUtilisateurParPseudo(pseudo);
 
-		if(utilisateur != null) {
-			utilisateurEnSession.setIdUtilisateur(utilisateur.getIdUtilisateur());
-			utilisateurEnSession.setPseudo(utilisateur.getPseudo());
-			utilisateurEnSession.setNom(utilisateur.getNom());
-			utilisateurEnSession.setPrenom(utilisateur.getPrenom());
-			utilisateurEnSession.setEmail(utilisateur.getEmail());
-			utilisateurEnSession.setTelephone(utilisateur.getTelephone());
-			utilisateurEnSession.setRue(utilisateur.getRue());
-			utilisateurEnSession.setCodePostal(utilisateur.getCodePostal());
-			utilisateurEnSession.setVille(utilisateur.getVille());
-			utilisateurEnSession.setMotDePasse(utilisateur.getMotDePasse());
-//			utilisateurEnSession.setCredit(utilisateur.getCredit());
-//			utilisateurEnSession.setAdmin(utilisateur.isAdmin());
+	public String connexion(@RequestParam(name = "pseudo") String pseudo,@Valid @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, BindingResult bindingResult,BusinessException be) {
+//		try {
+//			Utilisateur utilisateur = this.utilisateurService.consulterUtilisateurParPseudo(pseudo);
+//		utilisateurEnSession.setIdUtilisateur(utilisateur.getIdUtilisateur());
+//		utilisateurEnSession.setPseudo(utilisateur.getPseudo());
+//		utilisateurEnSession.setNom(utilisateur.getNom());
+//		utilisateurEnSession.setPrenom(utilisateur.getPrenom());
+//		utilisateurEnSession.setEmail(utilisateur.getEmail());
+//		utilisateurEnSession.setTelephone(utilisateur.getTelephone());
+//		utilisateurEnSession.setRue(utilisateur.getRue());
+//		utilisateurEnSession.setCodePostal(utilisateur.getCodePostal());
+//		utilisateurEnSession.setVille(utilisateur.getVille());
+//		utilisateurEnSession.setMotDePasse(utilisateur.getMotDePasse());
+//		return "redirect:/encheres";
+//		} catch (BusinessException e) {
+//			e.add("Identifiant ou mot de passe incorrect");
+//			return "redirect:/encheres/connexion";
+//		}
+		
+		if(utilisateurService.isCompteExist(pseudo, be )) {
+			Utilisateur utilisateur = this.utilisateurService.consulterUtilisateurParPseudo(pseudo);
+			if(utilisateur != null) {
+				utilisateurEnSession.setIdUtilisateur(utilisateur.getIdUtilisateur());
+				utilisateurEnSession.setPseudo(utilisateur.getPseudo());
+				utilisateurEnSession.setNom(utilisateur.getNom());
+				utilisateurEnSession.setPrenom(utilisateur.getPrenom());
+				utilisateurEnSession.setEmail(utilisateur.getEmail());
+				utilisateurEnSession.setTelephone(utilisateur.getTelephone());
+				utilisateurEnSession.setRue(utilisateur.getRue());
+				utilisateurEnSession.setCodePostal(utilisateur.getCodePostal());
+				utilisateurEnSession.setVille(utilisateur.getVille());
+				utilisateurEnSession.setMotDePasse(utilisateur.getMotDePasse());
+//				utilisateurEnSession.setCredit(utilisateur.getCredit());
+//				utilisateurEnSession.setAdmin(utilisateur.isAdmin());
+				return "redirect:/encheres";
+			
+			}else {
+				utilisateurEnSession.setIdUtilisateur(0);
+				utilisateurEnSession.setPseudo(null);
+				utilisateurEnSession.setNom(null);
+				utilisateurEnSession.setPrenom(null);
+				utilisateurEnSession.setEmail(null);
+				utilisateurEnSession.setTelephone(null);
+				utilisateurEnSession.setRue(null);
+				utilisateurEnSession.setCodePostal(null);
+				utilisateurEnSession.setVille(null);
+				utilisateurEnSession.setMotDePasse(null);
+//				utilisateurEnSession.setCredit(0);
+//				utilisateurEnSession.setAdmin(null);
+				return "redirect:/encheres/connexion";	
+			}
+		}ObjectError error = new ObjectError("globalError", "Identifiant inconnu");
+		bindingResult.addError(error);
+		return "redirect:/encheres/connexion";	
+		
+		
+//		Utilisateur utilisateur = this.utilisateurService.consulterUtilisateurParPseudo(pseudo);
+//		if(utilisateur != null) {
+//			utilisateurEnSession.setIdUtilisateur(utilisateur.getIdUtilisateur());
+//			utilisateurEnSession.setPseudo(utilisateur.getPseudo());
+//			utilisateurEnSession.setNom(utilisateur.getNom());
+//			utilisateurEnSession.setPrenom(utilisateur.getPrenom());
+//			utilisateurEnSession.setEmail(utilisateur.getEmail());
+//			utilisateurEnSession.setTelephone(utilisateur.getTelephone());
+//			utilisateurEnSession.setRue(utilisateur.getRue());
+//			utilisateurEnSession.setCodePostal(utilisateur.getCodePostal());
+//			utilisateurEnSession.setVille(utilisateur.getVille());
+//			utilisateurEnSession.setMotDePasse(utilisateur.getMotDePasse());
+////			utilisateurEnSession.setCredit(utilisateur.getCredit());
+////			utilisateurEnSession.setAdmin(utilisateur.isAdmin());
+//			return "redirect:/encheres";
+//		
+//		}else {
+//			utilisateurEnSession.setIdUtilisateur(0);
+//			utilisateurEnSession.setPseudo(null);
+//			utilisateurEnSession.setNom(null);
+//			utilisateurEnSession.setPrenom(null);
+//			utilisateurEnSession.setEmail(null);
+//			utilisateurEnSession.setTelephone(null);
+//			utilisateurEnSession.setRue(null);
+//			utilisateurEnSession.setCodePostal(null);
+//			utilisateurEnSession.setVille(null);
+//			utilisateurEnSession.setMotDePasse(null);
+////			utilisateurEnSession.setCredit(0);
+////			utilisateurEnSession.setAdmin(null);
+//			return "redirect:/encheres/connexion";	
+//		}
+
 
 		
-		}else {
-			utilisateurEnSession.setIdUtilisateur(0);
-			utilisateurEnSession.setPseudo(null);
-			utilisateurEnSession.setNom(null);
-			utilisateurEnSession.setPrenom(null);
-			utilisateurEnSession.setEmail(null);
-			utilisateurEnSession.setTelephone(null);
-			utilisateurEnSession.setRue(null);
-			utilisateurEnSession.setCodePostal(null);
-			utilisateurEnSession.setVille(null);
-			utilisateurEnSession.setMotDePasse(null);
-//			utilisateurEnSession.setCredit(0);
-//			utilisateurEnSession.setAdmin(null);
-		}
-		return "redirect:/encheres";	
 	}
 	
 	@ModelAttribute("utilisateurEnSession")

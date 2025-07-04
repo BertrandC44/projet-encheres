@@ -66,6 +66,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		BusinessException be = new BusinessException();
 		
 		boolean isValid = isEmailValide(utilisateur.getEmail(), be);
+		isValid &= isPseudoValide(utilisateur.getPseudo(), be);
 		
 		if(isValid) {
 			utilisateurDAO.creerUtilisateur(utilisateur);
@@ -78,6 +79,11 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		}
 		
 	}
+	
+	@Override
+	public void modifierUtilisateur(Utilisateur utilisateur) {
+		utilisateurDAO.modifierUtilisateur(utilisateur);
+	}
 
 	@Override
 	public void supprimerUtilisateur(Utilisateur utilisateur) {
@@ -89,20 +95,33 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		
 		
 	}
+	
+	@Override
+	public void supprimerMonProfil(Utilisateur utilisateur) {
+		utilisateurDAO.supprimerMonProfil(utilisateur);
+	}
 
 	@Override
 	public boolean isEmailValide(String email, BusinessException be) {
 		if(utilisateurDAO.isEmailValide(email)) {
 			return true;
-		}be.add("Vous avez déjà un compte créé");
+		}be.add("L'email \"" + email + "\" a déjà un compte associé");
+		return false;
+	}
+	
+	@Override
+	public boolean isPseudoValide(String pseudo, BusinessException be) {
+		if(utilisateurDAO.isPseudoValide(pseudo)) {
+			return true;
+		}be.add("Le pseudo \"" + pseudo + "\" existe déjà");
 		return false;
 	}
 
 	@Override
-	public boolean isCompteExist(long idUtilisateur, BusinessException be) {
-		if(utilisateurDAO.isExist(idUtilisateur)) {
+	public boolean isCompteExist(String pseudo, BusinessException be) {
+		if(utilisateurDAO.isExist(pseudo)) {
 			return true;
-		}be.add("Ce compte n'existe pas");
+		}be.add("Identifiant incorrect");
 		return false;
 	}
 
@@ -114,6 +133,12 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		return false;
 	}
 
+	
+
+	
+
+
+	
 
 
 	

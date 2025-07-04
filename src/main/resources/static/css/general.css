@@ -15,6 +15,9 @@ p, a, label{
 	font-family: 'Lato';
 }
 
+.erreur{
+	color:red;
+}
 
 /*@font-face {
   font-family: "Passion One";

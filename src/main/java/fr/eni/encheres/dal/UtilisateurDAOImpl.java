@@ -23,12 +23,16 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 	private static final String FIND_BY_ID = "SELECT * FROM UTILISATEUR WHERE idUtilisateur=:idUtilisateur";
 	private static final String FIND_BY_PSEUDO = "SELECT * FROM UTILISATEUR WHERE pseudo=:pseudo";
 	private static final String CREATE_UTILISATEUR = "INSERT INTO UTILISATEUR(pseudo,nom,prenom,email,telephone,rue,codePostal,ville,motDePasse,credit,administrateur) VALUES (:pseudo,:nom,:prenom,:email,:telephone,:rue,:codePostal,:ville,:motDePasse,100,0)";
+	private static final String UPDATE_UTILISATEUR = "UPDATE UTILISATEUR SET pseudo = :pseudo, nom = :nom , prenom = :prenom, email = :email, telephone = :telephone, rue = :rue, codePostal = :codePostal, ville = :ville, motDePasse = :motDePasse WHERE pseudo = :pseudo";
 	private static final String DELETE_BY_ID = "DELETE FROM UTILISATEUR WHERE idUtilisateur=:idUtilisateur";
+	private static final String DELETE_PROFIL = "DELETE FROM UTILISATEUR WHERE idUtilisateur = :idUtilisateur";
 	private static final String FIND_CREDIT = "SELECT credit FROM UTILISATEUR WHERE idUtilisateur=:idUtilisateur";
 	private static final String UPDATE_CREDIT = "UPDATE UTILISATEUR SET credit =:credit WHERE idUtilisateur =:idUtilisateur ";
 	private static final String COUNT_EMAIL = "SELECT COUNT(email) FROM UTILISATEUR WHERE email =:email";
+	private static final String COUNT_PSEUDO = "SELECT COUNT(pseudo) FROM UTILISATEUR WHERE pseudo =:pseudo";
 	private static final String COUNT_ID = "SELECT COUNT(*) FROM UTILISATEUR WHERE idUtilisateur =:idUtilisateur";
 	private static final String IS_ADMIN = "SELECT administrateur FROM UTILISATEUR WHERE idUtilisateur =:idUtilisateur";
+ 
 	
 	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -67,6 +71,21 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 
 		return namedParameterJdbcTemplate.queryForObject(FIND_BY_PSEUDO, map, new BeanPropertyRowMapper<>(Utilisateur.class));
 	}
+	
+	@Override
+	public void modifierUtilisateur(Utilisateur utilisateur) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("pseudo", utilisateur.getPseudo());
+		map.addValue("nom", utilisateur.getNom());
+		map.addValue("prenom", utilisateur.getPrenom());
+		map.addValue("email", utilisateur.getEmail());
+		map.addValue("telephone", utilisateur.getTelephone());
+		map.addValue("rue", utilisateur.getRue());
+		map.addValue("codePostal", utilisateur.getCodePostal());
+		map.addValue("ville", utilisateur.getVille());
+		map.addValue("motDePasse", utilisateur.getMotDePasse());
+		this.namedParameterJdbcTemplate.update(UPDATE_UTILISATEUR, map);
+	}
 
 	@Override
 	public void creerUtilisateur(Utilisateur utilisateur) {
@@ -92,6 +111,13 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 			utilisateur.setIdUtilisateur(keyHolder.getKey().longValue());
 		}
 		
+	}
+	
+	@Override
+	public void supprimerMonProfil(Utilisateur utilisateur) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idUtilisateur", utilisateur.getIdUtilisateur());
+		namedParameterJdbcTemplate.update(DELETE_PROFIL, map);
 	}
 
 	@Override
@@ -128,13 +154,22 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		Integer nbEmail = namedParameterJdbcTemplate.queryForObject(COUNT_EMAIL, map, Integer.class);
 		return nbEmail ==0 ;
 	}
+	
+	@Override
+	public boolean isPseudoValide(String pseudo) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("pseudo", pseudo);
+		
+		Integer nbPseudo = namedParameterJdbcTemplate.queryForObject(COUNT_PSEUDO, map, Integer.class);
+		return nbPseudo == 0 ;
+	}
 
 	@Override
-	public boolean isExist(long idUtilisateur) {
+	public boolean isExist(String pseudo) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
-		map.addValue("idUtilisateur", idUtilisateur);
+		map.addValue("pseudo", pseudo);
 		
-		Integer nbCompte = namedParameterJdbcTemplate.queryForObject(COUNT_ID, map, Integer.class);
+		Integer nbCompte = namedParameterJdbcTemplate.queryForObject(COUNT_PSEUDO, map, Integer.class);
 		return nbCompte ==1;
 	}
 
@@ -148,7 +183,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		return isAdmin == 1;
 	}
 
-	
+
 
 	
 	/*class UtilisateurRowMapper implements RowMapper<Utilisateur>{
