@@ -4,7 +4,7 @@ INSERT INTO UTILISATEUR (pseudo, nom, prenom, email, telephone, rue, codePostal,
 ('abaille', 'Baille', 'Annelise', 'abaille@campus-eni.fr', '0601020304', '10 rue des Lilas', '75000', 'Paris', 'Annelise', 100, 0),
 ('sgobin', 'Gobin', 'Stephane', 'sgobin@campus-eni.fr', '0605060708', '15 rue du Bac', '69000', 'Lyon', 'Stephane', 200, 1),
 ('jtrillard', 'Trillard', 'Julien', 'jtrillard@campus-eni.fr', '0608091011', '22 avenue Victor', '33000', 'Bordeaux', 'Julien', 150, 0),
-('sdautais', 'Dautais', 'Servane', 'sdautais@campus-eni.fr', '0611121314', '5 boulevard Haussmann', '31000', 'Servane', '', 50, 0);
+('sdautais', 'Dautais', 'Servane', 'sdautais@campus-eni.fr', '0611121314', '5 boulevard Haussmann', '31000', 'Toulouse', 'Servane', 50, 0);
 
 -- Insertions catégories
 
