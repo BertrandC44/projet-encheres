@@ -19,10 +19,11 @@
 	<main>
  
 
-		<form class="login-form" th:action="@{/encheres/connexion}" method="post" th:object="${utilisateur}">
+		<form class="login-form" th:action="@{/encheres/connexion}" method="post" th:object="${utilisateurEnSession}">
 		<h1>Se Connecter</h1>
+		<p class="erreur" th:if="${#fields.hasErrors('pseudo')}" th:errors="*{pseudo}"></p>
 			<div class="form-input">
-			
+				
 				<label for="pseudo">Identifiant :</label>
 				<i class="fa fa-user icon"></i>
 				<input type="text" placeholder="Pseudo" id="pseudo" name="pseudo" class="form-control"  required>
@@ -30,9 +31,9 @@
 				</div>
 				
 			<div class="form-input">
-				<label for="motdepasse">Mot de passe :</label>
+				<label for="motDePasse">Mot de passe :</label>
 				<i class="fa fa-lock icon"></i>
-				<input type="password"  placeholder="Mot de passe" id="motdepasse" name="motdepasse" class="form-control" required >
+				<input type="password"  placeholder="Mot de passe" id="motDePasse" name="motDePasse" class="form-control" required >
 
 			</div>
 			

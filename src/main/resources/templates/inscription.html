@@ -73,12 +73,12 @@
 			
 			<li class="form-input">
 			<p class="erreur" th:if="${#fields.hasErrors('motDePasse')}" th:errors="*{motDePasse}"></p>
+			<p class="erreur" th:if="${#fields.hasErrors('confMdp')}" th:errors="*{confMdp}"></p>
 			<label>Mot de passe :</label>
 			<input type="password" th:field="*{motDePasse}" id="mdp" />
 			</li>
 			
 			<li class="form-input">
-			<p class="erreur" th:if="${#fields.hasErrors('confMdp')}" th:errors="*{confMdp}"></p>
 			<label for="confMdp">Confirmation :</label>
 			<input type="password" th:field="*{confMdp}" id="confMdp" />
 			</li>
