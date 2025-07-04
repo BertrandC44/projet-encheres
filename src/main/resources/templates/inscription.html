@@ -72,7 +72,9 @@
 			
 			<p class="erreur" th:if="${#fields.hasErrors('motDePasse')}" th:errors="*{motDePasse}"></p>
 			<p class="erreur" th:if="${#fields.hasErrors('confMdp')}" th:errors="*{confMdp}"></p>
+
 			<li class="form-input">
+
 			<label>Mot de passe :</label>
 			<input type="password" th:field="*{motDePasse}" id="mdp" />
 			</li>

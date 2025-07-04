@@ -32,6 +32,8 @@ public interface UtilisateurDAO {
 
 	boolean isExist(String pseudo);
 
+	String consulterMdp(String pseudo);
+
 
 
 

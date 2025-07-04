@@ -27,7 +27,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 	private static final String COUNT_PSEUDO = "SELECT COUNT(pseudo) FROM UTILISATEUR WHERE pseudo =:pseudo";
 	private static final String COUNT_ID = "SELECT COUNT(*) FROM UTILISATEUR WHERE idUtilisateur =:idUtilisateur";
 	private static final String IS_ADMIN = "SELECT administrateur FROM UTILISATEUR WHERE idUtilisateur =:idUtilisateur";
- 
+	private static final String FIND_MDP_BY_PSEUDO = "SELECT motDePasse FROM UTILISATEUR WHERE pseudo=:pseudo";
 	
 	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -171,6 +171,13 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		return isAdmin == 1;
 	}
 
+	@Override
+	public String consulterMdp(String pseudo) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("pseudo", pseudo);
+		
+		return namedParameterJdbcTemplate.queryForObject(FIND_MDP_BY_PSEUDO, map, String.class);
+	}
 
 
 	
