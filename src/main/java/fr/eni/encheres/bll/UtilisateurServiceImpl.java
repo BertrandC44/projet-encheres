@@ -87,8 +87,18 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	
 	
 	@Override
-	public void modifierUtilisateur(Utilisateur utilisateur) {
-		utilisateurDAO.modifierUtilisateur(utilisateur);
+	public void modifierUtilisateur(Utilisateur utilisateur) throws BusinessException {
+		BusinessException be = new BusinessException();
+		
+		boolean isValid = isEmailValide(utilisateur.getEmail(), be);
+		isValid &= isPseudoValide(utilisateur.getPseudo(), be);
+		
+		if (isValid) {
+			utilisateurDAO.modifierUtilisateur(utilisateur);
+		} else {
+			throw be;
+		}
+		
 	}
 
 	@Override
@@ -104,7 +114,10 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	
 	@Override
 	public void supprimerMonProfil(Utilisateur utilisateur) {
-		utilisateurDAO.supprimerMonProfil(utilisateur);
+		if (utilisateur != null) {
+			utilisateurDAO.supprimerUtilisateur(utilisateur);
+		}
+		
 	}
 
 	@Override
