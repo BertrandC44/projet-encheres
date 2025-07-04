@@ -10,20 +10,19 @@
 	<header th:replace="~{fragments/entete::entete}"></header>
 	<main>
 	<form action="/encheres/vente" method="post" th:object="${article}">
-	
 		<h2> Nouvelle ventre</h2>
 		<ul class="flex-outer">
 		
 		<label for="article">Article</label>
 		<input type ="text" id="article" name="article" th:field="*{nomArticle}">
 		
-		<label for="categorie">Catégorie</label>
-		<select name="categorie" id="categorie" th:field="*{categorie}">
-		<option value=""> Choisir une catégorie
-		</option>
-		<th:block th:each="entry :${categorie}">
+		<label for="idCategorie">Catégorie</label>
+		
+		<select th:field="*{categorie.idCategorie}"> 
+			<option th:each="c :${categorie}" th:value="${c.idCategorie}" th:text="${c.libelle}"></option>
+		<!--  <th:block th:each="entry :${categorie}">
 			<option th:value="${entry.key}" th:data-img="${entry.value}" th:text="${entry.key}"></option>
-			</th:block>
+			</th:block>-->
 			</select>
 			
 			<br><br>

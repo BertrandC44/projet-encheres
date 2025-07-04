@@ -7,6 +7,7 @@ public class Categorie {
 	
 	private long idCategorie;
 	private String libelle;
+	private String image;
 	
 	private List<Article> articles = new ArrayList<Article>();
 
@@ -18,6 +19,15 @@ public class Categorie {
 	public Categorie(String libelle) {
 		this.libelle = libelle;
 	
+	}
+
+
+	public Categorie(long idCategorie, String libelle, String image, List<Article> articles) {
+		super();
+		this.idCategorie = idCategorie;
+		this.libelle = libelle;
+		this.image = image;
+		this.articles = articles;
 	}
 
 
@@ -50,6 +60,18 @@ public class Categorie {
 	public void setArticles(List<Article> articles) {
 		this.articles = articles;
 	}
+
+	
+	
+	public String getImage() {
+		return image;
+	}
+
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 
 	@Override
 	public String toString() {

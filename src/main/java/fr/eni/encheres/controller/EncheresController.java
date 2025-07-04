@@ -109,8 +109,11 @@ public class EncheresController {
 	@GetMapping("/encheres/vente")
 	public String vente(Model model) {
 		Article nouvelArticle = new Article();
+		Categorie categorie = new Categorie();
 		model.addAttribute("article", nouvelArticle);
+		model.addAttribute("categorie", categorie);
 		System.out.println("afficher les ventes");
+		
 		return "vente";
 	}
 
