@@ -14,7 +14,9 @@ public interface EnchereDAO {
 	
 	List<Enchere> consulterEncheres();	
 	
-	void encherir(LocalDate dateEnchere, int montantEnchere, int idUtilisateur, long idArticle);
+	int montantEnchereMax(long idArticle);
+	
+	void encherir(long idUtilisateur, long idArticle, int montantEnchere);
 	
 	Enchere consulterEnchereParId(long idArticle);
 	

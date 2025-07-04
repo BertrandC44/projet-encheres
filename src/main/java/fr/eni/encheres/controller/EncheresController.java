@@ -19,7 +19,6 @@ import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bll.contexte.ContexteService;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
-import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.BusinessException;
 import jakarta.validation.Valid;
@@ -38,7 +37,6 @@ public class EncheresController {
 
 	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ContexteService contexteService) {
 		this.encheresService = encheresService;
-		
 		this.utilisateurService = utilisateurService;
 		this.contexteService = contexteService;
 		
@@ -106,17 +104,27 @@ public class EncheresController {
 	}
 	
 	@GetMapping("/encheres/encherir")
-	public String encherir() {
-		System.out.println("Clic vers Encherir");
+	public String encherir(@RequestParam(name="idArticle") long idArticle, Model model) {
+		Article article = encheresService.consulterArticleParId(idArticle);
+		int montantMax = encheresService.montantMax(idArticle);
+		if (article != null) {
+			model.addAttribute("article", article);
+			model.addAttribute("montantMax", montantMax);
+		}
 		return "encherir";
 	}
 	
-//	@PostMapping("/encheres/encherir")
-//	public String encherirPost( @ModelAttribute Enchere enchere) {
-//		this.encheresService.encherir(enchere.getDateEnchere(), enchere.getMontantEnchere(), enchere.getUtilisateur().getIdUtilisateur(), enchere.getArticle().getIdArticle());
-//		
-//		return "redirect:/encheres";
-//	}
+	@PostMapping("/encheres/encherir")
+	public String encherirPost( @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, 
+								@RequestParam(name="idArticle") long idArticle, 
+								@RequestParam(name="montantEnchere") int montantEnchere, 
+								Model model) {
+		model.addAttribute("utilisateurEnSession", utilisateurEnSession);
+		model.addAttribute("idArticle", idArticle);
+		model.addAttribute("montantEnchere", montantEnchere);
+		this.encheresService.encherir(utilisateurEnSession.getIdUtilisateur(), idArticle, montantEnchere);
+		return "redirect:/encheres";
+	}
 	
 	@GetMapping("/encheres/vente")
 	public String vente(Model model) {

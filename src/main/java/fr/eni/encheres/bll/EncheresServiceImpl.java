@@ -1,6 +1,5 @@
 package fr.eni.encheres.bll;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -36,7 +35,6 @@ public class EncheresServiceImpl implements EncheresService{
 	
 	@Override
 	public Enchere consulterEnchereParId(long idArticle) {
-		// TODO Auto-generated method stub
 		return enchereDAO.consulterEnchereParId(idArticle);
 	}
 
@@ -83,8 +81,15 @@ public class EncheresServiceImpl implements EncheresService{
 
 
 	@Override
-	public void encherir(LocalDate dateEnchere, int montantEnchere, long idUtilisateur, long idArticle) {
+	public void encherir(long idUtilisateur, long idArticle, int montantEnchere) {
+		enchereDAO.encherir(idUtilisateur, idArticle, montantEnchere);
 
+	}
+
+	@Override
+	public int montantMax(long idArticle) {
+		// TODO Auto-generated method stub
+		return enchereDAO.montantEnchereMax(idArticle);
 	}
 
 

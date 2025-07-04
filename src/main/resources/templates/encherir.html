@@ -1,50 +1,67 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head th:insert="~{fragments/liens::liens}">
 <meta charset="UTF-8">
+
+
 <title>Enchères en cours</title>
-<link rel="icon" data-th-href="@{/images/logoENI.png}" sizes="32x32">
-<link rel="stylesheet" th:href="@{/css/general.css}">
+
+
+
+<link rel="stylesheet" href=
+"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
+
+
 <body>
 <header th:replace="~{fragments/entete::entete}"></header>
+
+
 <main>
-	<form action="/detail/retour" method="post">
-		<h2 th:text="${nomArticle}"></h2>
-		<input type="hidden" name="idArticle" th:value="${idArticle}" >
+	<form th:action="@{/encheres/encherir}" method="post" th:object=${enchere}>
+	
+
+		<input type="hidden" name="idArticle" th:text="${idArticle}" >   
+		<input type="hidden" name="dateEnchere" th:text="${dateEnchere}" > 
+		
+		<h2 th:text="${article.nomArticle}"></h2> 
 		<ul>
-			<li>
+			<li class="form-">
 				<label for="description">Description : </label>
-			<textarea type="text" id="inputDescription" name="description" disabled></textarea> <!--	th:value="${description}" disabled> </textarea>-->
+			<textarea type="text" id="Description" th:text="${article.description}" ></textarea> 
 			</li>
 			<li>
 				<label for="mOffre">Meilleure offre : </label>
-				<input type="text" id="inputMOffre" disabled> <!--  name="" th:value="${montantEnchere}" disabled >  -->
+				<span type="text" id="mOffre" th:text="${montantMax}" ></span>
+				<label for="utilisateur"> par</label>
+				<!-- <span type="text" id="utilisateur" th:text="${enchere.utilisateur.pseudo}"> </span>  -->
 			</li>
 			<li>
 				<label for="miseAPrix">Mise à prix : </label>
-				<input type="text" id="miseAPrix" disabled> <!-- name=""  th:value="${article.miseAPrix} + ' points'" disabled >  -->
-				<label for="utilisateur"> par</label>
-				<input type="text" id="utilisateur" disabled> <!--  name=""  th:value="${enchere.utilisateur.pseudo}" disabled >  -->
+				<span type="text" id="miseAPrix" th:text="${article.miseAPrix}" > </span>
+				
+
 			</li>
 			<li>
 				<label for="dateFinEncheres">Fin de l'enchère : </label>
-				 <input type="date" id="dateFinEncheres" disabled> <!--name=""  th:value="${article.dateFinEncheres}" disabled>  -->
+				 <span type="date" id="dateFinEncheres" th:text="${article.dateFinEncheres}" > </span>
 			</li>
 			<li>
 				<label for="retrait">Retrait : </label>
-				<input type="text" id="retrait" disabled> <!-- name=""  th:value="${article.retrait.rue} + ' ' + ${article.retrait.codePostal} + ' ' + ${article.retrait.ville}" disabled> -->
+				<p type="text" id="retrait" th:text="${article.retrait.rue}"></p>
+				<p type="text" id="retrait" th:text="${article.retrait.codePostal} + ' ' + ${article.retrait.ville}" > </p>
 			</li>
 			<li>
 				<label for="vendeur">Vendeur : </label>
-				<input type="text" id="vendeur" disabled> <!-- name=""  th:value="${article.utilisateur.pseudo}" disabled> -->
+				<span type="text" id="utilisateur" th:text="${article.utilisateur.pseudo}" > </span>
 			</li>
 			<li>
-				<label for="maProposition">Ma proposition : </label>
-				<input type="number" id="vendeur" > <!-- name=""  th:value="${article.utilisateur.pseudo}" disabled> -->
+				<label for="montantEnchere">Ma proposition : </label>
+				<input type="number" id="montantEnchere" value="montantEnchere" required>
 			</li>
 			<li>
-				<button type="submit" name="enchérir" >Enchérir</button>
+				<button type="submit" name="encherir" >Enchérir</button>
 			</li>	
 		</ul>
 	</form>

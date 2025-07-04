@@ -29,7 +29,9 @@ public interface EncheresService {
 
 	void annulerVente(Article article);
 	
-	void encherir(LocalDate dateEnchere, int montantEnchere, long idUtilisateur, long idArticle);
+	void encherir(long idUtilisateur, long idArticle, int montantEnchere);
+	
+	int montantMax(long idArticle);
 	
 	
 	
