@@ -7,106 +7,69 @@
 </head>
 
 <body>
-	<header th:replace="~{fragments/entete::entete}"></header>
-	<main>
-	<form action="/encheres/vente" method="post" th:object="${article}">
-	
-		<h2> Nouvelle vente</h2>
-		<ul class="flex-outer">
-		
-		<label for="article">Article</label>
-		<input type ="text" id="article" name="article" th:field="*{nomArticle}">
-		
-		<label for="categorie">Catégorie</label>
-		<select name="categorie" id="categorie" th:field="*{categorie}">
-		<option value=""> Choisir une catégorie
-		</option>
-		<th:block th:each="entry :${categorie}">
-			<option th:value="${entry.key}" th:data-img="${entry.value}" th:text="${entry.key}"></option>
-			</th:block>
-			</select>
-			
-			<br><br>
-			
-		<!-- <option value ="electromenager">electromenager</option>
-		<option value ="meuble">meuble</option>
-		<option value ="loisir">loisir</option>
-		<option value ="truc">truc</option>
-		</select> -->
-		
-		<label for="description">Description :</label>
-		<textarea id="description" name="description" rows="5" col="50" th:field="*{description}"></textarea>
-		
-		s
-		<label for="photo">Photo de l'article :</label>
-		
-		<div>
-			<input type="radio" id="chaise" name="image" value="0" required>
-			<label for="chaise">Chaise</label>
-			<img src="/images/chaise-en-bois.jpg" alt="image d'une chaise en bois" style="width:200px;height:200px;"/>
-			</div>
-			
-			<div>
-			<input type="radio" id="clavier" name="image" value="1" required>
-			<label for="clavier">Clavier</label>
-			<img src="/images/clavier.jpg" alt="image d'un clavier" style="width:200px;height:200px;"/>
-			</div>
-			
-			<div>
-			<input type="radio" id="tennis" name="image" value="2" required>
-			<label for="tennis">Tennis</label>
-			<img src="/images/tennis.png" alt="image d'une raquette de tennis" style="width:200px;height:200px;"/>
-			</div>
-			
-			<div> 
-			<input type="radio" id="tondeuse" name="image" value="3" required>
-			<label for="tondeuse"> Tondeuse</label>
-			<img src="/images/tondeuse.png" alt="image d'une tondeuse" style="width:200px;height:200px;"/>
-			</div>
-		
-		
-		<!-- <input type="file" id="upload" name="upload" accept="image/png, image/jpeg" />
-		<br> <br>
-		<img id="preview" style="max-width : 300px; display: none" alt="Aperçu"> -->
-		
-		
-		<label for="prixInit">Prix initial :</label>
-		<input type="number" id="prixInit" name="prixInit" min="1" max="100000" th:field="*{miseAPrix}"/>
-		
-		<label for="debutEnchere">Début de l'enchère :</label>
-		<input type="datetime-local" id="debutEnchere" name="debutEnchere" th:field="*{dateDebutEncheres}">
-		
-		<label for="finEnchere">Fin de l'enchère :</label>
-		<input type="datetime-local" id="finEnchere" name="finEnchere" th:field="*{dateFinEncheres}">
-		
-		<label>Retrait :</label>
-		<input type="text" id="retrait" name="retrait" th:field="*{retrait}">
-		
-		<button type="submit">Enregistrer</button>
-		<button type="reset"> Annuler</button>
-		
-			</form>
-			
-			
-			
-				<!-- <script>
-					
-					const input = document.getElementById('imageInput');
-					const preview = document.getElementById('preview');
-					
-					input.addEventListener('change', function(){
-					const file = this.file[0];
-					if(file) {
-						const reader = new FileReader();
-						reader.onload = function(e){
-						preview.src = e.target.result;
-						preview.style.display='block';
-						};
-						reader.readAsDataURL(file);
-						}
-					});
-				</script> -->
-	</main>
+<header th:replace="~{fragments/entete::entete}"></header>
+<main>
+  <h2>Nouvelle vente</h2>
+  
+  <!-- Formulaire 1 : choix de catégorie -->
+ <form action="/encheres/vente" method="post" th:object="${article}">
+  <label for="idCategorie">Catégorie</label>
+  <select id="idCategorie" name="categorie.idCategorie" th:field="*{categorie.idCategorie}">
+    <option th:each="c : ${categorie}" 
+            th:value="${c.idCategorie}" 
+            th:text="${c.libelle}" 
+            th:selected="${c.idCategorie == article.categorie?.idCategorie}">
+    </option>
+  </select>
+
+  <div th:if="${article.categorie != null}">
+    <img th:src="@{'/images/' + ${article.categorie.image}}" alt="Image catégorie" width="150" />
+  </div>
+
+  <button type="submit" name="action" value="categorieChoisie">Valider la catégorie</button>
+</form>
+  
+  <br><br>
+  
+  <!-- Formulaire 2 : reste des infos -->
+  <form action="/encheres/vente" method="post" th:object="${article}">
+    <label for="article">Article</label>
+    <input type="text" id="article" name="nomArticle" th:field="*{nomArticle}">
+    <br><br>
+
+    <label for="description">Description :</label>
+    <textarea id="description" name="description" rows="5" cols="50" th:field="*{description}"></textarea>
+    <br><br>
+
+    <label for="prixInit">Prix initial :</label>
+    <input type="number" id="prixInit" name="miseAPrix" min="1" max="100000" th:field="*{miseAPrix}"/>
+    <br><br>
+
+    <label for="debutEnchere">Début de l'enchère :</label>
+    <input type="date" id="debutEnchere" name="dateDebutEncheres" th:field="*{dateDebutEncheres}">
+    <br><br>
+
+    <label for="finEnchere">Fin de l'enchère :</label>
+    <input type="date" id="finEnchere" name="dateFinEncheres" th:field="*{dateFinEncheres}">
+    <br><br>
+
+    <label>Retrait :</label>
+    <label for="rue">Rue :</label>
+    <input type="text" id="rue" name="retrait.rue" th:field="*{retrait.rue}">
+    <br><br>
+
+    <label for="codePostal">Code Postal :</label>
+    <input type="text" id="codePostal" name="retrait.codePostal" th:field="*{retrait.codePostal}">
+    <br><br>
+
+    <label for="ville">Ville :</label>
+    <input type="text" id="ville" name="retrait.ville" th:field="*{retrait.ville}">
+    <br><br>
+
+    <button type="submit" name="action" value="validerFormulaire">Enregistrer</button>
+    <button type="reset">Annuler</button>
+  </form>
+</main>
 
 </body>
 </html>

@@ -56,10 +56,19 @@
 			
 			
 				<h1> Ventes en cours : </h1>
+				
+				<!-- <th:block data-th-if="${utilisateurEnSession == null or utilisateurEnSession.idUtilisateur == 0}">
+			<p> Connectez-vous pour visualiser les articles en enchère </p>
+			</th:block>
+			
+					<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">  -->
+					
+			
+		
 					<table>
 						<thead>
 							<tr>
-				
+					<th> Photo </th>
 					<th>Nom</th>
 					<th>Prix de l'article</th>
 					<th>Fin de l'enchere</th>
@@ -73,25 +82,26 @@
 			</thead>	
 			<tbody>
 				<tr th:each="a : ${articles}">
-					<td th:text="${a.nomArticle}"></td>
-					<td th:text="${a.miseAPrix}"></td>
-					<td th:text="${#temporals.format(a.dateFinEncheres,'dd-MM-yyyy HH:mm')}">
-					<td>
-					
-					<span class="compte-rebours"
-      				th:data-date-debut="${a.dateDebutEncheres}" 
-      				th:data-date-fin="${a.dateFinEncheres}"></span>
-					</td>
-					<td th:text="${a.retrait?.rue + ' ' + a.retrait?.codePostal + ' ' + a.retrait?.ville}"></td>
-					<td th:text="${a.utilisateur?.pseudo}"></td>
-					
-		
-					</tr>
+    <td>
+        <img th:src="@{${'/images/'+a.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
+    </td>
+    <td th:text="${a.nomArticle}"></td>
+    <td th:text="${a.miseAPrix}"></td>
+    <td th:text="${#temporals.format(a.dateFinEncheres,'dd-MM-yyyy HH:mm')}"></td>
+    <td>
+        <span class="compte-rebours"
+              th:data-date-debut="${a.dateDebutEncheres}" 
+              th:data-date-fin="${a.dateFinEncheres}"></span>
+    </td>
+    <td th:text="${a.retrait?.rue + ' ' + a.retrait?.codePostal + ' ' + a.retrait?.ville}"></td>
+    <td th:text="${a.utilisateur?.pseudo}"></td>
+</tr>
 					
 					</tbody>
 					
 				</table>
-
+		<!--  </th:block>-->
+			
 				
 				
 			</div>
