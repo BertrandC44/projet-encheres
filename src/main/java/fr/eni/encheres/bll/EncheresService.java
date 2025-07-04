@@ -1,5 +1,6 @@
 package fr.eni.encheres.bll;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import fr.eni.encheres.bo.Article;
@@ -11,6 +12,8 @@ import fr.eni.encheres.bo.Utilisateur;
 public interface EncheresService {
 	
 	List<Enchere> consulterEncheres();
+	
+	Enchere consulterEnchereParId(long idArticle);
 	
 	List<Categorie> consulterCategories();
 	
@@ -26,7 +29,10 @@ public interface EncheresService {
 
 	void annulerVente(Article article);
 	
-	void encherir(long idArticle,int credit);
+	void encherir(long idUtilisateur, long idArticle, int montantEnchere);
+	
+	int montantMax(long idArticle);
+	
 	
 	List<Article> consulterArticlePseudo();
 

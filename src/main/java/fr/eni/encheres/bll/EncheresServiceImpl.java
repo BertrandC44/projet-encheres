@@ -9,6 +9,11 @@ import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.dal.ArticleDAO;
 
+import fr.eni.encheres.dal.CategorieDAO;
+import fr.eni.encheres.dal.EnchereDAO;
+import fr.eni.encheres.dal.UtilisateurDAO;
+
+
 @Service
 public class EncheresServiceImpl implements EncheresService{
 	
@@ -21,22 +26,37 @@ public class EncheresServiceImpl implements EncheresService{
 		this.articleDAO = articleDAO;
 	}
 
-	@Override
-	public List<Enchere> consulterEncheres() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	private EnchereDAO enchereDAO;
+	private CategorieDAO categorieDAO;
+	private ArticleDAO articleDAO;
+	private UtilisateurDAO utilisateurDAO;
+
+	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO,	UtilisateurDAO utilisateurDAO) {
+		this.enchereDAO = enchereDAO;
+		this.categorieDAO = categorieDAO;
+		this.articleDAO = articleDAO;
+		this.utilisateurDAO = utilisateurDAO;
 	}
 
 	@Override
-	public List<Categorie> consulterCategories() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Enchere> consulterEncheres() {
+		return enchereDAO.consulterEncheres();
+	}
+	
+	@Override
+	public Enchere consulterEnchereParId(long idArticle) {
+		return enchereDAO.consulterEnchereParId(idArticle);
+	}
+
+	@Override
+	public List<Categorie> consulterCategories() {	
+		return categorieDAO.consulterCategories();
 	}
 
 	@Override
 	public Categorie consulterCategorieParId(long idCategorie) {
-		// TODO Auto-generated method stub
-		return null;
+		return categorieDAO.consulterCategorieParId(idCategorie);
 	}
 
 
@@ -52,8 +72,7 @@ public class EncheresServiceImpl implements EncheresService{
 	
 	@Override
 	public Article consulterArticleParId(long idArticle) {
-		// TODO Auto-generated method stub
-		return null;
+		return articleDAO.consulterArticleParId(idArticle);
 	}
 
 	@Override
@@ -76,10 +95,20 @@ public class EncheresServiceImpl implements EncheresService{
 		
 	}
 
+
 	@Override
-	public void encherir(long idArticle, int credit) {
+	public void encherir(long idUtilisateur, long idArticle, int montantEnchere) {
+		enchereDAO.encherir(idUtilisateur, idArticle, montantEnchere);
+
+	}
+
+	@Override
+	public int montantMax(long idArticle) {
 		// TODO Auto-generated method stub
-		
-}
+
+		return enchereDAO.montantEnchereMax(idArticle);
+	}
+
+
 
 }
