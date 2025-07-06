@@ -2,12 +2,17 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:400,300,100,700,900);
 @import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700;900&display=swap');
 
+*{
+	margin: 0;
+}
+
 a{
 	outline:none;
 	text-decoration:none;
 	color : black;
 	
 }
+
 h1,h2{
 	 font-family: "Passion One";
 }
@@ -15,9 +20,14 @@ p, a, label{
 	font-family: 'Lato';
 }
 
-.erreur{
+p.erreur{
 	color:red;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  white-space: pre-line;
 }
+
 
 
 

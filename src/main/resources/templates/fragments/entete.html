@@ -12,14 +12,19 @@
 
  
 <th:block data-th-if="${utilisateurEnSession == null or utilisateurEnSession.idUtilisateur == 0}">
+	<nav class="connect">
 		<a th:href="@{/encheres/inscription}">S'inscrire</a>
 		<a th:href="@{/encheres/connexion}">Se connecter</a>
-	</th:block>
+	</nav>	
+</th:block>
+
 <th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">
+	<nav class="disconnect">
 		<a th:href="@{/encheres/vente}">Vendre un article</a>
 		<a th:href="@{/encheres/profil(pseudo=${utilisateurEnSession.pseudo})}">Voir mon profil</a>
 		<a th:href="@{/encheres/deconnexion}">Déconnexion</a>
-	</th:block>
+	</nav>
+</th:block>
 
 </header>
 
