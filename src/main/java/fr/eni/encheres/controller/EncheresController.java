@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import fr.eni.encheres.bll.EncheresService;
-import fr.eni.encheres.bll.EncheresServiceImpl;
 import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bll.UtilisateurServiceImpl;
 import fr.eni.encheres.bll.contexte.ContexteService;
@@ -22,7 +21,6 @@ import fr.eni.encheres.bll.contexte.ContexteServiceImpl;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
-import fr.eni.encheres.controller.converter.StringToEnchereConverter;
 import fr.eni.encheres.exception.BusinessException;
 import jakarta.validation.Valid;
 
@@ -30,26 +28,14 @@ import jakarta.validation.Valid;
 @SessionAttributes({"utilisateurEnSession"})
 public class EncheresController {
 
-    private final EncheresServiceImpl encheresServiceImpl;
-
-    private final StringToEnchereConverter stringToEnchereConverter;
-
-    private final UtilisateurServiceImpl utilisateurServiceImpl;
-
-    private final ContexteServiceImpl contexteServiceImpl;
-
     private EncheresService encheresService;
     private UtilisateurService utilisateurService;
     private ContexteService contexteService;
 
-    public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ContexteService contexteService, ContexteServiceImpl contexteServiceImpl, UtilisateurServiceImpl utilisateurServiceImpl, StringToEnchereConverter stringToEnchereConverter, EncheresServiceImpl encheresServiceImpl) {
+    public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ContexteService contexteService) {
         this.encheresService = encheresService;
         this.utilisateurService = utilisateurService;
         this.contexteService = contexteService;
-        this.contexteServiceImpl = contexteServiceImpl;
-        this.utilisateurServiceImpl = utilisateurServiceImpl;
-        this.stringToEnchereConverter = stringToEnchereConverter;
-        this.encheresServiceImpl = encheresServiceImpl;
     }
 
     @GetMapping("/")
@@ -275,6 +261,8 @@ public class EncheresController {
         bindingResult.rejectValue("pseudo","pseudo.mismatch" ,"L'identifiant et/ou mot de passe incorrect");
         return "connexion";    
     }
+    
+    
 
     @ModelAttribute("utilisateurEnSession")
     public Utilisateur addUtilisateurEnSession() {
