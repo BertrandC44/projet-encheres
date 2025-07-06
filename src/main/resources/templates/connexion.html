@@ -22,28 +22,34 @@
 		<form class="login-form" th:action="@{/encheres/connexion}" method="post" th:object="${utilisateurEnSession}">
 		<h1>Se Connecter</h1>
 		<p class="erreur" th:if="${#fields.hasErrors('pseudo')}" th:errors="*{pseudo}"></p>
-			<div class="form-input">
+		
+			<ul class= "form-list">
+				<li class="form-input">
+					<label for="pseudo">Identifiant :</label>
+					<i class="fa fa-user icon"></i>
+					<input type="text" placeholder="Pseudo" id="pseudo" name="pseudo" class="form-control"  required>
+				</li>
 				
-				<label for="pseudo">Identifiant :</label>
-				<i class="fa fa-user icon"></i>
-				<input type="text" placeholder="Pseudo" id="pseudo" name="pseudo" class="form-control"  required>
-				
-				</div>
-				
-			<div class="form-input">
-				<label for="motDePasse">Mot de passe :</label>
-				<i class="fa fa-lock icon"></i>
-				<input type="password"  placeholder="Mot de passe" id="motDePasse" name="motDePasse" class="form-control" required >
-
-			</div>
+				<li class="form-input">
+					<label for="motDePasse">Mot de passe :</label>
+					<i class="fa fa-lock icon"></i>
+					<input type="password"  placeholder="Mot de passe" id="motDePasse" name="motDePasse" class="form-control" required >
+				</li>
 			
-				<button type="submit" class="form-button">Connexion</button>  
+				<li>
+					<button type="submit" class="form-button">Connexion</button>  
+				</li>
 			
-			<input type="checkbox" id="sesouvenirdemoi" name="sesouvenirdemoi"  >
-			<label for="sesouvenirdemoi">Se souvenir de moi</label>
-
-				<a href="/encheres/inscription">Créer un compte</a>
+				<li>
+					<input type="checkbox" id="sesouvenirdemoi" name="sesouvenirdemoi"  >
+					<label for="sesouvenirdemoi">Se souvenir de moi</label>
+				</li>
 				
+					<a href="/encheres/inscription">Créer un compte</a>
+				
+				
+			</ul>	
+			
 			</form>
 	
 	</main>

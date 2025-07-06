@@ -1,10 +1,10 @@
 -- Insertions utilisateurs
 
 INSERT INTO UTILISATEUR (pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, credit, administrateur) VALUES
-('abaille', 'Baille', 'Annelise', 'abaille@campus-eni.fr', '0601020304', '10 rue des Lilas', '75000', 'Paris', '{bcrypt}$2a$10$KaSHgvH9p/cUnsOVPzYvzunWDAIv68whrOxmui1S.0AjzbP5RX7yO', 100, 0),
-('sgobin', 'Gobin', 'Stephane', 'sgobin@campus-eni.fr', '0605060708', '15 rue du Bac', '69000', 'Lyon', '{bcrypt}$2a$10$B5U29ajHsIKd8aY3c/JNn.xTJpOCAeoXvT9XvfzbbHGP4iIFV9Lkm', 200, 1),
-('jtrillard', 'Trillard', 'Julien', 'jtrillard@campus-eni.fr', '0608091011', '22 avenue Victor', '33000', 'Bordeaux', '{bcrypt}$2a$10$VwQ7gMUPLeQnFC6vCsOoTevzdPe.JPu0L/7cwPGdJ6TjSpipGwY.y', 150, 0),
-('sdautais', 'Dautais', 'Servane', 'sdautais@campus-eni.fr', '0611121314', '5 boulevard Haussmann', '31000', 'Toulouse', '{bcrypt}$2a$10$qHGnMJYcTx1Vr.UTpnD.OuZHTbRS0O0N6SSn2BZMVbFekKOgjHTvu', 50, 0);
+('abaille', 'Baille', 'Annelise', 'abaille@campus-eni.fr', '0601020304', '10 rue des Lilas', '75000', 'Paris', 'Annelise', 100, 0),
+('sgobin', 'Gobin', 'Stephane', 'sgobin@campus-eni.fr', '0605060708', '15 rue du Bac', '69000', 'Lyon', 'Stephane', 200, 1),
+('jtrillard', 'Trillard', 'Julien', 'jtrillard@campus-eni.fr', '0608091011', '22 avenue Victor', '33000', 'Bordeaux', 'Julien', 150, 0),
+('sdautais', 'Dautais', 'Servane', 'sdautais@campus-eni.fr', '0611121314', '5 boulevard Haussmann', '31000', 'Toulouse', 'Servane', 50, 0);
 
 -- Insertions catégories
 

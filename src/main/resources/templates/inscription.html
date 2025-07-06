@@ -74,7 +74,6 @@
 			<p class="erreur" th:if="${#fields.hasErrors('confMdp')}" th:errors="*{confMdp}"></p>
 
 			<li class="form-input">
-
 			<label>Mot de passe :</label>
 			<input type="password" th:field="*{motDePasse}" id="mdp" />
 			</li>
@@ -84,13 +83,11 @@
 			<input type="password" th:field="*{confMdp}" id="confMdp" />
 			</li>
 			
-			<div class="btn">
-				<li >
+		
+			<li >
 				<button class="form-button" type="submit">Créer</button>
-				</li>
+			</li>
 				
-
-			</div>
 			
 		</ul>
 		

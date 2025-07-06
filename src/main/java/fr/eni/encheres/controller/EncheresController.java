@@ -29,22 +29,17 @@ import jakarta.validation.Valid;
 @SessionAttributes({"utilisateurEnSession"})
 public class EncheresController {
 
-    private final UtilisateurServiceImpl utilisateurServiceImpl;
-
-    private final ContexteServiceImpl contexteServiceImpl;
-
 	
 	private EncheresService encheresService;
 	private UtilisateurService utilisateurService;
 	private ContexteService contexteService;
 
 
-	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ContexteService contexteService, ContexteServiceImpl contexteServiceImpl, UtilisateurServiceImpl utilisateurServiceImpl) {
+	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ContexteService contexteService) {
 		this.encheresService = encheresService;
 		this.utilisateurService = utilisateurService;
 		this.contexteService = contexteService;
-		this.contexteServiceImpl = contexteServiceImpl;
-		this.utilisateurServiceImpl = utilisateurServiceImpl;
+	
 		
 
 	}
@@ -173,7 +168,7 @@ public class EncheresController {
 	}
 	
 	@PostMapping("encheres/profil/modifier")
-	public String modifierProfil(@ModelAttribute Utilisateur utilisateur, BindingResult bindingResult) {
+	public String modifierProfil(@Valid @ModelAttribute Utilisateur utilisateur, BindingResult bindingResult) {
 		try {
 			utilisateurService.modifierUtilisateur(utilisateur);
 			return "redirect:/encheres";
@@ -250,5 +245,6 @@ public class EncheresController {
 		return this.encheresService.consulterCategories();
 	}
 	
+
 
 }
