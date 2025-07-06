@@ -6,7 +6,7 @@ INSERT INTO UTILISATEUR (pseudo, nom, prenom, email, telephone, rue, codePostal,
 ('jtrillard', 'Trillard', 'Julien', 'jtrillard@campus-eni.fr', '0608091011', '22 avenue Victor', '33000', 'Bordeaux', 'Julien', 150, 0),
 ('sdautais', 'Dautais', 'Servane', 'sdautais@campus-eni.fr', '0611121314', '5 boulevard Haussmann', '31000', 'Toulouse', 'Servane', 50, 0);
 
--- Insertions catégories
+-- Insertions catÃ©gories
 
 INSERT INTO CATEGORIE (libelle) VALUES
 ('Informatique'),
@@ -17,9 +17,9 @@ INSERT INTO CATEGORIE (libelle) VALUES
 -- Insertions articles
 
 INSERT INTO ARTICLE (nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, idCategorie, idUtilisateur) VALUES
-('Clavier', 'Clavier mécanique AZERTY', '2025-07-01', '2025-07-10', 50, 0, 0, 1, 1),
+('Clavier', 'Clavier mÃ©canique AZERTY', '2025-07-01', '2025-07-10', 50, 0, 0, 1, 1),
 ('Chaise', 'Chaise en bois massif', '2025-06-25', '2025-07-05', 30, 0, 0, 2, 2),
-('Tondeuse', 'Tondeuse à gazon électrique', '2025-07-03', '2025-07-12', 100, 0, 0, 3, 3),
+('Tondeuse', 'Tondeuse Ã  gazon Ã©lectrique', '2025-07-03', '2025-07-12', 100, 0, 0, 3, 3),
 ('Raquette', 'Raquette de tennis neuve', '2025-07-02', '2025-07-15', 70, 0, 0, 4, 4);
 
 -- Insertions retraits
@@ -30,11 +30,11 @@ INSERT INTO RETRAIT (idArticle, rue, codePostal, ville) VALUES
 (3, '22 avenue Victor', '33000', 'Bordeaux'),
 (4, '5 boulevard Haussmann', '31000', 'Toulouse');
 
--- Insertions enchères
+-- Insertions enchÃ¨res
 
 INSERT INTO ENCHERE (dateEnchere, montantEnchere, idUtilisateur, idArticle) VALUES
-('2025-07-02', 55, 2, 1),  -- Stephane enchère sur Clavier
-('2025-07-03', 60, 3, 1),  -- Julien enchère plus haute sur Clavier
+('2025-07-02', 55, 2, 1),  -- Stephane enchÃ¨re sur Clavier
+('2025-07-03', 60, 3, 1),  -- Julien enchÃ¨re plus haute sur Clavier
 ('2025-06-26', 35, 1, 2),  -- Annelise sur Chaise
 ('2025-07-04', 110, 4, 3), -- Servane sur Tondeuse
 ('2025-07-05', 75, 1, 4);  -- Annelise sur Raquette
