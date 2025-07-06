@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head th:insert="~{fragments/liens::liens}">
+<meta charset="UTF-8">
+
+
+<title>Enchères en cours</title>
+
+
+
+<link rel="stylesheet" href=
+"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+
+<body>
+<header th:replace="~{fragments/entete::entete}"></header>
+
+
+<main>
+	<form th:action="@{/encheres/encherir}" method="post" th:object=${enchere}>
+	
+
+		<input type="hidden" name="idArticle" th:text="${idArticle}" >   
+		<input type="hidden" name="dateEnchere" th:text="${dateEnchere}" > 
+		
+		<h2 th:text="${article.nomArticle}"></h2> 
+		<ul>
+			<li class="form-">
+				<label for="description">Description : </label>
+			<textarea type="text" id="Description" th:text="${article.description}" ></textarea> 
+			</li>
+			<li>
+				<label for="mOffre">Meilleure offre : </label>
+				<span type="text" id="mOffre" th:text="${montantMax}" ></span>
+				<label for="utilisateur"> par</label>
+				<!-- <span type="text" id="utilisateur" th:text="${enchere.utilisateur.pseudo}"> </span>  -->
+			</li>
+			<li>
+				<label for="miseAPrix">Mise à prix : </label>
+				<span type="text" id="miseAPrix" th:text="${article.miseAPrix}" > </span>
+				
+
+			</li>
+			<li>
+				<label for="dateFinEncheres">Fin de l'enchère : </label>
+				 <span type="date" id="dateFinEncheres" th:text="${article.dateFinEncheres}" > </span>
+			</li>
+			<li>
+				<label for="retrait">Retrait : </label>
+				<p type="text" id="retrait" th:text="${article.retrait.rue}"></p>
+				<p type="text" id="retrait" th:text="${article.retrait.codePostal} + ' ' + ${article.retrait.ville}" > </p>
+			</li>
+			<li>
+				<label for="vendeur">Vendeur : </label>
+				<span type="text" id="utilisateur" th:text="${article.utilisateur.pseudo}" > </span>
+			</li>
+			<li>
+				<label for="montantEnchere">Ma proposition : </label>
+				<input type="number" id="montantEnchere" value="montantEnchere" required>
+			</li>
+			<li>
+				<button type="submit" name="encherir" >Enchérir</button>
+			</li>	
+		</ul>
+	</form>
+</main>
+
+
+</body>
+</html>
