@@ -28,6 +28,7 @@ import jakarta.validation.Valid;
 @SessionAttributes({"utilisateurEnSession"})
 public class EncheresController {
 
+
     private EncheresService encheresService;
     private UtilisateurService utilisateurService;
     private ContexteService contexteService;
@@ -198,7 +199,7 @@ public class EncheresController {
     }
 
     @PostMapping("encheres/profil/modifier")
-    public String modifierProfil(@ModelAttribute Utilisateur utilisateur, BindingResult bindingResult) {
+    public String modifierProfil(@Valid @ModelAttribute Utilisateur utilisateur, BindingResult bindingResult) {
         try {
             utilisateurService.modifierUtilisateur(utilisateur);
             return "redirect:/encheres";
