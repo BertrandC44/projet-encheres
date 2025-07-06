@@ -10,7 +10,7 @@
 	
 	<main>
 		<form class="login-form" th:action="@{/encheres/profil}" method="post" th:object=${utilisateur}>
-		<h2 th:text="*{pseudo}"></h2>
+		<h2 th:text="*{pseudo}"></h2><br>
 		<input type="hidden" th:field="*{pseudo}" id="pseudo" />
 		
 		<ul class="form-list">
