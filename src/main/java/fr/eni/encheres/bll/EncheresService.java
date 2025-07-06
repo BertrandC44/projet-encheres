@@ -29,11 +29,15 @@ public interface EncheresService {
 
 	void annulerVente(Article article);
 	
-	void encherir(long idUtilisateur, long idArticle, int montantEnchere);
+	void encherir(int montantEnchere, long idUtilisateur, long idArticle );
 	
 	int montantMax(long idArticle);
 	
+	String utilisateurMontantMax(long idArticle);
+	
 	
 	List<Article> consulterArticlePseudo();
+	
+	String categorieArticle(long idArticle);
 
 }

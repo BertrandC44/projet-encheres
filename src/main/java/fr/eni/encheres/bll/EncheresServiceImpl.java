@@ -16,10 +16,13 @@ import fr.eni.encheres.dal.CategorieDAO;
 import fr.eni.encheres.dal.CategorieDAO;
 import fr.eni.encheres.dal.EnchereDAO;
 import fr.eni.encheres.dal.UtilisateurDAO;
+import fr.eni.encheres.exception.BusinessException;
 
 
 @Service
 public class EncheresServiceImpl implements EncheresService{
+
+    private final UtilisateurServiceImpl utilisateurServiceImpl;
 	
 	private EnchereDAO enchereDAO;
 	private CategorieDAO categorieDAO;
@@ -27,11 +30,12 @@ public class EncheresServiceImpl implements EncheresService{
 	private UtilisateurDAO utilisateurDAO;
 	
 
-	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO, UtilisateurDAO utilisateurDAO) {
+	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO, UtilisateurDAO utilisateurDAO, UtilisateurServiceImpl utilisateurServiceImpl) {
 	    this.enchereDAO = enchereDAO;
 	    this.categorieDAO = categorieDAO;
 	    this.articleDAO = articleDAO;
 	    this.utilisateurDAO = utilisateurDAO;
+	    this.utilisateurServiceImpl = utilisateurServiceImpl;
 	}
 
 	// méthode pour assigner l'image en fonction de l'id de la catégorie
@@ -90,7 +94,6 @@ public class EncheresServiceImpl implements EncheresService{
 	
 	@Override
 	public Article consulterArticleParId(long idArticle) {
-
 	    Article article = articleDAO.consulterArticleParId(idArticle);
 	    assignerImageCategorie(article.getCategorie());
 	    return article;
@@ -117,18 +120,26 @@ public class EncheresServiceImpl implements EncheresService{
 
 
 	@Override
-	public void encherir(long idUtilisateur, long idArticle, int montantEnchere) {
-		enchereDAO.encherir(idUtilisateur, idArticle, montantEnchere);
+	public void encherir(int montantEnchere, long idUtilisateur, long idArticle ) {
+		BusinessException be = new BusinessException();
 
+		enchereDAO.encherir(idUtilisateur, idArticle, montantEnchere);
 	}
 
 	@Override
 	public int montantMax(long idArticle) {
-		// TODO Auto-generated method stub
-
 		return enchereDAO.montantEnchereMax(idArticle);
 	}
 
+	@Override
+	public String utilisateurMontantMax(long idArticle) {
+		return enchereDAO.utilisateurMontantMax(idArticle);
+	}
 
+	@Override
+	public String categorieArticle(long idArticle) {
+		
+		return enchereDAO.categorieArticle(idArticle);
+	}
 
 }

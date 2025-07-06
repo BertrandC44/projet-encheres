@@ -109,23 +109,36 @@ public class EncheresController {
     public String encherir(@RequestParam(name="idArticle") long idArticle, Model model) {
         Article article = encheresService.consulterArticleParId(idArticle);
         int montantMax = encheresService.montantMax(idArticle);
+        int enchereMin = montantMax+1;
+        String utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle);
+        String categorieArticle = encheresService.categorieArticle(idArticle);
         if (article != null) {
             model.addAttribute("article", article);
             model.addAttribute("montantMax", montantMax);
+            model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);
+            model.addAttribute("enchereMin", enchereMin);
+            model.addAttribute("categorieArticle", categorieArticle);
         }
         return "encherir";
     }
 
     @PostMapping("/encheres/encherir")
-    public String encherirPost(@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, 
+    public String encherirPost(@RequestParam(name="montantEnchere") int montantEnchere,
+    						   @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, 
                                @RequestParam(name="idArticle") long idArticle, 
-                               @RequestParam(name="montantEnchere") int montantEnchere, 
                                Model model) {
+    	
+        model.addAttribute("montantEnchere", montantEnchere);
         model.addAttribute("utilisateurEnSession", utilisateurEnSession);
         model.addAttribute("idArticle", idArticle);
-        model.addAttribute("montantEnchere", montantEnchere);
-        this.encheresService.encherir(utilisateurEnSession.getIdUtilisateur(), idArticle, montantEnchere);
+//        Utilisateur Utilisateur = utilisateurService.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
+//        int montantMax=encheresServiceImpl.montantMax(idArticle);
+//        if (Utilisateur.getCredit()>montantMax) {
+        System.out.println("id utilisateur= " + utilisateurEnSession.getIdUtilisateur());
+//        this.encheresService.encherir(montantEnchere,utilisateurEnSession.getIdUtilisateur(), idArticle );
+//        }
         return "redirect:/encheres";
+    
     }
 
     @GetMapping("/encheres/vente")
@@ -248,6 +261,8 @@ public class EncheresController {
         bindingResult.rejectValue("pseudo","pseudo.mismatch" ,"L'identifiant et/ou mot de passe incorrect");
         return "connexion";    
     }
+    
+    
 
     @ModelAttribute("utilisateurEnSession")
     public Utilisateur addUtilisateurEnSession() {
