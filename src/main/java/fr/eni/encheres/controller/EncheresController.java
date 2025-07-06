@@ -131,12 +131,9 @@ public class EncheresController {
         model.addAttribute("montantEnchere", montantEnchere);
         model.addAttribute("utilisateurEnSession", utilisateurEnSession);
         model.addAttribute("idArticle", idArticle);
-//        Utilisateur Utilisateur = utilisateurService.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
-//        int montantMax=encheresServiceImpl.montantMax(idArticle);
-//        if (Utilisateur.getCredit()>montantMax) {
+
         System.out.println("id utilisateur= " + utilisateurEnSession.getIdUtilisateur());
-//        this.encheresService.encherir(montantEnchere,utilisateurEnSession.getIdUtilisateur(), idArticle );
-//        }
+
         return "redirect:/encheres";
     
     }
