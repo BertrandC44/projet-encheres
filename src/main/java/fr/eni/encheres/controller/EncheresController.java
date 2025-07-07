@@ -34,9 +34,11 @@ public class EncheresController {
 
 
     private EncheresService encheresService;
+    private UtilisateurService utilisateurService;
  
-    public EncheresController(EncheresService encheresService) {
-        this.encheresService = encheresService;  
+    public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService) {
+        this.encheresService = encheresService;
+        this.utilisateurService = utilisateurService;
 
     }
 

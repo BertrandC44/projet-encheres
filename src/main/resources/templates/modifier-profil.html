@@ -10,7 +10,7 @@
 	<main>
 		<form class="login-form" th:action="@{/encheres/profil/modifier}" method="post" th:object=${utilisateur}>
 		<h2>Mon profil</h2><br>
-		<p class="erreur" th:if="${#fields.hasAnyErrors()}" th:text="#{error.message}" ></p>
+		<p class="erreur" th:if="${#fields.hasAnyErrors()}" th:text="#{error.message}" ></p><br>
 		
 		<ul class="form-list">
 		
