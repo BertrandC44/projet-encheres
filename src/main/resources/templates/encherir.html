@@ -25,12 +25,12 @@
 		  
 		<input type="hidden" name="dateEnchere" th:value="${dateEnchere}" /> 
 		
-		<input type="hidden" name="utilisateurEnSession" th:value="${utilisateurEnSession.idUtilisateur}" /> 
+		<input type="hidden" name="utilisateurEnSession" th:value="${utilisateurEnSession}" /> 
 		
 		<h2 th:text="${article.nomArticle}"></h2> 
 		<ul>
 			<li>
-			<img class="img" th:src="@{${'/images/'+ article.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
+			<img class="img-enchere" th:src="@{${'/images/'+ article.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
 			</li>
 			<li class="">
 				<label for="description">Description : </label>

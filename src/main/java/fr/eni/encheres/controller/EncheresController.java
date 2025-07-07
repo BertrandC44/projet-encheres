@@ -17,7 +17,6 @@ import fr.eni.encheres.bll.EncheresService;
 import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bll.UtilisateurServiceImpl;
 import fr.eni.encheres.bll.contexte.ContexteService;
-import fr.eni.encheres.bll.contexte.ContexteServiceImpl;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
@@ -33,10 +32,11 @@ public class EncheresController {
     private UtilisateurService utilisateurService;
     private ContexteService contexteService;
 
-    public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ContexteService contexteService) {
+    public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ContexteService contexteService, UtilisateurServiceImpl utilisateurServiceImpl) {
         this.encheresService = encheresService;
         this.utilisateurService = utilisateurService;
         this.contexteService = contexteService;
+        this.utilisateurServiceImpl = utilisateurServiceImpl;
     }
 
     @GetMapping("/")
@@ -128,12 +128,18 @@ public class EncheresController {
     						   @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, 
                                @RequestParam(name="idArticle") long idArticle, 
                                Model model) {
-    	
         model.addAttribute("montantEnchere", montantEnchere);
         model.addAttribute("utilisateurEnSession", utilisateurEnSession);
         model.addAttribute("idArticle", idArticle);
 
-        System.out.println("id utilisateur= " + utilisateurEnSession.getIdUtilisateur());
+        Utilisateur utilisateur = utilisateurService.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
+        long idUtilisateur = utilisateur.getIdUtilisateur();
+        int credit = utilisateur.getCredit();
+        System.out.println("id utilisateur= " + idUtilisateur);
+        System.out.println("Solde utilisateur= " + credit);
+        utilisateurService.debiter(montantEnchere, utilisateur);
+        System.out.println("Solde utilisateur= " + credit);
+
 
         return "redirect:/encheres";
     
