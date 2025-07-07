@@ -91,8 +91,8 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	public void modifierUtilisateur(Utilisateur utilisateur, Utilisateur utilisateurEnsession) throws BusinessException {
 		BusinessException be = new BusinessException();
 		
-		boolean isValid = isEmailModifierValide(utilisateur.getEmail(), utilisateurEnsession, utilisateur, be);
-		isValid &= isPseudoModifierValide(utilisateur.getPseudo(), utilisateurEnsession, utilisateur, be);
+		boolean isValid = isEmailModifierValide(utilisateur.getEmail(), utilisateur, utilisateurEnsession, be);
+		isValid &= isPseudoModifierValide(utilisateur.getPseudo(), utilisateur, utilisateurEnsession,  be);
 		
 		if (isValid) {
 			utilisateurDAO.modifierUtilisateur(utilisateur);
@@ -122,17 +122,13 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	}
 
 	@Override
-	public boolean isEmailModifierValide(String email, Utilisateur utilisateurEnSession, Utilisateur utilisateur, BusinessException be) {
-		if(utilisateur.getEmail().equals(utilisateurEnSession.getEmail())) {
-			System.out.println("1");
-			return true;
-		}
-		if(utilisateurDAO.isEmailValide(email)) {
-			System.out.println("2");
-			return true;
-		}be.add("L'email \"" + email + "\" a déjà un compte associé");
-		System.out.println("3");
-		return false;
+	public boolean isEmailModifierValide(String email, Utilisateur utilisateur, Utilisateur utilisateurEnSession, BusinessException be) {
+		Utilisateur utilisateurAvecEmail = utilisateurDAO.utilisateurparEmail(email);
+	    if (utilisateurAvecEmail == null || utilisateurAvecEmail.getIdUtilisateur() == utilisateurEnSession.getIdUtilisateur()) {
+	      return true; 
+	    }be.add("L'email \"" + email + "\" a déjà un compte associé");
+	      return false;
+	    
 	}
 	
 	
@@ -145,14 +141,12 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	}
 	
 	@Override
-	public boolean isPseudoModifierValide(String pseudo, Utilisateur utilisateurEnSession, Utilisateur utilisateur, BusinessException be) {
-		if(utilisateur.getPseudo().equals(utilisateurEnSession.getPseudo())) {
-			return true;
-		}
-		if(utilisateurDAO.isPseudoValide(pseudo)) {
-			return true;
-		}be.add("Le pseudo \"" + pseudo + "\" existe déjà");
-		return false;
+	public boolean isPseudoModifierValide(String pseudo, Utilisateur utilisateur, Utilisateur utilisateurEnSession, BusinessException be) {
+		Utilisateur utilisateurAvecPseudo = utilisateurDAO.utilisateurParPseudo(pseudo);
+	    if (utilisateurAvecPseudo == null || utilisateurAvecPseudo.getIdUtilisateur() == utilisateurEnSession.getIdUtilisateur()) {
+	      return true;
+	    }be.add("Le pseudo \"" + pseudo + "\" a déjà un compte associé");
+	      return false;
 	}
 	
 	@Override

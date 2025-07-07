@@ -22,9 +22,6 @@ p, a, label, span, input, textarea, td, th{
 
 p.erreur{
   color:red;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
   white-space: pre-line;
 }
 

@@ -112,10 +112,6 @@ public class EncheresServiceImpl implements EncheresService{
 		return null;
 	}
 
-	}
-
-	
-
 	@Override
 	public Article rechercheParMotCle(String motCle) {
 		// TODO Auto-generated method stub

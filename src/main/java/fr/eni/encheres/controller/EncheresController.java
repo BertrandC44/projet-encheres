@@ -35,14 +35,11 @@ public class EncheresController {
 
     private EncheresService encheresService;
     private UtilisateurService utilisateurService;
- 
-
 
     public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService) {
+        this.encheresService = encheresService;
+        this.utilisateurService = utilisateurService;
 
-		this.encheresService = encheresService;
-		this.utilisateurService = utilisateurService;
-	}
 
 	@GetMapping("/")
     public String index() {
