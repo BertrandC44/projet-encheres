@@ -27,7 +27,6 @@ import jakarta.validation.Valid;
 @SessionAttributes({"utilisateurEnSession"})
 public class EncheresController {
 
-    private final UtilisateurServiceImpl utilisateurServiceImpl;
 
     private EncheresService encheresService;
     private UtilisateurService utilisateurService;
@@ -132,6 +131,7 @@ public class EncheresController {
         model.addAttribute("montantEnchere", montantEnchere);
         model.addAttribute("utilisateurEnSession", utilisateurEnSession);
         model.addAttribute("idArticle", idArticle);
+
         Utilisateur utilisateur = utilisateurService.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
         long idUtilisateur = utilisateur.getIdUtilisateur();
         int credit = utilisateur.getCredit();
@@ -139,6 +139,7 @@ public class EncheresController {
         System.out.println("Solde utilisateur= " + credit);
         utilisateurService.debiter(montantEnchere, utilisateur);
         System.out.println("Solde utilisateur= " + credit);
+
 
         return "redirect:/encheres";
     
@@ -204,7 +205,7 @@ public class EncheresController {
     }
 
     @PostMapping("encheres/profil/modifier")
-    public String modifierProfil(@ModelAttribute Utilisateur utilisateur, BindingResult bindingResult) {
+    public String modifierProfil(@Valid @ModelAttribute Utilisateur utilisateur, BindingResult bindingResult) {
         try {
             utilisateurService.modifierUtilisateur(utilisateur);
             return "redirect:/encheres";

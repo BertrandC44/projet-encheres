@@ -21,6 +21,7 @@ main {
   padding: 10px 20px;
   border-radius: 10px;
   cursor: pointer;
+  margin-right: 10px;
   }
 
 
@@ -59,10 +60,10 @@ main {
 	padding: 0 ;
 }	
 
-ul.form-list{
+/*ul.form-list{
 	width: 130%;
 	
-}
+}*/
 
 
 li{
@@ -71,7 +72,7 @@ li{
 	
 }
 
-.form-list input, span{
+.form-list input, span, textarea{
 	width: 60%;
 	
 }
@@ -84,7 +85,12 @@ span{
 	width: 45%;
 }
 
+label#memoire{
+	width: 80%;	
+}
+
 input#sesouvenirdemoi{
 	width: 8%;
+	margin-right: 5px;
 }
 	
