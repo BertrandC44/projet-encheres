@@ -137,7 +137,6 @@ public class EncheresServiceImpl implements EncheresService{
 
 	@Override
 	public String categorieArticle(long idArticle) {
-		
 		return enchereDAO.categorieArticle(idArticle);
 	}
 

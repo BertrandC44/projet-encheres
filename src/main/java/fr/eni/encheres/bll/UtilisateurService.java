@@ -17,7 +17,7 @@ public interface UtilisateurService {
 	
 	int consulterCredit(Utilisateur utilisateur);
 	
-	void debiter(int debit,Utilisateur utilisateur);
+	void debiter(int montantEnchere,Utilisateur utilisateur);
 	
 	void crediter(int credit,Utilisateur utilisateur);
 	

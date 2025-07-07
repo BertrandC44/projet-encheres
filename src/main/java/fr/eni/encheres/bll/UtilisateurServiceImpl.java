@@ -51,10 +51,10 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	}
 
 	@Override
-	public void debiter(int debit, Utilisateur utilisateur) {
+	public void debiter(int montantEnchere, Utilisateur utilisateur) {
 		int solde = utilisateur.getCredit();
-		if (solde > debit) {
-			solde -= debit;
+		if (solde > montantEnchere) {
+			solde -= montantEnchere;
 			utilisateur.setCredit(solde);
 		}
 	}
