@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head th:insert="~{fragments/liens::liens}">
+<meta charset="UTF-8">
+<title>Eni-Enchères</title>
+
+</head>
+
+<body>
+<header th:replace="~{fragments/entete::entete}"></header>
+<main>
+  <h2>Nouvelle vente</h2>
+  
+  <!-- Formulaire 1 : choix de catégorie -->
+ <form action="/encheres/vente" method="post" th:object="${article}">
+  <label for="idCategorie">Catégorie</label>
+  <select id="idCategorie" name="categorie.idCategorie" th:field="*{categorie.idCategorie}">
+    <option th:each="c : ${categorie}" 
+            th:value="${c.idCategorie}" 
+            th:text="${c.libelle}" 
+            th:selected="${c.idCategorie == article.categorie?.idCategorie}">
+    </option>
+  </select>
+
+  <div th:if="${article.categorie != null}">
+    <img th:src="@{'/images/' + ${article.categorie.image}}" alt="Image catégorie" width="150" />
+  </div>
+
+  <button type="submit" name="action" value="categorieChoisie">Valider la catégorie</button>
+</form>
+  
+  <br><br>
+  
+  <!-- Formulaire 2 : reste des infos -->
+  <form action="/encheres/vente" method="post" th:object="${article}">
+    <label for="article">Article</label>
+    <input type="text" id="article" name="nomArticle" th:field="*{nomArticle}">
+    <br><br>
+
+    <label for="description">Description :</label>
+    <textarea id="description" name="description" rows="5" cols="50" th:field="*{description}"></textarea>
+    <br><br>
+
+    <label for="prixInit">Prix initial :</label>
+    <input type="number" id="prixInit" name="miseAPrix" min="1" max="100000" th:field="*{miseAPrix}"/>
+    <br><br>
+
+    <label for="debutEnchere">Début de l'enchère :</label>
+    <input type="date" id="debutEnchere" name="dateDebutEncheres" th:field="*{dateDebutEncheres}">
+    <br><br>
+
+    <label for="finEnchere">Fin de l'enchère :</label>
+    <input type="date" id="finEnchere" name="dateFinEncheres" th:field="*{dateFinEncheres}">
+    <br><br>
+
+    <label>Retrait :</label>
+    <label for="rue">Rue :</label>
+    <input type="text" id="rue" name="retrait.rue" th:field="*{retrait.rue}">
+    <br><br>
+
+    <label for="codePostal">Code Postal :</label>
+    <input type="text" id="codePostal" name="retrait.codePostal" th:field="*{retrait.codePostal}">
+    <br><br>
+
+    <label for="ville">Ville :</label>
+    <input type="text" id="ville" name="retrait.ville" th:field="*{retrait.ville}">
+    <br><br>
+
+    <button type="submit" name="action" value="validerFormulaire">Enregistrer</button>
+    <button type="reset">Annuler</button>
+  </form>
+</main>
+
+</body>
+</html>

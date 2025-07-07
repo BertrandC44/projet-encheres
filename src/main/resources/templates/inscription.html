@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<link rel="icon" data-th-href="@{/images/logoENI.png}" sizes="32x32">
+<link rel="stylesheet" th:href="@{/css/connexion.css}">
+<link rel="stylesheet" th:href="@{/css/general.css}">
+<meta charset="UTF-8">
+<title>ENI-Enchères</title>
+
+</head>
+
+
+<body>
+ 
+<header th:replace="~{fragments/entete::entete}"></header>
+
+
+	<main>
+
+		<form class="login-form" th:action="@{/encheres/inscription}" method="post"  th:object="${utilisateur}">
+		<h2>Créer un compte</h2>
+
+		<p class="erreur" th:if="${#fields.hasAnyErrors()}" th:text="#{error.message}" ></p>
+		
+		<ul class="form-list">
+			<p class="erreur" th:if="${#fields.hasErrors('pseudo')}" th:errors="*{pseudo}"></p>
+			<li class="form-input">
+			<label>Pseudo :</label>
+			<input type="text" th:field="*{pseudo}" id="pseudo"/>
+			</li>
+			
+			<p class="erreur" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></p>
+			<li class="form-input">
+			<label>Nom :</label>
+			<input type="text" th:field="*{nom}" id="nom"/>
+			</li>
+			
+			<p class="erreur" th:if="${#fields.hasErrors('prenom')}" th:errors="*{prenom}"></p>
+			<li class="form-input">
+			<label>Prénom :</label>
+			<input type="text" th:field="*{prenom}" id="prenom" />
+			</li>
+			
+			<p class="erreur" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+			<li class="form-input">
+			<label>Email :</label>
+			<input type="text" th:field="*{email}" id="email" />
+			</li>
+			
+			<p class="erreur" th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}"></p>
+			<li class="form-input">
+			<label> Téléphone :</label>
+			<input type="text" th:field="*{telephone}" id="telephone" />
+			</li>
+			
+			<p class="erreur" th:if="${#fields.hasErrors('rue')}" th:errors="*{rue}"></p>
+			<li class="form-input">
+			<label>Rue :</label>
+			<input type="text" th:field="*{rue}" id="rue" />
+			</li>
+			
+			<p class="erreur" th:if="${#fields.hasErrors('codePostal')}" th:errors="*{codePostal}"></p>
+			<li class="form-input">
+			<label>Code postal :</label>
+			<input type="text" th:field="*{codePostal}" id="cpo" />
+			</li>
+			
+			<p class="erreur" th:if="${#fields.hasErrors('ville')}" th:errors="*{ville}"></p>
+			<li class="form-input">
+			<label>Ville :</label>
+			<input type="text" th:field="*{ville}" id="ville" />
+			</li>
+			
+			<p class="erreur" th:if="${#fields.hasErrors('motDePasse')}" th:errors="*{motDePasse}"></p>
+			<p class="erreur" th:if="${#fields.hasErrors('confMdp')}" th:errors="*{confMdp}"></p>
+
+			<li class="form-input">
+			<label>Mot de passe :</label>
+			<input type="password" th:field="*{motDePasse}" id="mdp" />
+			</li>
+			
+			<li class="form-input">
+			<label for="confMdp">Confirmation :</label>
+			<input type="password" th:field="*{confMdp}" id="confMdp" />
+			</li>
+			
+		
+			<li >
+				<button class="form-button" type="submit">Créer</button>
+			</li>
+				
+			
+		</ul>
+		
+		</form>
+	
+	
+	
+	</main>
+
+
+</body>
+</html>
