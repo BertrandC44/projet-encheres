@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<link rel="icon" data-th-href="@{/images/logoENI.png}" sizes="32x32">
+<link rel="stylesheet" th:href="@{/css/connexion.css}">
 <head th:insert="~{fragments/liens::liens}">
 
 <meta charset="UTF-8">
@@ -10,8 +12,10 @@
  
 <header th:replace="~{fragments/entete::entete}"></header>
 
+
 <main>
 	<ul > 
+
 	<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">
 
 		
@@ -62,8 +66,12 @@
 			<li>
 					<button type="submit">Rechercher</button>  
 			</li>
+
+			
+			</ul>
+
 			</form>
-	
+
 			
 			
 				<h1> Ventes en cours : </h1>
@@ -96,7 +104,7 @@
     <td>
         <img th:src="@{${'/images/'+a.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
     </td>
-    <td th:text="${a.nomArticle}"></td>
+    <td><a th:href="@{/encheres/encherir(idArticle=${a.idArticle})}" th:text="${a.nomArticle}">lien</a></td>
     <td th:text="${a.miseAPrix}"></td>
     <td th:text="${#temporals.format(a.dateFinEncheres,'dd-MM-yyyy HH:mm')}"></td>
     <td>

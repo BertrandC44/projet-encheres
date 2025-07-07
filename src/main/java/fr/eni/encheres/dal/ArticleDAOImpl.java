@@ -28,8 +28,12 @@ public class ArticleDAOImpl implements ArticleDAO {
 
     private static final String DELETE_ARTICLE = "DELETE FROM ARTICLE WHERE idArticle = :idArticle";
 
+
+   // private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur LEFT JOIN RETRAIT r ON r.idArticle = a.idArticle";
+
     private static final String FIND_BY_ID_USER = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE u.idUtilisateur=:idUtilisateur";
     private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle";
+
 
     private static final String FIND_ENCHERES_EN_COURS = "SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE dateDebutEncheres<=GETDATE() AND dateFinEncheres>GETDATE() AND a.idUtilisateur<>:idUtilisateur";
     
@@ -147,6 +151,7 @@ public class ArticleDAOImpl implements ArticleDAO {
         @Override
         public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
             Article a = new Article();
+            a.setIdArticle(rs.getLong("idArticle"));
             a.setNomArticle(rs.getString("nomArticle"));
             a.setDescription(rs.getString("description"));
             a.setDateDebutEncheres(rs.getDate("dateDebutEncheres").toLocalDate());

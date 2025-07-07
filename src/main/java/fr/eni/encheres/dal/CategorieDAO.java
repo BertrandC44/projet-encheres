@@ -10,5 +10,6 @@ public interface CategorieDAO {
 
 	List<Categorie> consulterCategories();
 	
-	
+	public void insertCategorieArticle(Categorie categorie);
+
 }

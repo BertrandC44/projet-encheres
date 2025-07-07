@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<link rel="icon" data-th-href="@{/images/logoENI.png}" sizes="32x32">
+<link rel="stylesheet" th:href="@{/css/connexion.css}">
 <head th:insert="~{fragments/liens::liens}">
 <meta charset="UTF-8">
 
@@ -19,7 +21,7 @@
 
 
 <main>
-	<form class="encherir-form" th:action="@{/encheres/encherir(idArticle=${article.idArticle})}" method="post" th:object=${enchere}>
+	<form class="login-form" th:action="@{/encheres/encherir(idArticle=${article.idArticle})}" method="post" th:object=${enchere}>
 	
 		<input type="hidden" name="idArticle" th:value="${article.idArticle}" />
 		  
@@ -28,7 +30,7 @@
 		<input type="hidden" name="utilisateurEnSession" th:value="${utilisateurEnSession}" /> 
 		
 		<h2 th:text="${article.nomArticle}"></h2> 
-		<ul>
+		<ul class="form-list">
 			<li>
 			<img class="img-enchere" th:src="@{${'/images/'+ article.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
 			</li>
