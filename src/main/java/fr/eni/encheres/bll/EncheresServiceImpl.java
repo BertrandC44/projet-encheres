@@ -30,14 +30,17 @@ public class EncheresServiceImpl implements EncheresService{
 	private EnchereDAO enchereDAO;
 	private CategorieDAO categorieDAO;
 	private ArticleDAO articleDAO;
+	private UtilisateurDAO utilisateurDAO;
 
 	
 
 
-	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO) {
+	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO, UtilisateurDAO utilisateurDAO) {
 	    this.enchereDAO = enchereDAO;
 	    this.categorieDAO = categorieDAO;
 	    this.articleDAO = articleDAO;
+	    this.utilisateurDAO = utilisateurDAO;
+	}
 
 
 
@@ -109,7 +112,7 @@ public class EncheresServiceImpl implements EncheresService{
 		return null;
 	}
 
-
+	}
 
 	
 
