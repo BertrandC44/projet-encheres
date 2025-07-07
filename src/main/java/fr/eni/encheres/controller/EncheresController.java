@@ -199,18 +199,29 @@ public class EncheresController {
     }
 
     @PostMapping("encheres/profil/modifier")
-    public String modifierProfil(@Valid @ModelAttribute Utilisateur utilisateur, BindingResult bindingResult) {
-        try {
-            utilisateurService.modifierUtilisateur(utilisateur);
-            return "redirect:/encheres";
-        } catch (BusinessException e) {
-            e.getErrors().forEach(m->{
-                ObjectError error = new ObjectError("globalError", m);
-                bindingResult.addError(error);
-            });
-            return "modifier-profil";
+    public String modifierProfil(@Valid @ModelAttribute Utilisateur utilisateur, BindingResult bindingResult, @ModelAttribute("utilisateurEnSession")Utilisateur utilisateurEnSession) {
+    	if(utilisateur.getConfMdp().equals(utilisateur.getMotDePasse())) {
+            if (bindingResult.hasErrors()) {
+                return "modifier-profil";
+            } else {
+            	try {
+            		utilisateurService.modifierUtilisateur(utilisateur, utilisateurEnSession);
+    			
+            		return "redirect:/encheres";
+            	} catch (BusinessException e) {
+            		e.getErrors().forEach(m->{
+            			ObjectError error = new ObjectError("globalError", m);
+            			bindingResult.addError(error);
+            		});
+            		return "modifier-profil";
+            	}
+            }
         }
-    }
+        bindingResult.rejectValue("confMdp","password.mismatch" ,"La confirmation est différente du mot de passe saisi");
+        return "modifier-profil";
+   }
+
+    	
 
     @GetMapping("/encheres/profil/sup")
     public String supprimerUtilisateur(@ModelAttribute Utilisateur utilisateur) {
