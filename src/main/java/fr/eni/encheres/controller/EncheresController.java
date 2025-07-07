@@ -32,7 +32,10 @@ import jakarta.validation.Valid;
 @SessionAttributes({"utilisateurEnSession","categorieEnSession"})
 public class EncheresController {
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 0a6296e3208ed9e7f812fcb484bfbce2578bffd4
     private EncheresService encheresService;
  
     public EncheresController(EncheresService encheresService) {
@@ -122,7 +125,7 @@ public class EncheresController {
 
     @PostMapping("/encheres/encherir")
 
-    public String encherirPost(@Valid @RequestParam(name="montantEnchere") int montantEnchere,
+    public String encherirPost(@RequestParam(name="montantEnchere") int montantEnchere,
     						   @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, 
                                @RequestParam(name="idArticle") long idArticle, 
                                Model model, BindingResult bindingResult) {
@@ -132,19 +135,33 @@ public class EncheresController {
 
         Utilisateur utilisateur = utilisateurService.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
 		if (bindingResult.hasErrors()) {
-			return "encheres/encherir";
+			return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		} else {
 	        System.out.println("id utilisateur= " + utilisateur.getIdUtilisateur());
 	        System.out.println("Solde utilisateur= " + utilisateur.getCredit());
 	        System.out.println("id article= " + idArticle);
 	        try {
 				encheresService.encherir(montantEnchere, utilisateur.getIdUtilisateur(), idArticle);
+<<<<<<< HEAD
+	        }catch (BusinessException e) {
+					e.getMessagesBE().forEach(m->{
+						ObjectError error = new ObjectError("globalError", m);
+						bindingResult.addError(error);
+					});
+					e.printStackTrace();
+				    return "redirect:/encheres/encherir?idArticle=" + idArticle;  
+				}
+	        
+	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
+		}  
+=======
 			} catch (BusinessException e) {
 				e.printStackTrace();
 			}
 	
 	        return "redirect:/encheres";
 		}
+>>>>>>> 0a6296e3208ed9e7f812fcb484bfbce2578bffd4
 
     }
 
