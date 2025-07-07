@@ -14,8 +14,8 @@
 
 
 <main>
-	<ul > 
-
+	<div > 
+<ul>
 	<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">
 
 		
@@ -59,16 +59,18 @@
   				</select>
 				
 			</li>
+			
 			<li class="recherche">
 				<img alt ="loupe"  width=20 height=20 src="/images/loupe.png"> 
 				<input type="text" placeholder="Le nom de l'article contient..."></input>
 			</li>
+			
 			<li>
 					<button type="submit">Rechercher</button>  
 			</li>
 
-			
 			</ul>
+		
 
 			</form>
 
@@ -123,9 +125,9 @@
 			
 				
 				
-			</div>
-			</li>
-		</ul>
+			
+			
+		</div>
  
  </main>
  <script>
