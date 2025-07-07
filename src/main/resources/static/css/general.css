@@ -16,7 +16,7 @@ a{
 h1,h2{
 	 font-family: "Passion One";
 }
-p, a, label{
+p, a, label, span, input, textarea, td, th{
 	font-family: 'Lato';
 }
 

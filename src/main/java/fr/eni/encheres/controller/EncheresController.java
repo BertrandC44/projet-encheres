@@ -22,6 +22,7 @@ import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.BusinessException;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -108,7 +109,9 @@ public class EncheresController {
 
     @GetMapping("/encheres/encherir")
     public String encherir(@RequestParam(name="idArticle") long idArticle, Model model) {
+    	System.out.println("l'id de l'article est :" + idArticle);
         Article article = encheresService.consulterArticleParId(idArticle);
+       
         int montantMax = encheresService.montantMax(idArticle);
         int enchereMin = montantMax+1;
         String utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle);
@@ -142,13 +145,15 @@ public class EncheresController {
     @GetMapping("/encheres/vente")
     public String vente(Model model) {
         List<Categorie> categories = encheresService.consulterCategories();
+        Article article = new Article();
+        article.setCategorie(new Categorie());
         model.addAttribute("article", new Article());
         model.addAttribute("categorie", categories);
         return "vente";
     }
 
     @PostMapping("/encheres/vente")
-    public String ventePost(@ModelAttribute Article article,
+    public String ventePost(@ModelAttribute Article article, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
                             @RequestParam("action") String action,
                             Model model) {
 
@@ -165,13 +170,25 @@ public class EncheresController {
         }
 
         if ("validerFormulaire".equals(action)) {
-            encheresService.creerVente(article);
+        	if(article.getCategorie()== null || article.getCategorie().getIdCategorie()==0) {
+        		model.addAttribute("error", "veuillez selectionner une catégorie");
+        		  model.addAttribute("article", article);
+        		  return "vente";
+        	}
+        	
+        		if (utilisateurEnSession == null || utilisateurEnSession.getIdUtilisateur()==0) {
+        			return "redirect:/connexion";
+        		}
+        	article.setUtilisateur(utilisateurEnSession);
+        	article.setEtatVente(1);
+        	
+            this.encheresService.creerVente(article);
             return "redirect:/encheres";
         }
-
         model.addAttribute("article", article);
         return "vente";
     }
+
 
     @GetMapping("/encheres/detail")
     public String afficherDetailEnchere(@RequestParam(name="id") long idArticle, Model model) {

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<link rel="icon" data-th-href="@{/images/logoENI.png}" sizes="32x32">
+<link rel="stylesheet" th:href="@{/css/connexion.css}">
 <head th:insert="~{fragments/liens::liens}">
 
 <meta charset="UTF-8">
@@ -9,7 +11,6 @@
 <body>
  
 <header th:replace="~{fragments/entete::entete}"></header>
-
 	<h2>Filtres :</h2>
 	<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">
 
@@ -38,7 +39,7 @@
 		
 		</ul>
 	</th:block>
-			<a class="">
+			
 			<li>
 				<label for="categories">Catégories :</label>
 				<input type="text" id="categories" name="categories" disabled th:value required>
@@ -51,7 +52,6 @@
 					<button type="submit">Rechercher</button>  
 			</li>
 			
-			</a>
 			</ul>
 			
 			
@@ -85,7 +85,7 @@
     <td>
         <img th:src="@{${'/images/'+a.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
     </td>
-    <td th:text="${a.nomArticle}"></td>
+    <td><a th:href="@{/encheres/encherir(idArticle=${a.idArticle})}" th:text="${a.nomArticle}">lien</a></td>
     <td th:text="${a.miseAPrix}"></td>
     <td th:text="${#temporals.format(a.dateFinEncheres,'dd-MM-yyyy HH:mm')}"></td>
     <td>

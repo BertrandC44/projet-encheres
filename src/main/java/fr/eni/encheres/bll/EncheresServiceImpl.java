@@ -2,10 +2,11 @@ package fr.eni.encheres.bll;
 
 import java.util.List;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
-
+import fr.eni.encheres.Application;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
@@ -22,6 +23,8 @@ import fr.eni.encheres.exception.BusinessException;
 @Service
 public class EncheresServiceImpl implements EncheresService{
 
+    private final Application application;
+
     private final UtilisateurServiceImpl utilisateurServiceImpl;
 	
 	private EnchereDAO enchereDAO;
@@ -30,12 +33,13 @@ public class EncheresServiceImpl implements EncheresService{
 	private UtilisateurDAO utilisateurDAO;
 	
 
-	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO, UtilisateurDAO utilisateurDAO, UtilisateurServiceImpl utilisateurServiceImpl) {
+	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO, UtilisateurDAO utilisateurDAO, UtilisateurServiceImpl utilisateurServiceImpl, Application application) {
 	    this.enchereDAO = enchereDAO;
 	    this.categorieDAO = categorieDAO;
 	    this.articleDAO = articleDAO;
 	    this.utilisateurDAO = utilisateurDAO;
 	    this.utilisateurServiceImpl = utilisateurServiceImpl;
+	    this.application = application;
 	}
 
 	// méthode pour assigner l'image en fonction de l'id de la catégorie
@@ -94,10 +98,19 @@ public class EncheresServiceImpl implements EncheresService{
 	
 	@Override
 	public Article consulterArticleParId(long idArticle) {
+		//pour éviter de renvoyer une erruer s'il n'y a pas d'id 
+	
+		try {
 	    Article article = articleDAO.consulterArticleParId(idArticle);
+	    if(article != null) {
 	    assignerImageCategorie(article.getCategorie());
+	    }
 	    return article;
+	}catch (EmptyResultDataAccessException e) {
+		return null;
 	}
+}
+
 	@Override
 	public Article rechercheParMotCle(String motCle) {
 		// TODO Auto-generated method stub
@@ -107,10 +120,16 @@ public class EncheresServiceImpl implements EncheresService{
 
 	@Override
 	public void creerVente(Article article) {
-		// TODO Auto-generated method stub
+		Categorie categorie= article.getCategorie();
+		articleDAO.creerVente(article);
+		
+		categorieDAO.consulterCategorieParId(categorie.getIdCategorie());
+		
+	
 		
 	}
 
+	
 
 	@Override
 	public void annulerVente(Article article) {
