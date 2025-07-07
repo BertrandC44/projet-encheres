@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<link rel="icon" data-th-href="@{/images/logoENI.png}" sizes="32x32">
+<link rel="stylesheet" th:href="@{/css/connexion.css}">
 <head th:insert="~{fragments/liens::liens}">
 
 <meta charset="UTF-8">
@@ -10,19 +12,24 @@
  
 <header th:replace="~{fragments/entete::entete}"></header>
 
-	<h2>Filtres :</h2>
+
+<main>
+	<ul > 
+
 	<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">
 
-		<ul>
+		
+		<h2>Filtres :</h2>
+		<form th:action="@{/encheres}" method="post">
 			<li >
 			<label for="achats">Achats :</label>
 			<input type="radio"  id="achats" value="Achats" name="achats/ventes" checked onchange="checkCase()">
 			</li>
 			
 			<li >
-				<input type="checkbox" id="encheresOuvertes" name="encheresOuvertes"><label for="encheresOuvertes">  enchères ouvertes</label>
-				<input type="checkbox" id="mesEncheresEnCours" name="mesEncheresEnCours"><label for="mesEncheresEnCours">  mes enchères en cours</label>
-				<input type="checkbox" id="mesEncheresEmportees" name="mesEncheresEmportees"><label for="mesEncheresEmportees">  mes enchères remportées</label>
+				<input type="checkbox" id="encheresOuvertes" name="achats" th:value="eO"><label for="encheresOuvertes">  enchères ouvertes</label>
+				<input type="checkbox" id="mesEncheresEnCours" name="achats" th:value="eEc"><label for="mesEncheresEnCours">  mes enchères en cours</label>
+				<input type="checkbox" id="mesEncheresEmportees" name="achats" th:value="eE"><label for="mesEncheresEmportees">  mes enchères remportées</label>
  			</li>
  
  			<li >
@@ -31,28 +38,40 @@
 			</li>
 			
 			<li >
-				<input type="checkbox" id="mesVentesEnCours" name="mesVentesEnCours"><label for="mesVentesEnCours">  mes ventes en cours</label>
-				<input type="checkbox" id="ventesNonDebutees" name="ventesNonDebutees"><label for="ventesNonDebutees">  ventes non débutées</label>
-				<input type="checkbox" id="ventesTerminees" name="ventesTerminees"><label for="ventesTerminees">  ventes terminées</label>
+				<input type="checkbox" id="mesVentesEnCours" name="ventes" th:value="vEc"><label for="mesVentesEnCours">  mes ventes en cours</label>
+				<input type="checkbox" id="ventesNonDebutees" name="ventes" th:value="vNd"><label for="ventesNonDebutees">  ventes non débutées</label>
+				<input type="checkbox" id="ventesTerminees" name="ventes" th:value="vT"><label for="ventesTerminees">  ventes terminées</label>
 			</li>
 		
-		</ul>
+
 	</th:block>
-			<a class="">
+			
 			<li>
-				<label for="categories">Catégories :</label>
-				<input type="text" id="categories" name="categories" disabled th:value required>
+				<label for="idCategorie">Catégorie</label>
+  				<select id="idCategorie" name="categorie">
+    				<option th:each="c : ${categorie}" 
+	            	th:value="${c.idCategorie}" 
+	            	th:text="${c.libelle}" >
+	            	<!--  
+	            	th:selected="${c.idCategorie == article.categorie?.idCategorie}"
+	            	-->
+    				</option>
+  				</select>
+				
 			</li>
 			<li class="recherche">
-				<img alt ="loupe"  width=10 src="/images/loupe.png">
+				<img alt ="loupe"  width=20 height=20 src="/images/loupe.png"> 
 				<input type="text" placeholder="Le nom de l'article contient..."></input>
 			</li>
 			<li>
 					<button type="submit">Rechercher</button>  
 			</li>
+
 			
-			</a>
 			</ul>
+
+			</form>
+
 			
 			
 				<h1> Ventes en cours : </h1>
@@ -85,7 +104,7 @@
     <td>
         <img th:src="@{${'/images/'+a.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
     </td>
-    <td th:text="${a.nomArticle}"></td>
+    <td><a th:href="@{/encheres/encherir(idArticle=${a.idArticle})}" th:text="${a.nomArticle}">lien</a></td>
     <td th:text="${a.miseAPrix}"></td>
     <td th:text="${#temporals.format(a.dateFinEncheres,'dd-MM-yyyy HH:mm')}"></td>
     <td>
@@ -108,7 +127,7 @@
 			</li>
 		</ul>
  
- 
+ </main>
  <script>
   function checkCase(){
             if  (document.getElementById("achats").checked )

@@ -2,11 +2,14 @@ package fr.eni.encheres.bll;
 
 import java.util.List;
 
+
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
+
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
-
+import fr.eni.encheres.Application;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
@@ -21,20 +24,22 @@ import fr.eni.encheres.exception.BusinessException;
 
 
 @Service
+
 public class EncheresServiceImpl implements EncheresService{	
-	
+
 	private EnchereDAO enchereDAO;
 	private CategorieDAO categorieDAO;
 	private ArticleDAO articleDAO;
-	private UtilisateurDAO utilisateurDAO;
+
 	
 
-	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO, UtilisateurDAO utilisateurDAO) {
+
+	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO) {
 	    this.enchereDAO = enchereDAO;
 	    this.categorieDAO = categorieDAO;
 	    this.articleDAO = articleDAO;
-	    this.utilisateurDAO = utilisateurDAO;
-	}
+
+
 
 	// méthode pour assigner l'image en fonction de l'id de la catégorie
 	private void assignerImageCategorie(Categorie c) {
@@ -92,10 +97,22 @@ public class EncheresServiceImpl implements EncheresService{
 	
 	@Override
 	public Article consulterArticleParId(long idArticle) {
+		//pour éviter de renvoyer une erruer s'il n'y a pas d'id 
+	
+		try {
 	    Article article = articleDAO.consulterArticleParId(idArticle);
+	    if(article != null) {
 	    assignerImageCategorie(article.getCategorie());
+	    }
 	    return article;
+	}catch (EmptyResultDataAccessException e) {
+		return null;
 	}
+
+
+
+	
+
 	@Override
 	public Article rechercheParMotCle(String motCle) {
 		// TODO Auto-generated method stub
@@ -105,10 +122,16 @@ public class EncheresServiceImpl implements EncheresService{
 
 	@Override
 	public void creerVente(Article article) {
-		// TODO Auto-generated method stub
+		Categorie categorie= article.getCategorie();
+		articleDAO.creerVente(article);
+		
+		categorieDAO.consulterCategorieParId(categorie.getIdCategorie());
+		
+	
 		
 	}
 
+	
 
 	@Override
 	public void annulerVente(Article article) {
@@ -162,6 +185,60 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public String categorieArticle(long idArticle) {
 		return enchereDAO.categorieArticle(idArticle);
+	}
+
+	@Override
+	public List<Article> consulterArticleEncheresEnCours(long idUtilisateur) {
+		List<Article> articles = articleDAO.consulterArticleEncheresEnCours(idUtilisateur);
+	    for (Article a : articles) {
+	        assignerImageCategorie(a.getCategorie());
+	    }
+	    return articles;
+	}
+
+	@Override
+	public List<Article> consulterArticleMesEncheresEnCours(long idUtilisateur) {
+		List<Article> articles = articleDAO.consulterArticleMesEncheresEnCours(idUtilisateur);
+	    for (Article a : articles) {
+	        assignerImageCategorie(a.getCategorie());
+	    }
+	    return articles;
+	}
+
+	@Override
+	public List<Article> consulterArticleMesEncheresRemportees(long idUtilisateur) {
+		List<Article> articles = articleDAO.consulterArticleMesEncheresRemportees(idUtilisateur);
+	    for (Article a : articles) {
+	        assignerImageCategorie(a.getCategorie());
+	    }
+	    return articles;
+	}
+
+	@Override
+	public List<Article> consulterArticleMesVentesEnCours(long idUtilisateur) {
+		List<Article> articles = articleDAO.consulterArticleMesVentesEnCours(idUtilisateur);
+	    for (Article a : articles) {
+	        assignerImageCategorie(a.getCategorie());
+	    }
+	    return articles;
+	}
+
+	@Override
+	public List<Article> consulterArticleMesVentesFutures(long idUtilisateur) {
+		List<Article> articles = articleDAO.consulterArticleMesVentesFutures(idUtilisateur);
+	    for (Article a : articles) {
+	        assignerImageCategorie(a.getCategorie());
+	    }
+	    return articles;
+	}
+
+	@Override
+	public List<Article> consulterArticleMesVentesTerminees(long idUtilisateur) {
+		List<Article> articles = articleDAO.consulterArticleMesVentesTerminees(idUtilisateur);
+	    for (Article a : articles) {
+	        assignerImageCategorie(a.getCategorie());
+	    }
+	    return articles;
 	}
 
 }

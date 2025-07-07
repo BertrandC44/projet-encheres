@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<link rel="icon" data-th-href="@{/images/logoENI.png}" sizes="32x32">
+<link rel="stylesheet" th:href="@{/css/connexion.css}">
 <head th:insert="~{fragments/liens::liens}">
 <meta charset="UTF-8">
 <title>Eni-Enchères</title>
@@ -19,10 +21,10 @@
  	<li>
   		<label for="idCategorie">Catégorie</label>
   		<select id="idCategorie" name="categorie.idCategorie" th:field="*{categorie.idCategorie}">
+    		<!--  <option value ="" disabled> Choisir une catégorie</option>-->
     		<option th:each="c : ${categorie}" 
             	th:value="${c.idCategorie}" 
-            	th:text="${c.libelle}" 
-            	th:selected="${c.idCategorie == article.categorie?.idCategorie}">
+            	th:text="${c.libelle}" >
     		</option>
   		</select>
   	</li>
