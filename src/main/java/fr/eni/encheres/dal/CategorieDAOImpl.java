@@ -12,7 +12,7 @@ import fr.eni.encheres.bo.Categorie;
 @Repository
 public class CategorieDAOImpl implements CategorieDAO{
 	
-	private static final String FIND_ALL ="SELECT*FROM CATEGORIE";
+	private static final String FIND_ALL ="SELECT * FROM CATEGORIE";
 	private static final String FIND_BY_ID ="SELECT*FROM CATEGORIE WHERE idCategorie= :idCategorie";
 	
 	private NamedParameterJdbcTemplate jdbcTemplate;
