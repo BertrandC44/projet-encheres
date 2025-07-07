@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.incrementer.SybaseAnywhereMaxValueIncrementer;
 import org.springframework.stereotype.Repository;
 
 import fr.eni.encheres.bo.Article;
@@ -27,8 +28,30 @@ public class ArticleDAOImpl implements ArticleDAO {
 
     private static final String DELETE_ARTICLE = "DELETE FROM ARTICLE WHERE idArticle = :idArticle";
 
-    private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur LEFT JOIN RETRAIT r ON r.idArticle = a.idArticle";
 
+   // private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur LEFT JOIN RETRAIT r ON r.idArticle = a.idArticle";
+
+    private static final String FIND_BY_ID_USER = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE u.idUtilisateur=:idUtilisateur";
+    private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle";
+
+
+    private static final String FIND_ENCHERES_EN_COURS = "SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE dateDebutEncheres<=GETDATE() AND dateFinEncheres>GETDATE() AND a.idUtilisateur<>:idUtilisateur";
+    
+    private static final String FIND_MES_ENCHERES_EN_COURS= "  SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN ENCHERE e ON a.idArticle = e.idArticle\r\n"
+    		+ "  WHERE dateDebutEncheres<=GETDATE() AND dateFinEncheres>GETDATE() and e.idUtilisateur =:idUtilisateur";
+    
+    private static final String FIND_MES_ENCHERES_REMPORTEES = " SELECT TOP 1 * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN ENCHERE e ON a.idArticle = e.idArticle\r\n"
+    		+ "  WHERE dateFinEncheres<=GETDATE() and e.idUtilisateur =:idUtilisateur";
+    
+    private static final String FIND_MES_VENTES_EN_COURS = " SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE dateDebutEncheres<=GETDATE() AND dateFinEncheres>GETDATE() AND a.idUtilisateur=:idUtilisateur";
+    
+    
+    private static final String FIND_MES_VENTES_A_VENIR = "SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE dateDebutEncheres>GETDATE() AND a.idUtilisateur=:idUtilisateur";
+    
+    private static final String FIND_MES_VENTES_TERMINEES = "SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE dateFinEncheres<=GETDATE() AND a.idUtilisateur=:idUtilisateur";
+    
+    
+    
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     public ArticleDAOImpl(NamedParameterJdbcTemplate jdbcTemplate) {
@@ -44,6 +67,9 @@ public class ArticleDAOImpl implements ArticleDAO {
     public List<Article> consulterArticlePseudo() {
         return jdbcTemplate.query(RETRAIT_UTILISATEUR, new ArticleRowMapper());
     }
+    
+    
+
 
     @Override
     public Article consulterArticleParId(long id) {
@@ -73,6 +99,51 @@ public class ArticleDAOImpl implements ArticleDAO {
         map.addValue("idArticle", article.getIdArticle());
         this.jdbcTemplate.update(DELETE_ARTICLE, map);
     }
+    
+
+	@Override
+	public List<Article> consulterArticleEncheresEnCours(long idUtilisateur) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idUtilisateur", idUtilisateur);
+		return jdbcTemplate.query(FIND_ENCHERES_EN_COURS, map, new ArticleRowMapper());
+	}
+
+	@Override
+	public List<Article> consulterArticleMesEncheresEnCours(long idUtilisateur) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idUtilisateur", idUtilisateur);
+		
+		return jdbcTemplate.query(FIND_MES_ENCHERES_EN_COURS, map, new ArticleRowMapper());
+	}
+
+	@Override
+	public List<Article> consulterArticleMesEncheresRemportees(long idUtilisateur) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idUtilisateur", idUtilisateur);
+		
+		return jdbcTemplate.query(FIND_MES_ENCHERES_REMPORTEES, map, new ArticleRowMapper());
+	}
+
+	@Override
+	public List<Article> consulterArticleMesVentesEnCours(long idUtilisateur) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idUtilisateur", idUtilisateur);
+		return jdbcTemplate.query(FIND_MES_VENTES_EN_COURS, map, new ArticleRowMapper());
+	}
+
+	@Override
+	public List<Article> consulterArticleMesVentesFutures(long idUtilisateur) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idUtilisateur", idUtilisateur);
+		return jdbcTemplate.query(FIND_MES_VENTES_A_VENIR, map, new ArticleRowMapper());
+	}
+
+	@Override
+	public List<Article> consulterArticleMesVentesTerminees(long idUtilisateur) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idUtilisateur", idUtilisateur);
+		return jdbcTemplate.query(FIND_MES_VENTES_TERMINEES, map, new ArticleRowMapper());
+	}
 
     // Garde une seule classe ArticleRowMapper corrigée
     class ArticleRowMapper implements RowMapper<Article> {
@@ -109,4 +180,5 @@ public class ArticleDAOImpl implements ArticleDAO {
             return a;
         }
     }
+
 }
