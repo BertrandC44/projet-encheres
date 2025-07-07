@@ -3,6 +3,7 @@ package fr.eni.encheres.bll;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dal.UtilisateurDAO;
@@ -87,11 +88,11 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	
 	
 	@Override
-	public void modifierUtilisateur(Utilisateur utilisateur) throws BusinessException {
+	public void modifierUtilisateur(Utilisateur utilisateur, Utilisateur utilisateurEnsession) throws BusinessException {
 		BusinessException be = new BusinessException();
 		
-		boolean isValid = isEmailValide(utilisateur.getEmail(), be);
-		isValid &= isPseudoValide(utilisateur.getPseudo(), be);
+		boolean isValid = isEmailModifierValide(utilisateur.getEmail(), utilisateurEnsession, utilisateur, be);
+		isValid &= isPseudoModifierValide(utilisateur.getPseudo(), utilisateurEnsession, utilisateur, be);
 		
 		if (isValid) {
 			utilisateurDAO.modifierUtilisateur(utilisateur);
@@ -121,10 +122,36 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	}
 
 	@Override
+	public boolean isEmailModifierValide(String email, Utilisateur utilisateurEnSession, Utilisateur utilisateur, BusinessException be) {
+		if(utilisateur.getEmail().equals(utilisateurEnSession.getEmail())) {
+			System.out.println("1");
+			return true;
+		}
+		if(utilisateurDAO.isEmailValide(email)) {
+			System.out.println("2");
+			return true;
+		}be.add("L'email \"" + email + "\" a déjà un compte associé");
+		System.out.println("3");
+		return false;
+	}
+	
+	
+	@Override
 	public boolean isEmailValide(String email, BusinessException be) {
 		if(utilisateurDAO.isEmailValide(email)) {
 			return true;
 		}be.add("L'email \"" + email + "\" a déjà un compte associé");
+		return false;
+	}
+	
+	@Override
+	public boolean isPseudoModifierValide(String pseudo, Utilisateur utilisateurEnSession, Utilisateur utilisateur, BusinessException be) {
+		if(utilisateur.getPseudo().equals(utilisateurEnSession.getPseudo())) {
+			return true;
+		}
+		if(utilisateurDAO.isPseudoValide(pseudo)) {
+			return true;
+		}be.add("Le pseudo \"" + pseudo + "\" existe déjà");
 		return false;
 	}
 	
