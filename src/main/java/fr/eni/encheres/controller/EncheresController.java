@@ -28,8 +28,11 @@ import jakarta.validation.Valid;
 @SessionAttributes({"utilisateurEnSession"})
 public class EncheresController {
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> cd5ecc5d91eb4e0d2b68824d2c52ec5c870ed464
 
     private EncheresService encheresService;
     private UtilisateurService utilisateurService;
@@ -134,6 +137,7 @@ public class EncheresController {
         model.addAttribute("montantEnchere", montantEnchere);
         model.addAttribute("utilisateurEnSession", utilisateurEnSession);
         model.addAttribute("idArticle", idArticle);
+<<<<<<< HEAD
         Utilisateur utilisateur = utilisateurService.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
 		if (bindingResult.hasErrors()) {
 			return "encheres/encherir";
@@ -149,6 +153,20 @@ public class EncheresController {
 	
 	        return "redirect:/encheres";
 		}
+=======
+
+        Utilisateur utilisateur = utilisateurService.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
+        long idUtilisateur = utilisateur.getIdUtilisateur();
+        int credit = utilisateur.getCredit();
+        System.out.println("id utilisateur= " + idUtilisateur);
+        System.out.println("Solde utilisateur= " + credit);
+        utilisateurService.debiter(montantEnchere, utilisateur);
+        System.out.println("Solde utilisateur= " + credit);
+
+
+        return "redirect:/encheres";
+    
+>>>>>>> cd5ecc5d91eb4e0d2b68824d2c52ec5c870ed464
     }
 
     @GetMapping("/encheres/vente")
