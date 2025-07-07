@@ -28,20 +28,15 @@ import jakarta.validation.Valid;
 @SessionAttributes({"utilisateurEnSession"})
 public class EncheresController {
 
-    private final UtilisateurServiceImpl utilisateurServiceImpl;
-
-    private final ContexteServiceImpl contexteServiceImpl;
 
     private EncheresService encheresService;
     private UtilisateurService utilisateurService;
     private ContexteService contexteService;
 
-    public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ContexteService contexteService, ContexteServiceImpl contexteServiceImpl, UtilisateurServiceImpl utilisateurServiceImpl) {
+    public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ContexteService contexteService) {
         this.encheresService = encheresService;
         this.utilisateurService = utilisateurService;
         this.contexteService = contexteService;
-        this.contexteServiceImpl = contexteServiceImpl;
-        this.utilisateurServiceImpl = utilisateurServiceImpl;
     }
 
     @GetMapping("/")
@@ -115,23 +110,33 @@ public class EncheresController {
     public String encherir(@RequestParam(name="idArticle") long idArticle, Model model) {
         Article article = encheresService.consulterArticleParId(idArticle);
         int montantMax = encheresService.montantMax(idArticle);
+        int enchereMin = montantMax+1;
+        String utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle);
+        String categorieArticle = encheresService.categorieArticle(idArticle);
         if (article != null) {
             model.addAttribute("article", article);
             model.addAttribute("montantMax", montantMax);
+            model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);
+            model.addAttribute("enchereMin", enchereMin);
+            model.addAttribute("categorieArticle", categorieArticle);
         }
         return "encherir";
     }
 
     @PostMapping("/encheres/encherir")
-    public String encherirPost(@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, 
+    public String encherirPost(@RequestParam(name="montantEnchere") int montantEnchere,
+    						   @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, 
                                @RequestParam(name="idArticle") long idArticle, 
-                               @RequestParam(name="montantEnchere") int montantEnchere, 
                                Model model) {
+    	
+        model.addAttribute("montantEnchere", montantEnchere);
         model.addAttribute("utilisateurEnSession", utilisateurEnSession);
         model.addAttribute("idArticle", idArticle);
-        model.addAttribute("montantEnchere", montantEnchere);
-        this.encheresService.encherir(utilisateurEnSession.getIdUtilisateur(), idArticle, montantEnchere);
+
+        System.out.println("id utilisateur= " + utilisateurEnSession.getIdUtilisateur());
+
         return "redirect:/encheres";
+    
     }
 
     @GetMapping("/encheres/vente")
@@ -194,7 +199,7 @@ public class EncheresController {
     }
 
     @PostMapping("encheres/profil/modifier")
-    public String modifierProfil(@ModelAttribute Utilisateur utilisateur, BindingResult bindingResult) {
+    public String modifierProfil(@Valid @ModelAttribute Utilisateur utilisateur, BindingResult bindingResult) {
         try {
             utilisateurService.modifierUtilisateur(utilisateur);
             return "redirect:/encheres";
@@ -254,6 +259,8 @@ public class EncheresController {
         bindingResult.rejectValue("pseudo","pseudo.mismatch" ,"L'identifiant et/ou mot de passe incorrect");
         return "connexion";    
     }
+    
+    
 
     @ModelAttribute("utilisateurEnSession")
     public Utilisateur addUtilisateurEnSession() {
@@ -267,3 +274,4 @@ public class EncheresController {
     }
 
 }
+

@@ -19,9 +19,14 @@ public class EnchereDAOImpl implements EnchereDAO {
 	
 	private static final String FIND_ALL = "SELECT * FROM ENCHERE";
 	private static final String FIND_BY_ID = "SELECT * FROM ENCHERE WHERE idArticle = :idArticle";
-	private static final String INSERT_ENCHERE = "INSERT INTO ENCHERE (dateEnchere, montantEnchere, idUtilisateur, idArticle) VALUES (:dateEnchere, :montantEnchere, :idUtilisateur, :idArticle)";
-	private static final String FIND_MAX = "SELECT MAX(montantEnchere) from ENCHERE Where idArticle=:idArticle";
+
+	private static final String FIND_MAX = "SELECT MAX(montantEnchere) from ENCHERE WHERE idArticle=:idArticle";
+	private static final String FIND_UTILISATEUR_MAX = "SELECT U.pseudo	FROM ENCHERE E JOIN UTILISATEUR U ON E.idUtilisateur = U.idUtilisateur WHERE E.idArticle = 1 AND E.montantEnchere = (SELECT MAX(montantEnchere) FROM ENCHERE WHERE idArticle = 1)";
+	//SELECT pseudo FROM UTILISATEUR 	WHERE idUtilisateur = (SELECT idUtilisateur FROM ENCHERE WHERE montantEnchere = (SELECT MAX(montantEnchere) FROM ENCHERE WHERE idArticle = 1) AND idArticle = 1);
 	
+	private static final String FIND_CATEGORIE = "SELECT C.libelle FROM CATEGORIE C JOIN ARTICLE A  ON A.idCategorie = C.idCategorie WHERE A.idArticle = :idArticle";
+	
+	private static final String INSERT_ENCHERE = "INSERT INTO ENCHERE (dateEnchere, montantEnchere, idUtilisateur, idArticle) VALUES (:dateEnchere, :montantEnchere, :idUtilisateur, :idArticle)";
 	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -49,6 +54,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 		map.addValue("montantEnchere", montantEnchere);
 		map.addValue("idUtilisateur", idUtilisateur);
 		map.addValue("idArticle", idArticle);
+		System.out.println("INSERT avec idUtilisateur = " + idUtilisateur);
 		this.namedParameterJdbcTemplate.update(INSERT_ENCHERE, map);
 	}
 
@@ -59,6 +65,18 @@ public class EnchereDAOImpl implements EnchereDAO {
 		return this.namedParameterJdbcTemplate.queryForObject(FIND_MAX, map, Integer.class);
 	}
 
+	@Override
+	public String utilisateurMontantMax(long idArticle) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idArticle", idArticle);
+		return this.namedParameterJdbcTemplate.queryForObject(FIND_UTILISATEUR_MAX, map, String.class);
+	}
 
+	@Override
+	public String categorieArticle(long idArticle) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idArticle", idArticle);
+		return this.namedParameterJdbcTemplate.queryForObject(FIND_CATEGORIE, map, String.class);
+	}
 
 }
