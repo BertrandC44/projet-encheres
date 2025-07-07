@@ -80,6 +80,7 @@ public class ArticleDAOImpl implements ArticleDAO {
         @Override
         public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
             Article a = new Article();
+            a.setIdArticle(rs.getLong("idArticle"));
             a.setNomArticle(rs.getString("nomArticle"));
             a.setDescription(rs.getString("description"));
             a.setDateDebutEncheres(rs.getDate("dateDebutEncheres").toLocalDate());
