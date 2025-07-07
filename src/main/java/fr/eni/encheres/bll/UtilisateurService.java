@@ -19,7 +19,7 @@ public interface UtilisateurService {
 	
 	void debiter(int debit,Utilisateur utilisateur);
 	
-	void credit(int credit,Utilisateur utilisateur);
+	void crediter(int credit,Utilisateur utilisateur);
 	
 	void creerUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	

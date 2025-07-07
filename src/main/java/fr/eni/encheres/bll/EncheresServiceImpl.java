@@ -22,20 +22,18 @@ import fr.eni.encheres.exception.BusinessException;
 @Service
 public class EncheresServiceImpl implements EncheresService{
 
-    private final UtilisateurServiceImpl utilisateurServiceImpl;
-	
+ 
 	private EnchereDAO enchereDAO;
 	private CategorieDAO categorieDAO;
 	private ArticleDAO articleDAO;
-	private UtilisateurDAO utilisateurDAO;
+
 	
 
-	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO, UtilisateurDAO utilisateurDAO, UtilisateurServiceImpl utilisateurServiceImpl) {
+	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO) {
 	    this.enchereDAO = enchereDAO;
 	    this.categorieDAO = categorieDAO;
 	    this.articleDAO = articleDAO;
-	    this.utilisateurDAO = utilisateurDAO;
-	    this.utilisateurServiceImpl = utilisateurServiceImpl;
+
 	}
 
 	// méthode pour assigner l'image en fonction de l'id de la catégorie
@@ -98,6 +96,7 @@ public class EncheresServiceImpl implements EncheresService{
 	    assignerImageCategorie(article.getCategorie());
 	    return article;
 	}
+	
 	@Override
 	public Article rechercheParMotCle(String motCle) {
 		// TODO Auto-generated method stub
@@ -140,6 +139,60 @@ public class EncheresServiceImpl implements EncheresService{
 	public String categorieArticle(long idArticle) {
 		
 		return enchereDAO.categorieArticle(idArticle);
+	}
+
+	@Override
+	public List<Article> consulterArticleEncheresEnCours(long idUtilisateur) {
+		List<Article> articles = articleDAO.consulterArticleEncheresEnCours(idUtilisateur);
+	    for (Article a : articles) {
+	        assignerImageCategorie(a.getCategorie());
+	    }
+	    return articles;
+	}
+
+	@Override
+	public List<Article> consulterArticleMesEncheresEnCours(long idUtilisateur) {
+		List<Article> articles = articleDAO.consulterArticleMesEncheresEnCours(idUtilisateur);
+	    for (Article a : articles) {
+	        assignerImageCategorie(a.getCategorie());
+	    }
+	    return articles;
+	}
+
+	@Override
+	public List<Article> consulterArticleMesEncheresRemportees(long idUtilisateur) {
+		List<Article> articles = articleDAO.consulterArticleMesEncheresRemportees(idUtilisateur);
+	    for (Article a : articles) {
+	        assignerImageCategorie(a.getCategorie());
+	    }
+	    return articles;
+	}
+
+	@Override
+	public List<Article> consulterArticleMesVentesEnCours(long idUtilisateur) {
+		List<Article> articles = articleDAO.consulterArticleMesVentesEnCours(idUtilisateur);
+	    for (Article a : articles) {
+	        assignerImageCategorie(a.getCategorie());
+	    }
+	    return articles;
+	}
+
+	@Override
+	public List<Article> consulterArticleMesVentesFutures(long idUtilisateur) {
+		List<Article> articles = articleDAO.consulterArticleMesVentesFutures(idUtilisateur);
+	    for (Article a : articles) {
+	        assignerImageCategorie(a.getCategorie());
+	    }
+	    return articles;
+	}
+
+	@Override
+	public List<Article> consulterArticleMesVentesTerminees(long idUtilisateur) {
+		List<Article> articles = articleDAO.consulterArticleMesVentesTerminees(idUtilisateur);
+	    for (Article a : articles) {
+	        assignerImageCategorie(a.getCategorie());
+	    }
+	    return articles;
 	}
 
 }

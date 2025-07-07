@@ -60,7 +60,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	}
 	
 	@Override
-	public void credit(int credit, Utilisateur utilisateur) {
+	public void crediter(int credit, Utilisateur utilisateur) {
 		int solde = utilisateur.getCredit();
 		solde += credit;
 		utilisateur.setCredit(solde);
