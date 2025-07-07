@@ -50,14 +50,14 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		return utilisateur.getCredit();
 	}
 
-	@Override
-	public void debiter(int montantEnchere, Utilisateur utilisateur) {
-		int solde = utilisateur.getCredit();
-		if (solde > montantEnchere) {
-			solde -= montantEnchere;
-			utilisateur.setCredit(solde);
-		}
-	}
+//	@Override
+//	public void debiter(int montantEnchere, Utilisateur utilisateur) {
+//		int solde = utilisateur.getCredit();
+//		if (solde > montantEnchere) {
+//			solde -= montantEnchere;
+//			utilisateur.setCredit(solde);
+//		}
+//	}
 	
 	@Override
 	public void crediter(int credit, Utilisateur utilisateur) {

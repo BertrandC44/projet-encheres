@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import fr.eni.encheres.bll.EncheresService;
 import fr.eni.encheres.bll.UtilisateurService;
-import fr.eni.encheres.bll.UtilisateurServiceImpl;
+
 import fr.eni.encheres.bll.contexte.ContexteService;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
@@ -120,25 +121,31 @@ public class EncheresController {
     }
 
     @PostMapping("/encheres/encherir")
-    public String encherirPost(@RequestParam(name="montantEnchere") int montantEnchere,
+
+    public String encherirPost(@Valid @RequestParam(name="montantEnchere") int montantEnchere,
     						   @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, 
                                @RequestParam(name="idArticle") long idArticle, 
-                               Model model) {
+                               Model model, BindingResult bindingResult) {
         model.addAttribute("montantEnchere", montantEnchere);
         model.addAttribute("utilisateurEnSession", utilisateurEnSession);
         model.addAttribute("idArticle", idArticle);
 
         Utilisateur utilisateur = utilisateurService.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
-        long idUtilisateur = utilisateur.getIdUtilisateur();
-        int credit = utilisateur.getCredit();
-        System.out.println("id utilisateur= " + idUtilisateur);
-        System.out.println("Solde utilisateur= " + credit);
-        utilisateurService.debiter(montantEnchere, utilisateur);
-        System.out.println("Solde utilisateur= " + credit);
+		if (bindingResult.hasErrors()) {
+			return "encheres/encherir";
+		} else {
+	        System.out.println("id utilisateur= " + utilisateur.getIdUtilisateur());
+	        System.out.println("Solde utilisateur= " + utilisateur.getCredit());
+	        System.out.println("id article= " + idArticle);
+	        try {
+				encheresService.encherir(montantEnchere, utilisateur.getIdUtilisateur(), idArticle);
+			} catch (BusinessException e) {
+				e.printStackTrace();
+			}
+	
+	        return "redirect:/encheres";
+		}
 
-
-        return "redirect:/encheres";
-    
     }
 
     @GetMapping("/encheres/vente")

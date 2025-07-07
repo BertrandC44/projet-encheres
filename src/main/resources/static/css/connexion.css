@@ -95,6 +95,16 @@ input#sesouvenirdemoi{
 	width: 8%;
 	margin-right: 5px;
 }
+
+
+.img-enchere {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 10%
+}
+	
+
 label{	
 	display:inline-block;
 	min-width:10rem;
@@ -102,4 +112,5 @@ label{
   margin: 5px 0 5px 0;
 	
 }	
+
 

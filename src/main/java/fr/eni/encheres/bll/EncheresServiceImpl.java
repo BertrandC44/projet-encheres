@@ -2,7 +2,10 @@ package fr.eni.encheres.bll;
 
 import java.util.List;
 
+
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
@@ -21,13 +24,15 @@ import fr.eni.encheres.exception.BusinessException;
 
 
 @Service
-public class EncheresServiceImpl implements EncheresService{
+
+public class EncheresServiceImpl implements EncheresService{	
 
 	private EnchereDAO enchereDAO;
 	private CategorieDAO categorieDAO;
 	private ArticleDAO articleDAO;
 
 	
+
 
 	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO) {
 	    this.enchereDAO = enchereDAO;
@@ -134,12 +139,32 @@ public class EncheresServiceImpl implements EncheresService{
 		
 	}
 
+	@Override
+	public int debiter(int montantEnchere, Utilisateur utilisateur) {
+		int solde = utilisateur.getCredit();
+		if (solde > montantEnchere) {
+			solde -= montantEnchere;
+			utilisateur.setCredit(solde);
+		}
+		return solde;
+	}
 
 	@Override
-	public void encherir(int montantEnchere, long idUtilisateur, long idArticle ) {
+	public void encherir(int montantEnchere, long idUtilisateur, long idArticle) throws BusinessException{
 		BusinessException be = new BusinessException();
+		Utilisateur utilisateur = utilisateurDAO.utilisateurparId(idUtilisateur);
+		try {
+			if (idUtilisateurMontantMax(idArticle)!=idUtilisateur) {
+				if (utilisateur.getCredit()>=montantEnchere) {
+					int solde = debiter(montantEnchere, utilisateur);
+					enchereDAO.encherir(montantEnchere, idUtilisateur, idArticle);
+					utilisateurDAO.majCredit(solde, idUtilisateur);
+				} be.add("Vous n'avez pas assez de crédit pour enchérir !");
+			}be.add("Vous êtes pour le moment le meilleur enchérisseur");
+		} catch (DataAccessException e) {
 
-		enchereDAO.encherir(idUtilisateur, idArticle, montantEnchere);
+			throw be;
+		}
 	}
 
 	@Override
@@ -150,6 +175,11 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public String utilisateurMontantMax(long idArticle) {
 		return enchereDAO.utilisateurMontantMax(idArticle);
+	}
+	
+	@Override
+	public long idUtilisateurMontantMax(long idArticle) {
+		return enchereDAO.idUtilisateurMontantMax(idArticle);
 	}
 
 	@Override

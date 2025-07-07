@@ -18,7 +18,6 @@ public class CategorieDAOImpl implements CategorieDAO{
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
 	public CategorieDAOImpl(NamedParameterJdbcTemplate jdbcTemplate) {
-		super();
 		this.jdbcTemplate = jdbcTemplate;
 	}
 

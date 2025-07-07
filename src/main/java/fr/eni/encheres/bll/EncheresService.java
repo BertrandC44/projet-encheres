@@ -6,6 +6,11 @@ import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
 
+
+import fr.eni.encheres.bo.Utilisateur;
+import fr.eni.encheres.exception.BusinessException;
+
+
 public interface EncheresService {
 	
 	List<Enchere> consulterEncheres();
@@ -26,9 +31,15 @@ public interface EncheresService {
 
 	void annulerVente(Article article);
 	
-	void encherir(int montantEnchere, long idUtilisateur, long idArticle);
+
+	int debiter(int montantEnchere, Utilisateur utilisateur);
+	
+	void encherir(int montantEnchere, long idUtilisateur, long idArticle ) throws BusinessException;
+
 	
 	int montantMax(long idArticle);
+	
+	long idUtilisateurMontantMax(long idArticle);
 	
 	String utilisateurMontantMax(long idArticle);
 	
