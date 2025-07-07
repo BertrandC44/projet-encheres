@@ -20,6 +20,7 @@ public class Article {
 	private Retrait retrait;
 	private List<Enchere> encheres = new ArrayList<Enchere>();
 
+	
 
 	public Article() {
 	}

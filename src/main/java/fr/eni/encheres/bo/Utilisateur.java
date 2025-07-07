@@ -31,7 +31,7 @@ public class Utilisateur {
 	@NotBlank
 	private String motDePasse;
 	@NotBlank
-	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$")
+	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$")
 	private String confMdp;
 	private int credit;
 	private boolean admin;
