@@ -15,5 +15,17 @@ public interface ArticleDAO {
 	void annulerVente(Article article);
 
 	List<Article> consulterArticlePseudo();
+	
+	List<Article> consulterArticleEncheresEnCours(long idUtilisateur);
+	
+	List<Article> consulterArticleMesEncheresEnCours(long idUtilisateur);
+	
+	List<Article> consulterArticleMesEncheresRemportees(long idUtilisateur);
+	
+	List<Article> consulterArticleMesVentesEnCours(long idUtilisateur);
+	
+	List<Article> consulterArticleMesVentesFutures(long idUtilisateur);
+	
+	List<Article> consulterArticleMesVentesTerminees(long idUtilisateur);
 
 }

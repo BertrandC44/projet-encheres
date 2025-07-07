@@ -16,7 +16,7 @@ a{
 h1,h2{
 	 font-family: "Passion One";
 }
-p, a, label{
+p, a, label, span, input, textarea, td, th{
 	font-family: 'Lato';
 }
 
@@ -28,7 +28,12 @@ p.erreur{
   white-space: pre-line;
 }
 
-
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  text-align:center;
+  padding:1em;
+}
 
 
 /*@font-face {

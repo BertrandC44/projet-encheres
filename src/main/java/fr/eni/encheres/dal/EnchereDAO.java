@@ -18,7 +18,9 @@ public interface EnchereDAO {
 	
 	String utilisateurMontantMax(long idArticle);
 	
-	void encherir(long idUtilisateur, long idArticle, int montantEnchere);
+	long idUtilisateurMontantMax(long idArticle);
+	
+	void encherir(int montantEnchere, long idUtilisateur, long idArticle);
 	
 	Enchere consulterEnchereParId(long idArticle);
 	

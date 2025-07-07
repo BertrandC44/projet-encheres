@@ -121,14 +121,18 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idUtilisateur",utilisateur.getIdUtilisateur());
 		
-		return namedParameterJdbcTemplate.queryForObject(FIND_CREDIT, map, new BeanPropertyRowMapper<>(Integer.class));
+		return namedParameterJdbcTemplate.queryForObject(FIND_CREDIT, map, Integer.class);
+
 	}
 	
 
+
+
 	@Override
-	public void majCredit(int credit) {
+	public void majCredit(int credit, long idUtilisateur) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("credit", credit);
+		map.addValue("idUtilisateur", idUtilisateur);
 		
 		namedParameterJdbcTemplate.update(UPDATE_CREDIT, map);
 		
@@ -178,6 +182,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		
 		return namedParameterJdbcTemplate.queryForObject(FIND_MDP_BY_PSEUDO, map, String.class);
 	}
+
 
 
 	

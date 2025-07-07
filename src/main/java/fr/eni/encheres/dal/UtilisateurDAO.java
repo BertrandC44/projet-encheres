@@ -22,7 +22,7 @@ public interface UtilisateurDAO {
 	
 	public int consulterCredit(Utilisateur utilisateur);
 	
-	void majCredit(int credit);
+	void majCredit(int credit, long idUtilisateur);
 	
 	boolean isEmailValide(String email);
 	

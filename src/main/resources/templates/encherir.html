@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<link rel="icon" data-th-href="@{/images/logoENI.png}" sizes="32x32">
+<link rel="stylesheet" th:href="@{/css/connexion.css}">
 <head th:insert="~{fragments/liens::liens}">
 <meta charset="UTF-8">
 
@@ -17,10 +19,12 @@
 <body>
 <header th:replace="~{fragments/entete::entete}"></header>
 
-
+<p th:text="${article.idArticle}"></p>
 <main>
-	<form class="encherir-form" th:action="@{/encheres/encherir(idArticle=${article.idArticle})}" method="post" th:object=${enchere}>
+
 	
+	<form class="login-form" th:action="@{/encheres/encherir(idArticle=${article.idArticle})}" method="post" th:object=${enchere}>
+		<h1>Enchérir</h1>
 		<input type="hidden" name="idArticle" th:value="${article.idArticle}" />
 		  
 		<input type="hidden" name="dateEnchere" th:value="${dateEnchere}" /> 
@@ -28,7 +32,13 @@
 		<input type="hidden" name="utilisateurEnSession" th:value="${utilisateurEnSession}" /> 
 		
 		<h2 th:text="${article.nomArticle}"></h2> 
-		<ul>
+
+
+<!-- 		<p class="erreur" th:if="${#fields.hasErrors('encherir')}" th:errors="*{encherir}"></p>   -->
+	
+
+		<ul class="form-list">
+
 			<li>
 			<img class="img-enchere" th:src="@{${'/images/'+ article.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
 			</li>
@@ -68,7 +78,7 @@
 				<input type="number" id="montantEnchere"  name="montantEnchere" th:attr="min=${enchereMin}" th:value="${montantEnchere}" required>
 			</li>
 			<li>
-				<button type="submit" class="form-button" name="encherir" >Enchérir</button>
+				<button type="submit" class="form-button" name="encherir">Enchérir</button>
 			</li>	
 		</ul>
 	</form>
