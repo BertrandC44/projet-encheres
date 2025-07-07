@@ -1,14 +1,15 @@
 package fr.eni.encheres.bll;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
 
+
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.BusinessException;
+
 
 public interface EncheresService {
 	
@@ -30,9 +31,11 @@ public interface EncheresService {
 
 	void annulerVente(Article article);
 	
+
 	int debiter(int montantEnchere, Utilisateur utilisateur);
 	
 	void encherir(int montantEnchere, long idUtilisateur, long idArticle ) throws BusinessException;
+
 	
 	int montantMax(long idArticle);
 	
@@ -40,9 +43,24 @@ public interface EncheresService {
 	
 	String utilisateurMontantMax(long idArticle);
 	
+	String categorieArticle(long idArticle);
 	
 	List<Article> consulterArticlePseudo();
 	
-	String categorieArticle(long idArticle);
+	List<Article> consulterArticleEncheresEnCours(long idUtilisateur);
+	
+	List<Article> consulterArticleMesEncheresEnCours(long idUtilisateur);
+	
+	List<Article> consulterArticleMesEncheresRemportees(long idUtilisateur);
+	
+	List<Article> consulterArticleMesVentesEnCours(long idUtilisateur);
+	
+	List<Article> consulterArticleMesVentesFutures(long idUtilisateur);
+	
+	List<Article> consulterArticleMesVentesTerminees(long idUtilisateur);
+	
+	
+	
+	
 
 }
