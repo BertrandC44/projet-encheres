@@ -28,12 +28,6 @@ import jakarta.validation.Valid;
 @SessionAttributes({"utilisateurEnSession"})
 public class EncheresController {
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> cd5ecc5d91eb4e0d2b68824d2c52ec5c870ed464
-
     private EncheresService encheresService;
     private UtilisateurService utilisateurService;
     private ContexteService contexteService;
@@ -130,43 +124,35 @@ public class EncheresController {
 
     @PostMapping("/encheres/encherir")
 
-    public String encherirPost(@Valid @RequestParam(name="montantEnchere") int montantEnchere,
+    public String encherirPost(@RequestParam(name="montantEnchere") int montantEnchere,
     						   @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, 
                                @RequestParam(name="idArticle") long idArticle, 
                                Model model, BindingResult bindingResult) {
         model.addAttribute("montantEnchere", montantEnchere);
         model.addAttribute("utilisateurEnSession", utilisateurEnSession);
         model.addAttribute("idArticle", idArticle);
-<<<<<<< HEAD
+
         Utilisateur utilisateur = utilisateurService.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
 		if (bindingResult.hasErrors()) {
-			return "encheres/encherir";
+			return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		} else {
 	        System.out.println("id utilisateur= " + utilisateur.getIdUtilisateur());
 	        System.out.println("Solde utilisateur= " + utilisateur.getCredit());
 	        System.out.println("id article= " + idArticle);
 	        try {
 				encheresService.encherir(montantEnchere, utilisateur.getIdUtilisateur(), idArticle);
-			} catch (BusinessException e) {
-				e.printStackTrace();
-			}
-	
-	        return "redirect:/encheres";
-		}
-=======
+	        }catch (BusinessException e) {
+					e.getMessagesBE().forEach(m->{
+						ObjectError error = new ObjectError("globalError", m);
+						bindingResult.addError(error);
+					});
+					e.printStackTrace();
+				    return "redirect:/encheres/encherir?idArticle=" + idArticle;  
+				}
+	        
+	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
+		}  
 
-        Utilisateur utilisateur = utilisateurService.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
-        long idUtilisateur = utilisateur.getIdUtilisateur();
-        int credit = utilisateur.getCredit();
-        System.out.println("id utilisateur= " + idUtilisateur);
-        System.out.println("Solde utilisateur= " + credit);
-        utilisateurService.debiter(montantEnchere, utilisateur);
-        System.out.println("Solde utilisateur= " + credit);
-
-
-        return "redirect:/encheres";
-    
->>>>>>> cd5ecc5d91eb4e0d2b68824d2c52ec5c870ed464
     }
 
     @GetMapping("/encheres/vente")

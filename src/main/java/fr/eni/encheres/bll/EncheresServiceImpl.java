@@ -143,6 +143,35 @@ public class EncheresServiceImpl implements EncheresService{
 			throw be;
 		}
 	}
+	
+//	@Override
+//	public void encherir(int montantEnchere, long idUtilisateur, long idArticle) throws BusinessException {
+//	    BusinessException be = new BusinessException();
+//	    Utilisateur utilisateur = utilisateurDAO.utilisateurparId(idUtilisateur);
+//
+//	    if (idUtilisateurMontantMax(idArticle) == idUtilisateur) {
+//	        be.add("Vous êtes déjà le meilleur enchérisseur.");
+//	    }
+//
+//	    if (utilisateur.getCredit() < montantEnchere) {
+//	        be.add("Vous n'avez pas assez de crédit pour enchérir !");
+//	    }
+//
+//
+//	    if (be.hasError()) {
+//	        throw be;
+//	    }
+//
+//	    try {
+//	        int nouveauSolde = debiter(montantEnchere, utilisateur);
+//	        enchereDAO.encherir(montantEnchere, idUtilisateur, idArticle);
+//	        utilisateurDAO.majCredit(nouveauSolde, idUtilisateur);
+//	    } catch (DataAccessException e) {
+//	        // Erreur technique → tu peux logger ici aussi
+//	        throw new BusinessException("Erreur lors du traitement. Veuillez recommencer.");
+//	    }
+//	}
+
 
 	@Override
 	public int montantMax(long idArticle) {
