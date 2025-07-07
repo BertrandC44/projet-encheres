@@ -32,18 +32,19 @@ import jakarta.validation.Valid;
 @SessionAttributes({"utilisateurEnSession","categorieEnSession"})
 public class EncheresController {
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 0a6296e3208ed9e7f812fcb484bfbce2578bffd4
     private EncheresService encheresService;
+    private UtilisateurService utilisateurService;
  
-    public EncheresController(EncheresService encheresService) {
-        this.encheresService = encheresService;  
 
-    }
 
-    @GetMapping("/")
+    public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService) {
+
+		this.encheresService = encheresService;
+		this.utilisateurService = utilisateurService;
+	}
+
+	@GetMapping("/")
     public String index() {
         System.out.println("Clic vers Index");
         return "encheres";
@@ -142,7 +143,7 @@ public class EncheresController {
 	        System.out.println("id article= " + idArticle);
 	        try {
 				encheresService.encherir(montantEnchere, utilisateur.getIdUtilisateur(), idArticle);
-<<<<<<< HEAD
+
 	        }catch (BusinessException e) {
 					e.getMessagesBE().forEach(m->{
 						ObjectError error = new ObjectError("globalError", m);
@@ -154,14 +155,7 @@ public class EncheresController {
 	        
 	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		}  
-=======
-			} catch (BusinessException e) {
-				e.printStackTrace();
-			}
-	
-	        return "redirect:/encheres";
-		}
->>>>>>> 0a6296e3208ed9e7f812fcb484bfbce2578bffd4
+
 
     }
 
