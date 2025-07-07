@@ -35,14 +35,13 @@ public class EncheresController {
 
     private EncheresService encheresService;
     private UtilisateurService utilisateurService;
- 
+
     public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService) {
         this.encheresService = encheresService;
         this.utilisateurService = utilisateurService;
 
-    }
 
-    @GetMapping("/")
+	@GetMapping("/")
     public String index() {
         System.out.println("Clic vers Index");
         return "encheres";
@@ -124,7 +123,7 @@ public class EncheresController {
 
     @PostMapping("/encheres/encherir")
 
-    public String encherirPost(@Valid @RequestParam(name="montantEnchere") int montantEnchere,
+    public String encherirPost(@RequestParam(name="montantEnchere") int montantEnchere,
     						   @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, 
                                @RequestParam(name="idArticle") long idArticle, 
                                Model model, BindingResult bindingResult) {
@@ -134,19 +133,26 @@ public class EncheresController {
 
         Utilisateur utilisateur = utilisateurService.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
 		if (bindingResult.hasErrors()) {
-			return "encheres/encherir";
+			return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		} else {
 	        System.out.println("id utilisateur= " + utilisateur.getIdUtilisateur());
 	        System.out.println("Solde utilisateur= " + utilisateur.getCredit());
 	        System.out.println("id article= " + idArticle);
 	        try {
 				encheresService.encherir(montantEnchere, utilisateur.getIdUtilisateur(), idArticle);
-			} catch (BusinessException e) {
-				e.printStackTrace();
-			}
-	
-	        return "redirect:/encheres";
-		}
+
+	        }catch (BusinessException e) {
+					e.getMessagesBE().forEach(m->{
+						ObjectError error = new ObjectError("globalError", m);
+						bindingResult.addError(error);
+					});
+					e.printStackTrace();
+				    return "redirect:/encheres/encherir?idArticle=" + idArticle;  
+				}
+	        
+	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
+		}  
+
 
     }
 
