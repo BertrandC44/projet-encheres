@@ -23,7 +23,7 @@ public interface UtilisateurService {
 	
 	void creerUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	
-	void modifierUtilisateur(Utilisateur utilisateur) throws BusinessException;
+	void modifierUtilisateur(Utilisateur utilisateur, Utilisateur utilisateurEnSession) throws BusinessException;
 	
 	void supprimerUtilisateur(Utilisateur utilisateur);
 	
@@ -36,6 +36,12 @@ public interface UtilisateurService {
 	boolean isAdmin(long idUtilisateur, BusinessException be);
 
 	boolean isCompteExist(String pseudo, BusinessException be);
+
+	boolean isEmailModifierValide(String email, Utilisateur utilisateurEnSessionUtilisateur, Utilisateur utilisateur,
+			BusinessException be);
+
+	boolean isPseudoModifierValide(String pseudo, Utilisateur utilisateurEnSessionUtilisateur, Utilisateur utilisateur,
+			BusinessException be);
 	
 //	boolean isMdpValide (String mdp, BusinessException be);
 

@@ -95,13 +95,31 @@ public class UtilisateurController {
 	    }
 
 	    @PostMapping("encheres/profil/modifier")
-	    public String modifierProfil(@Valid @ModelAttribute Utilisateur utilisateur, BindingResult bindingResult) {
+	    public String modifierProfil(@Valid @ModelAttribute Utilisateur utilisateur, BindingResult bindingResult, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) { 
+	        if (!utilisateur.getConfMdp().equals(utilisateur.getMotDePasse())) {
+	            bindingResult.rejectValue("confMdp", "password.mismatch", "La confirmation est différente du mot de passe saisi");
+	        }
+
+	        if (bindingResult.hasErrors()) {
+	            return "modifier-profil";
+	        }
+
 	        try {
-	            utilisateurService.modifierUtilisateur(utilisateur);
+	            utilisateurService.modifierUtilisateur(utilisateur, utilisateurEnSession);
+	            utilisateurEnSession.setPseudo(utilisateur.getPseudo());
+	            utilisateurEnSession.setEmail(utilisateur.getEmail());
+	            utilisateurEnSession.setNom(utilisateur.getNom());
+	            utilisateurEnSession.setPrenom(utilisateur.getPrenom());
+	            utilisateurEnSession.setTelephone(utilisateur.getTelephone());
+	            utilisateurEnSession.setRue(utilisateur.getRue());
+	            utilisateurEnSession.setCodePostal(utilisateur.getCodePostal());
+	            utilisateurEnSession.setVille(utilisateur.getVille());
+
 	            return "redirect:/encheres";
+
 	        } catch (BusinessException e) {
-	            e.getErrors().forEach(m->{
-	                ObjectError error = new ObjectError("globalError", m);
+	            e.getErrors().forEach(message -> {
+	                ObjectError error = new ObjectError("globalError", message);
 	                bindingResult.addError(error);
 	            });
 	            return "modifier-profil";

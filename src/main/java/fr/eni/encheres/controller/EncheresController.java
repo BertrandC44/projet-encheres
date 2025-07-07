@@ -205,7 +205,6 @@ public class EncheresController {
         return "enchere-en-cours";
     }
 
-   
 
     @ModelAttribute("categorieEnSession")
     public List<Categorie> chargerCategoriesEnSession() {
