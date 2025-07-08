@@ -152,10 +152,13 @@ public class EncheresServiceImpl implements EncheresService{
 		isValid &=isEnchereOpen(idArticle, be);
 		isValid &=isEnchereClose(idArticle, be);
 		if (isValid) {
-			Utilisateur utilisateur = utilisateurDAO.utilisateurparId(idUtilisateur);
-			int solde = debiter(montantEnchere, utilisateur);
+			Utilisateur utilisateurMax = utilisateurDAO.utilisateurparId(idUtilisateur);
+			int newCredit = debiter(montantEnchere, utilisateurMax);
 			enchereDAO.encherir(montantEnchere, idUtilisateur, idArticle);
-			utilisateurDAO.majCredit(solde, idUtilisateur);
+			utilisateurDAO.majCredit(newCredit, idUtilisateur);
+			Utilisateur utilisateurSecond = utilisateurDAO.utilisateurparId(enchereDAO.idUtilisateurARecrediter(idArticle));
+			int credit = utilisateurSecond.getCredit() + enchereDAO.recrediter(idArticle);
+			utilisateurDAO.majCredit(credit, utilisateurSecond.getIdUtilisateur());
 		} else {
 			throw be;
 		}
@@ -163,15 +166,15 @@ public class EncheresServiceImpl implements EncheresService{
 	
 	private boolean isNotSameEncherisseur (long idArticle, long idUtilisateur, BusinessException be) {
 		if(this.enchereDAO.idUtilisateurMontantMax(idArticle)==idUtilisateur) {
-			be.add("Vous êtes pour le moment le meilleur enchérisseur");
+			be.add("Erreur_1 : Vous êtes pour le moment le meilleur enchérisseur");
 			return false;
 		}
 		return true;
 	}
 	
 	private boolean isNotEnoughCredit (int montantEnchere, long idUtilisateur, BusinessException be) {
-		if (this.utilisateurDAO.utilisateurparId(idUtilisateur).getCredit()>=montantEnchere) {
-			be.add("Vous n'avez pas assez de crédit pour enchérir !");
+		if (montantEnchere>=this.utilisateurDAO.utilisateurparId(idUtilisateur).getCredit()) {
+			be.add("Erreur_2 : Vous n'avez pas assez de crédit pour enchérir !");
 			return false;
 		}
 		return true;
@@ -190,7 +193,7 @@ public class EncheresServiceImpl implements EncheresService{
 	private boolean isEnchereClose (long idArticle, BusinessException be) {
 		LocalDate today = LocalDate.now();
 		LocalDate finEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
-		if (today.isBefore(finEnchereDate)) {
+		if (today.isAfter(finEnchereDate)) {
 			be.add("Les enchères sur cet article sont terminées.");
 			return false;
 		}
