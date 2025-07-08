@@ -1,5 +1,6 @@
 package fr.eni.encheres.bll;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -13,12 +14,14 @@ import fr.eni.encheres.Application;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
+import fr.eni.encheres.bo.Retrait;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dal.ArticleDAO;
 import fr.eni.encheres.dal.CategorieDAO;
 
 import fr.eni.encheres.dal.CategorieDAO;
 import fr.eni.encheres.dal.EnchereDAO;
+import fr.eni.encheres.dal.RetraitDAO;
 import fr.eni.encheres.dal.UtilisateurDAO;
 import fr.eni.encheres.exception.BusinessException;
 
@@ -31,19 +34,17 @@ public class EncheresServiceImpl implements EncheresService{
 	private CategorieDAO categorieDAO;
 	private ArticleDAO articleDAO;
 	private UtilisateurDAO utilisateurDAO;
+	private RetraitDAO retraitDAO;
 
-	
-
-
-	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO, UtilisateurDAO utilisateurDAO) {
-	    this.enchereDAO = enchereDAO;
-	    this.categorieDAO = categorieDAO;
-	    this.articleDAO = articleDAO;
-	    this.utilisateurDAO = utilisateurDAO;
+	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO,
+			UtilisateurDAO utilisateurDAO, RetraitDAO retraitDAO) {
+		this.enchereDAO = enchereDAO;
+		this.categorieDAO = categorieDAO;
+		this.articleDAO = articleDAO;
+		this.utilisateurDAO = utilisateurDAO;
+		this.retraitDAO = retraitDAO;
 	}
-
-
-
+	
 	// méthode pour assigner l'image en fonction de l'id de la catégorie
 	private void assignerImageCategorie(Categorie c) {
 	    if (c != null) {
@@ -113,6 +114,9 @@ public class EncheresServiceImpl implements EncheresService{
 	}
 	}
 
+	
+
+
 	@Override
 	public Article rechercheParMotCle(String motCle) {
 		// TODO Auto-generated method stub
@@ -123,15 +127,13 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public void creerVente(Article article) {
 		Categorie categorie= article.getCategorie();
+		
 		articleDAO.creerVente(article);
-		
+		Retrait retrait = article.getRetrait();	
+		retrait.setArticle(article);
 		categorieDAO.consulterCategorieParId(categorie.getIdCategorie());
-		
-	
-		
+		retraitDAO.creer(retrait, article.getIdArticle());
 	}
-
-	
 
 	@Override
 	public void annulerVente(Article article) {
@@ -152,19 +154,54 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public void encherir(int montantEnchere, long idUtilisateur, long idArticle) throws BusinessException{
 		BusinessException be = new BusinessException();
-		Utilisateur utilisateur = utilisateurDAO.utilisateurparId(idUtilisateur);
-		try {
-			if (idUtilisateurMontantMax(idArticle)!=idUtilisateur) {
-				if (utilisateur.getCredit()>=montantEnchere) {
-					int solde = debiter(montantEnchere, utilisateur);
-					enchereDAO.encherir(montantEnchere, idUtilisateur, idArticle);
-					utilisateurDAO.majCredit(solde, idUtilisateur);
-				} be.add("Vous n'avez pas assez de crédit pour enchérir !");
-			}be.add("Vous êtes pour le moment le meilleur enchérisseur");
-		} catch (DataAccessException e) {
-
+		boolean isValid = isNotSameEncherisseur(idArticle, idUtilisateur, be);
+		isValid &=isNotEnoughCredit(montantEnchere, idUtilisateur, be);
+		isValid &=isEnchereOpen(idArticle, be);
+		isValid &=isEnchereClose(idArticle, be);
+		if (isValid) {
+			Utilisateur utilisateur = utilisateurDAO.utilisateurparId(idUtilisateur);
+			int solde = debiter(montantEnchere, utilisateur);
+			enchereDAO.encherir(montantEnchere, idUtilisateur, idArticle);
+			utilisateurDAO.majCredit(solde, idUtilisateur);
+		} else {
 			throw be;
 		}
+	}
+	
+	private boolean isNotSameEncherisseur (long idArticle, long idUtilisateur, BusinessException be) {
+		if(this.enchereDAO.idUtilisateurMontantMax(idArticle)==idUtilisateur) {
+			be.add("Vous êtes pour le moment le meilleur enchérisseur");
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean isNotEnoughCredit (int montantEnchere, long idUtilisateur, BusinessException be) {
+		if (this.utilisateurDAO.utilisateurparId(idUtilisateur).getCredit()>=montantEnchere) {
+			be.add("Vous n'avez pas assez de crédit pour enchérir !");
+			return false;
+		}
+		return true;
+	} 
+	
+	private boolean isEnchereOpen (long idArticle, BusinessException be) {
+		LocalDate today = LocalDate.now();
+		LocalDate debutEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
+		if (today.isAfter(debutEnchereDate)) {
+			be.add("Cet article n'est pas encore en mis en enchère.");
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean isEnchereClose (long idArticle, BusinessException be) {
+		LocalDate today = LocalDate.now();
+		LocalDate finEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
+		if (today.isBefore(finEnchereDate)) {
+			be.add("Les enchères sur cet article sont terminées.");
+			return false;
+		}
+		return true;
 	}
 	
 //	@Override

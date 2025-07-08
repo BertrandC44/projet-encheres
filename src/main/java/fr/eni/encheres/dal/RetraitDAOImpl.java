@@ -57,7 +57,7 @@ public class RetraitDAOImpl implements RetraitDAO {
 			@Override
 			public void creer(Retrait retrait, long idArticle) {
 				MapSqlParameterSource map = new MapSqlParameterSource();			
-				map.addValue("idArticle", retrait.getArticle().getIdArticle());
+				map.addValue("idArticle", idArticle);
 				map.addValue("rue", retrait.getRue());
 				map.addValue("codePostal", retrait.getCodePostal());
 				map.addValue("ville", retrait.getVille());

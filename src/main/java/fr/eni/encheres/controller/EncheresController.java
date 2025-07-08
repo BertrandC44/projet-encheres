@@ -1,6 +1,5 @@
 package fr.eni.encheres.controller;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,25 +21,31 @@ import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bll.contexte.ContexteService;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
+import fr.eni.encheres.bo.Retrait;
 import fr.eni.encheres.bo.Utilisateur;
+import fr.eni.encheres.dal.ArticleDAO;
 import fr.eni.encheres.dal.CategorieDAO;
 import fr.eni.encheres.exception.BusinessException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
-@SessionAttributes({"utilisateurEnSession","categorieEnSession"})
+@SessionAttributes({ "utilisateurEnSession", "categorieEnSession" })
 public class EncheresController {
 
+	private final UtilisateurController utilisateurController;
 
-    private EncheresService encheresService;
-    private UtilisateurService utilisateurService;
+	private EncheresService encheresService;
+	private UtilisateurService utilisateurService;
 
-    public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService) {
-        this.encheresService = encheresService;
-        this.utilisateurService = utilisateurService;
 
-    }
+	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService,
+			UtilisateurController utilisateurController) {
+		this.encheresService = encheresService;
+		this.utilisateurService = utilisateurService;
+		this.utilisateurController = utilisateurController;
+	}
+
 	@GetMapping("/")
     public String index() {
         System.out.println("Clic vers Index");
@@ -132,14 +137,16 @@ public class EncheresController {
         model.addAttribute("idArticle", idArticle);
 
         Utilisateur utilisateur = utilisateurService.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
+
 		if (bindingResult.hasErrors()) {
 			return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		} else {
-	        System.out.println("id utilisateur= " + utilisateur.getIdUtilisateur());
-	        System.out.println("Solde utilisateur= " + utilisateur.getCredit());
-	        System.out.println("id article= " + idArticle);
-	        try {
+			System.out.println("id utilisateur= " + utilisateur.getIdUtilisateur());
+			System.out.println("Solde utilisateur= " + utilisateur.getCredit());
+			System.out.println("id article= " + idArticle);
+			try {
 				encheresService.encherir(montantEnchere, utilisateur.getIdUtilisateur(), idArticle);
+
 
 	        }catch (BusinessException e) {
 					e.getMessagesBE().forEach(m->{
@@ -157,16 +164,26 @@ public class EncheresController {
     }
 
     @GetMapping("/encheres/vente")
-    public String vente(Model model) {
+    public String vente(@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, Model model) {
         List<Categorie> categories = encheresService.consulterCategories();
         Article article = new Article();
         article.setCategorie(new Categorie());
+        
+        Retrait retrait = new Retrait();
+        retrait.setRue(utilisateurEnSession.getRue());
+        retrait.setVille(utilisateurEnSession.getVille());
+        retrait.setCodePostal(utilisateurEnSession.getCodePostal());
+        article.setRetrait(retrait);
+        
+        
+        
         model.addAttribute("article", new Article());
         model.addAttribute("categorie", categories);
+        model.addAttribute("retrait", retrait);
         return "vente";
     }
 
-    @PostMapping("/encheres/vente")
+  /*  @PostMapping("/encheres/vente")
     public String ventePost(@ModelAttribute Article article, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
                             @RequestParam("action") String action,
                             Model model) {
@@ -201,7 +218,7 @@ public class EncheresController {
         }
         model.addAttribute("article", article);
         return "vente";
-    }
+    }*/
 
 
     @GetMapping("/encheres/detail")
@@ -210,12 +227,73 @@ public class EncheresController {
         model.addAttribute("article", article);
         return "enchere-en-cours";
     }
-
-
+  
     @ModelAttribute("categorieEnSession")
     public List<Categorie> chargerCategoriesEnSession() {
         return this.encheresService.consulterCategories();
     }
 
-}
+	
+	@PostMapping("/encheres/vente")
+	public String creerArticle(@ModelAttribute Article article,
+			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
+			@RequestParam("action") String action, Model model) {
 
+		List<Categorie> categories = encheresService.consulterCategories();
+		model.addAttribute("categorie", categories);
+		
+		/*if ("categorieChoisie".equals(action)) {
+			if (article.getCategorie() != null && article.getCategorie().getIdCategorie() > 0) {
+
+				Categorie selectedCategorie = encheresService
+						.consulterCategorieParId(article.getCategorie().getIdCategorie());
+				article.setCategorie(selectedCategorie);
+			} else {
+
+				model.addAttribute("article", article);
+				return "vente";
+			}
+
+		}*/
+
+		if ("validerFormulaire".equals(action)) {
+			if (article.getCategorie() == null || article.getCategorie().getIdCategorie() == 0) {
+
+				model.addAttribute("error", "veuillez selectionner une catégorie");
+				model.addAttribute("article", article);
+				return "vente";
+			}
+
+			if (utilisateurEnSession == null || utilisateurEnSession.getIdUtilisateur() == 0) {
+
+				return "redirect:/connexion";
+			} else {
+
+				article.setUtilisateur(utilisateurEnSession);
+				article.setEtatVente(1);
+
+				this.encheresService.creerVente(article);
+//				article.setCategorie(article.getCategorie());
+//				article.setDateDebutEncheres(article.getDateDebutEncheres());
+//				article.setDateFinEncheres(article.getDateFinEncheres());
+//				article.setDescription(article.getDescription());
+//				article.setMiseAPrix(article.getMiseAPrix());
+//				article.setNomArticle(article.getNomArticle());
+//				article.setRetrait(article.getRetrait());
+
+				return "redirect:/encheres";
+			}
+
+		} else
+
+			model.addAttribute("article", article);
+
+		return "vente";
+
+	}
+
+	
+
+	
+
+}
