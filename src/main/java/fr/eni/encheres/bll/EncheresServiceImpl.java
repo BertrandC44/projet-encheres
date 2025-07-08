@@ -1,5 +1,6 @@
 package fr.eni.encheres.bll;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -13,12 +14,14 @@ import fr.eni.encheres.Application;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
+import fr.eni.encheres.bo.Retrait;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dal.ArticleDAO;
 import fr.eni.encheres.dal.CategorieDAO;
 
 import fr.eni.encheres.dal.CategorieDAO;
 import fr.eni.encheres.dal.EnchereDAO;
+import fr.eni.encheres.dal.RetraitDAO;
 import fr.eni.encheres.dal.UtilisateurDAO;
 import fr.eni.encheres.exception.BusinessException;
 
@@ -31,13 +34,16 @@ public class EncheresServiceImpl implements EncheresService{
 	private CategorieDAO categorieDAO;
 	private ArticleDAO articleDAO;
 	private UtilisateurDAO utilisateurDAO;
+	private RetraitDAO retraitDAO;
 
 	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO,
-			UtilisateurDAO utilisateurDAO) {
+			UtilisateurDAO utilisateurDAO, RetraitDAO retraitDAO) {
+
 		this.enchereDAO = enchereDAO;
 		this.categorieDAO = categorieDAO;
 		this.articleDAO = articleDAO;
 		this.utilisateurDAO = utilisateurDAO;
+		this.retraitDAO = retraitDAO;
 	}
 	
 	// méthode pour assigner l'image en fonction de l'id de la catégorie
@@ -107,29 +113,19 @@ public class EncheresServiceImpl implements EncheresService{
 	}catch (EmptyResultDataAccessException e) {
 		return null;
 	}
-
 	}
 
 	
-
-	@Override
-	public Article rechercheParMotCle(String motCle) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
 	@Override
 	public void creerVente(Article article) {
 		Categorie categorie= article.getCategorie();
+		
 		articleDAO.creerVente(article);
-		
+		Retrait retrait = article.getRetrait();	
+		retrait.setArticle(article);
 		categorieDAO.consulterCategorieParId(categorie.getIdCategorie());
-		
-	
-		
+		retraitDAO.creer(retrait, article.getIdArticle());
 	}
-
 	
 
 	@Override
@@ -151,20 +147,90 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public void encherir(int montantEnchere, long idUtilisateur, long idArticle) throws BusinessException{
 		BusinessException be = new BusinessException();
-		Utilisateur utilisateur = utilisateurDAO.utilisateurparId(idUtilisateur);
-		try {
-			if (idUtilisateurMontantMax(idArticle)!=idUtilisateur) {
-				if (utilisateur.getCredit()>=montantEnchere) {
-					int solde = debiter(montantEnchere, utilisateur);
-					enchereDAO.encherir(montantEnchere, idUtilisateur, idArticle);
-					utilisateurDAO.majCredit(solde, idUtilisateur);
-				} be.add("Vous n'avez pas assez de crédit pour enchérir !");
-			}be.add("Vous êtes pour le moment le meilleur enchérisseur");
-		} catch (DataAccessException e) {
-
+		boolean isValid = isNotSameEncherisseur(idArticle, idUtilisateur, be);
+		isValid &=isNotEnoughCredit(montantEnchere, idUtilisateur, be);
+		isValid &=isEnchereOpen(idArticle, be);
+		isValid &=isEnchereClose(idArticle, be);
+	
+		if (isValid) {
+			Utilisateur utilisateurMax = utilisateurDAO.utilisateurparId(idUtilisateur);
+			int newCredit = debiter(montantEnchere, utilisateurMax);
+			enchereDAO.encherir(montantEnchere, idUtilisateur, idArticle);
+			utilisateurDAO.majCredit(newCredit, idUtilisateur);
+			Utilisateur utilisateurSecond = utilisateurDAO.utilisateurparId(enchereDAO.idUtilisateurARecrediter(idArticle));
+			int credit = utilisateurSecond.getCredit() + enchereDAO.recrediter(idArticle);
+			utilisateurDAO.majCredit(credit, utilisateurSecond.getIdUtilisateur());
+		} else {
 			throw be;
 		}
 	}
+	
+	private boolean isNotSameEncherisseur (long idArticle, long idUtilisateur, BusinessException be) {
+		if(this.enchereDAO.idUtilisateurMontantMax(idArticle)==idUtilisateur) {
+			be.add("Erreur_1 : Vous êtes pour le moment le meilleur enchérisseur");
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean isNotEnoughCredit (int montantEnchere, long idUtilisateur, BusinessException be) {
+		if (montantEnchere>=this.utilisateurDAO.utilisateurparId(idUtilisateur).getCredit()) {
+			be.add("Erreur_2 : Vous n'avez pas assez de crédit pour enchérir !");
+			return false;
+		}
+		return true;
+	} 
+	
+	private boolean isEnchereOpen (long idArticle, BusinessException be) {
+		LocalDate today = LocalDate.now();
+		LocalDate debutEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
+		if (today.isAfter(debutEnchereDate)) {
+			be.add("Cet article n'est pas encore en mis en enchère.");
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean isEnchereClose (long idArticle, BusinessException be) {
+		LocalDate today = LocalDate.now();
+		LocalDate finEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
+		if (today.isAfter(finEnchereDate)) {
+			be.add("Les enchères sur cet article sont terminées.");
+			return false;
+		}
+		return true;
+	}
+	
+
+	
+//	@Override
+//	public void encherir(int montantEnchere, long idUtilisateur, long idArticle) throws BusinessException {
+//	    BusinessException be = new BusinessException();
+//	    Utilisateur utilisateur = utilisateurDAO.utilisateurparId(idUtilisateur);
+//
+//	    if (idUtilisateurMontantMax(idArticle) == idUtilisateur) {
+//	        be.add("Vous êtes déjà le meilleur enchérisseur.");
+//	    }
+//
+//	    if (utilisateur.getCredit() < montantEnchere) {
+//	        be.add("Vous n'avez pas assez de crédit pour enchérir !");
+//	    }
+//
+//
+//	    if (be.hasError()) {
+//	        throw be;
+//	    }
+//
+//	    try {
+//	        int nouveauSolde = debiter(montantEnchere, utilisateur);
+//	        enchereDAO.encherir(montantEnchere, idUtilisateur, idArticle);
+//	        utilisateurDAO.majCredit(nouveauSolde, idUtilisateur);
+//	    } catch (DataAccessException e) {
+//	        // Erreur technique → tu peux logger ici aussi
+//	        throw new BusinessException("Erreur lors du traitement. Veuillez recommencer.");
+//	    }
+//	}
+
 
 	@Override
 	public int montantMax(long idArticle) {
@@ -234,6 +300,25 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticleMesVentesTerminees(long idUtilisateur) {
 		List<Article> articles = articleDAO.consulterArticleMesVentesTerminees(idUtilisateur);
+	    for (Article a : articles) {
+	        assignerImageCategorie(a.getCategorie());
+	    }
+	    return articles;
+	}
+
+	@Override
+	public List<Article> consulterArticleParIdCategorie(long idCategorie) {
+		List<Article> articles = articleDAO.consulterArticleParCategorie(idCategorie);
+	    for (Article a : articles) {
+	        assignerImageCategorie(a.getCategorie());
+	    }
+	    return articles;
+	
+	}
+
+	@Override
+	public List<Article> consulterArticleParMotCle(String motCle) {
+		List<Article> articles = articleDAO.consulterArticleParMotCle(motCle);
 	    for (Article a : articles) {
 	        assignerImageCategorie(a.getCategorie());
 	    }

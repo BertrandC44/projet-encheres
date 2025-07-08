@@ -16,11 +16,12 @@
 <main>
 	<div > 
 <ul>
+	<form th:action="@{/encheres}" method="post">
 	<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">
 
 		
 		<h2>Filtres :</h2>
-		<form th:action="@{/encheres}" method="post">
+		
 			<li >
 			<label for="achats">Achats :</label>
 			<input type="radio"  id="achats" value="Achats" name="achats/ventes" checked onchange="checkCase()">
@@ -43,18 +44,15 @@
 				<input type="checkbox" id="ventesTerminees" name="ventes" th:value="vT"><label for="ventesTerminees">  ventes terminées</label>
 			</li>
 		
-
 	</th:block>
 			
 			<li>
 				<label for="idCategorie">Catégorie</label>
   				<select id="idCategorie" name="categorie">
+  					<option value ="0" > Choisir une catégorie</option>
     				<option th:each="c : ${categorie}" 
 	            	th:value="${c.idCategorie}" 
 	            	th:text="${c.libelle}" >
-	            	<!--  
-	            	th:selected="${c.idCategorie == article.categorie?.idCategorie}"
-	            	-->
     				</option>
   				</select>
 				
@@ -62,7 +60,7 @@
 			
 			<li class="recherche">
 				<img alt ="loupe"  width=20 height=20 src="/images/loupe.png"> 
-				<input type="text" placeholder="Le nom de l'article contient..."></input>
+				<input type="text" name="motCle" th:value="${motCle}" placeholder="Le nom de l'article contient..."></input>
 			</li>
 			
 			<li>
@@ -114,17 +112,18 @@
               th:data-date-debut="${a.dateDebutEncheres}" 
               th:data-date-fin="${a.dateFinEncheres}"></span>
     </td>
+    
     <td th:text="${a.retrait?.rue + ' ' + a.retrait?.codePostal + ' ' + a.retrait?.ville}"></td>
-    <td th:text="${a.utilisateur?.pseudo}"></td>
+
+    <td><a th:href="@{/encheres/profil(pseudo=${a.utilisateur.pseudo})}" th:text="${a.utilisateur.pseudo}"></a></td>
 </tr>
 					
 					</tbody>
-					
-				</table>
+</table>
 		<!--  </th:block>-->
 			
 				
-				
+			
 			
 			
 		</div>

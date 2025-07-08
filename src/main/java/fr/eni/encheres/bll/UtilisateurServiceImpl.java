@@ -2,7 +2,9 @@ package fr.eni.encheres.bll;
 
 import java.util.List;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dal.UtilisateurDAO;
@@ -12,7 +14,7 @@ import fr.eni.encheres.exception.BusinessException;
 public class UtilisateurServiceImpl implements UtilisateurService{
 	
 	private UtilisateurDAO utilisateurDAO;
-
+	
 
 	public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO) {
 		this.utilisateurDAO = utilisateurDAO;
@@ -87,14 +89,15 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	
 	
 	@Override
-	public void modifierUtilisateur(Utilisateur utilisateur) throws BusinessException {
+	public void modifierUtilisateur(Utilisateur utilisateur, Utilisateur utilisateurEnsession) throws BusinessException {
 		BusinessException be = new BusinessException();
 		
-		boolean isValid = isEmailValide(utilisateur.getEmail(), be);
-		isValid &= isPseudoValide(utilisateur.getPseudo(), be);
+		boolean isValid = isEmailModifierValide(utilisateur.getEmail(), utilisateur, utilisateurEnsession, be);
+		isValid &= isPseudoModifierValide(utilisateur.getPseudo(), utilisateur, utilisateurEnsession,  be);
 		
 		if (isValid) {
-			utilisateurDAO.modifierUtilisateur(utilisateur);
+				utilisateurDAO.modifierUtilisateur(utilisateur);
+			
 		} else {
 			throw be;
 		}
@@ -121,11 +124,35 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	}
 
 	@Override
+	public boolean isEmailModifierValide(String email, Utilisateur utilisateur, Utilisateur utilisateurEnSession, BusinessException be) {
+		Utilisateur Emailutilisateur = utilisateurDAO.utilisateurparEmail(email);
+	    if (Emailutilisateur == null || Emailutilisateur.getIdUtilisateur() == utilisateurEnSession.getIdUtilisateur()) {
+	    System.out.println("1");
+	    	return true; 
+	    }be.add("L'email est déjà utilisé");
+	      System.out.println("2");
+	    return false;
+	    
+	}
+	
+	
+	@Override
 	public boolean isEmailValide(String email, BusinessException be) {
 		if(utilisateurDAO.isEmailValide(email)) {
 			return true;
 		}be.add("L'email \"" + email + "\" a déjà un compte associé");
 		return false;
+	}
+	
+	@Override
+	public boolean isPseudoModifierValide(String pseudo, Utilisateur utilisateur, Utilisateur utilisateurEnSession, BusinessException be) {
+		Utilisateur Pseudoutilisateur = utilisateurDAO.utilisateurParPseudo(pseudo);
+	    if (Pseudoutilisateur == null || Pseudoutilisateur.getIdUtilisateur() == utilisateurEnSession.getIdUtilisateur()) {
+	      System.out.println("1");
+	    	return true;
+	    }be.add("Le pseudo est déjà utilisé");
+	    System.out.println("2");
+	    return false;
 	}
 	
 	@Override

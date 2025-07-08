@@ -24,19 +24,15 @@ public interface EncheresService {
 	List<Article> consulterArticles();
 	
 	Article consulterArticleParId(long id);
-	
-	Article rechercheParMotCle(String motCle);
 
 	void creerVente(Article article);
 
 	void annulerVente(Article article);
 	
-
 	int debiter(int montantEnchere, Utilisateur utilisateur);
 	
 	void encherir(int montantEnchere, long idUtilisateur, long idArticle ) throws BusinessException;
 
-	
 	int montantMax(long idArticle);
 	
 	long idUtilisateurMontantMax(long idArticle);
@@ -59,8 +55,9 @@ public interface EncheresService {
 	
 	List<Article> consulterArticleMesVentesTerminees(long idUtilisateur);
 	
+	List<Article> consulterArticleParIdCategorie(long idCategorie);
 	
-	
-	
+	List<Article> consulterArticleParMotCle(String motCle);
+
 
 }

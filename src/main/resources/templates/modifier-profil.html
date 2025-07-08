@@ -10,7 +10,8 @@
 	<main>
 		<form class="login-form" th:action="@{/encheres/profil/modifier}" method="post" th:object=${utilisateur}>
 		<h2>Mon profil</h2><br>
-		<p class="erreur" th:if="${#fields.hasAnyErrors()}" th:text="#{error.message}" ></p>
+		<input type="hidden" th:field="*{idUtilisateur}" id="idUtilisateur" />
+		<p class="erreur" th:if="${#fields.hasErrors()}" th:text="#{error.message}" ></p><br>
 		
 		<ul class="form-list">
 		
@@ -62,6 +63,7 @@
 			<input type="text" th:field="*{ville}" id="ville" />
 			</li>
 			
+			<p>Entrez votre mot de passe ou un nouveau <br> pour valider les modifications</p><br>
 			<p class="erreur" th:if="${#fields.hasErrors('motDePasse')}" th:errors="*{motDePasse}"></p>
 			<p class="erreur" th:if="${#fields.hasErrors('confMdp')}" th:errors="*{confMdp}"></p>
 			<li>
@@ -71,7 +73,7 @@
 			
 			<li>
 			<label for="confMdp">Confirmation :</label>
-			<input type="password" name="confMdp" id="confMdp" />
+			<input type="password" th:field="*{confMdp}" id="confMdp" />
 			</li>
 			
 			<li>
