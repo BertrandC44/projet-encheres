@@ -19,7 +19,6 @@
 <body>
 <header th:replace="~{fragments/entete::entete}"></header>
 
-<p th:text="${article.idArticle}"></p>
 <main>
 
 	
@@ -120,14 +119,14 @@
 			</li>
 			<li>
 				<label for="vendeur">Vendeur : </label>
-				<span type="text" id="utilisateur" th:text="${article.utilisateur.pseudo}" > </span>
+				<a type="text" id="utilisateur" th:text="${article.utilisateur.pseudo}" href="encheres/profil?pseudo= + '${article.utilisateur.pseudo}' "></a>
 			</li>
 			<li data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">
-				
-				<!--  <p class="erreur" th:if="${#fields.hasErrors('Erreur1')}" th:errors="*{Erreur1}"></p> 
- 		<p class="erreur" th:if="${#fields.hasErrors('error.erreur2')}" th:errors="*{error.erreur2}"></p> 
- 		<p class="erreur" th:if="${#fields.hasErrors('error.erreur3')}" th:errors="*{error.erreur3}"></p> 
- 		<p class="erreur" th:if="${#fields.hasErrors('error.erreur4')}" th:errors="*{error.erreur4}"></p>  -->
+		<!--  		<div th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+				<p class="erreur" th:if="${#fields.hasErrors('erreurId')}" th:errors="*{erreurId}"></p> 
+ 				<p class="erreur" th:if="${#fields.hasErrors('erreurCredit')}" th:errors="*{erreurCredit}"></p> 
+ 				<p class="erreur" th:if="${#fields.hasErrors('erreurOpen')}" th:errors="*{erreurOpen}"></p> 
+ 				<p class="erreur" th:if="${#fields.hasErrors('erreurClose')}" th:errors="*{erreurClose}"></p>   -->
 				
 				<label for="montantEnchere">Ma proposition : </label>
 				<input type="number" id="montantEnchere"  name="montantEnchere" th:attr="min=${enchereMin}" th:value="${montantEnchere}" required>

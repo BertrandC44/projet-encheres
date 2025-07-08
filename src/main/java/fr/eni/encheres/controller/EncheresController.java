@@ -140,27 +140,26 @@ public class EncheresController {
 
 	        }catch (BusinessException e) {
 
-					e.getErrors().forEach(message->{
-						if(message.contains("Erreur_1")) {
-		                    bindingResult.rejectValue("Erreur1", "error.erreur1", message);
-		                } else if(message.contains("Erreur_2")) {
-		                    bindingResult.rejectValue("Erreur2", "error.erreur2", message);
-		                } else if(message.contains("Erreur_3")) {
-		                    bindingResult.rejectValue("Erreur3", "error.erreur3", message);
-		                } else if(message.contains("Erreur_4")) {
-		                    bindingResult.rejectValue("Erreur2", "error.erreur4", message);
-		                
-		                
-		                
-		                } else {
-		                    bindingResult.addError(new ObjectError("globalError", message));
-		                }
-
-					});
-					e.printStackTrace();
-				    return "redirect:/encheres/encherir?idArticle=" + idArticle;  
+//					e.getErrors().forEach(message->{
+//						if(message.contains("Erreur_1")) {
+//		                    bindingResult.rejectValue("erreurId", "error.erreurId", message);
+//		                } else if(message.contains("Erreur_2")) {
+//		                    bindingResult.rejectValue("erreurCredit", "error.erreurCredit", message);
+//		                } else if(message.contains("Erreur_3")) {
+//		                    bindingResult.rejectValue("erreurOpen", "error.erreurOpen", message);
+//		                } else if(message.contains("Erreur_4")) {
+//		                    bindingResult.rejectValue("erreurClose", "erreurClose", message);  
+//		                } else if(message.contains("Erreur_5")) {
+//		                    bindingResult.rejectValue("erreurVendeur", "erreurVendeur", message);   
+//		                    
+//		                } else {
+//		                    bindingResult.addError(new ObjectError("globalError", message));
+//		                }
+//
+//					});
+ 
 				}
-	        
+			model.addAttribute("utilisateur", utilisateur);
 	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		}  
 
