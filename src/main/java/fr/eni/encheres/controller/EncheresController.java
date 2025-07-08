@@ -11,10 +11,12 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import fr.eni.encheres.bll.EncheresService;
+import fr.eni.encheres.bll.EncheresServiceImpl;
 import fr.eni.encheres.bll.UtilisateurService;
 
 import fr.eni.encheres.bo.Article;
@@ -35,107 +37,129 @@ public class EncheresController {
 	private EncheresService encheresService;
 	private UtilisateurService utilisateurService;
 
-
-
-	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService,
-			UtilisateurController utilisateurController) {
-
+	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService) {
 		this.encheresService = encheresService;
 		this.utilisateurService = utilisateurService;
 
 	}
 
 	@GetMapping("/")
-    public String index() {
-        System.out.println("Clic vers Index");
-        return "encheres";
-    }
+	public String index() {
+		System.out.println("Clic vers Index");
+		return "encheres";
+	}
 
-    @GetMapping("/encheres")
-    public String encheres(Model model) {
-       List<Article> articles = encheresService.consulterArticlePseudo();
-       List<Categorie> categories = encheresService.consulterCategories();
-        model.addAttribute("articles", articles);
-        model.addAttribute("categorie",categories);
-        return "encheres";
-    }
-    
-    @PostMapping("/encheres")
-    public String encheres(Model model,@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession ,
-    		@RequestParam (name="achats",required = false) List<String> achats,
-    		@RequestParam(name="ventes",required = false) List<String> ventes,
-    		@RequestParam(name="categorie",required = false) String categorie) {
-    	
-    	 
-    	 List<Article> articles = new ArrayList<Article>();
-    	 
-    	 if (achats != null) {
-    	        for (String a : achats) {
-    	        	System.out.println("Filtre achat : " + a);
-    	        	if("eO".equals(a)) {
-        	         articles.addAll(encheresService.consulterArticleEncheresEnCours(utilisateurEnSession.getIdUtilisateur()));	
-    	        	}
-    	        	if ("eEc".equals(a)) {
-    	        		articles.addAll(encheresService.consulterArticleMesEncheresEnCours(utilisateurEnSession.getIdUtilisateur()));
-    	        	}
-    	        	if ("eE".equals(a)) {
-    	        		articles.addAll(encheresService.consulterArticleMesEncheresRemportees(utilisateurEnSession.getIdUtilisateur()));
-    	        	}
-    	        }  
-    	 }
-    	        
-    	        if (ventes != null) {
-    	        	for (String v : ventes) {
-    	        	
-    	        	if("vEc".equals(v)) {
-    	        		articles.addAll(encheresService.consulterArticleMesVentesEnCours(utilisateurEnSession.getIdUtilisateur()));
-    	        	}
-    	        	if ("vNd".equals(v)) {
-    	        		articles.addAll(encheresService.consulterArticleMesVentesFutures(utilisateurEnSession.getIdUtilisateur()));
-    	        	}
-    	        	if ("vT".equals(v)) {
-    	        		articles.addAll(encheresService.consulterArticleMesVentesTerminees(utilisateurEnSession.getIdUtilisateur()));
-    	        	}
-    	        }
-    	    }
+	@GetMapping("/encheres")
+	public String encheres(Model model) {
+		List<Article> articles = encheresService.consulterArticlePseudo();
+		List<Categorie> categories = encheresService.consulterCategories();
+		model.addAttribute("articles", articles);
+		model.addAttribute("categorie", categories);
+		return "encheres";
+	}
 
-    	model.addAttribute("articles",articles);
-		return "/encheres";
-    	
-    }
+	@PostMapping("/encheres")
+	public String filtresEncheres(Model model, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
+			@RequestParam(name = "achats", required = false) List<String> achats,
+			@RequestParam(name = "ventes", required = false) List<String> ventes,
+			@RequestParam(name = "categorie", required = false) String categorie,
+			@RequestParam(name = "motCle", required = false) String motCle) {
 
-   
+		List<Categorie> categories = encheresService.consulterCategories();
+		List<Article> articles = new ArrayList<Article>();
 
-    @GetMapping("/encheres/encherir")
-    public String encherir(@RequestParam(name="idArticle") long idArticle, Model model) {
-    	System.out.println("l'id de l'article est :" + idArticle);
-        Article article = encheresService.consulterArticleParId(idArticle);
-       
-        int montantMax = encheresService.montantMax(idArticle);
-        int enchereMin = montantMax+1;
-        String utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle);
-        String categorieArticle = encheresService.categorieArticle(idArticle);
-        if (article != null) {
-            model.addAttribute("article", article);
-            model.addAttribute("montantMax", montantMax);
-            model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);
-            model.addAttribute("enchereMin", enchereMin);
-            model.addAttribute("categorieArticle", categorieArticle);
-        }
-        return "encherir";
-    }
+		if (utilisateurEnSession.getIdUtilisateur() != 0) {
+			if (achats != null) {
+				for (String a : achats) {
+					System.out.println("Filtre achat : " + a);
+					if ("eO".equals(a)) {
+						articles.addAll(encheresService
+								.consulterArticleEncheresEnCours(utilisateurEnSession.getIdUtilisateur()));
+					}
+					if ("eEc".equals(a)) {
+						articles.addAll(encheresService
+								.consulterArticleMesEncheresEnCours(utilisateurEnSession.getIdUtilisateur()));
+					}
+					if ("eE".equals(a)) {
+						articles.addAll(encheresService
+								.consulterArticleMesEncheresRemportees(utilisateurEnSession.getIdUtilisateur()));
+					}
+				}
+			}
 
-    @PostMapping("/encheres/encherir")
+			if (ventes != null) {
+				for (String v : ventes) {
 
-    public String encherirPost(@RequestParam(name="montantEnchere") int montantEnchere,
-    						   @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, 
-                               @RequestParam(name="idArticle") long idArticle, 
-                               Model model, BindingResult bindingResult) {
-        model.addAttribute("montantEnchere", montantEnchere);
-        model.addAttribute("utilisateurEnSession", utilisateurEnSession);
-        model.addAttribute("idArticle", idArticle);
+					if ("vEc".equals(v)) {
+						articles.addAll(encheresService
+								.consulterArticleMesVentesEnCours(utilisateurEnSession.getIdUtilisateur()));
+					}
+					if ("vNd".equals(v)) {
+						articles.addAll(encheresService
+								.consulterArticleMesVentesFutures(utilisateurEnSession.getIdUtilisateur()));
+					}
+					if ("vT".equals(v)) {
+						articles.addAll(encheresService
+								.consulterArticleMesVentesTerminees(utilisateurEnSession.getIdUtilisateur()));
+					}
+				}
+			}
 
-        Utilisateur utilisateur = utilisateurService.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
+		}
+
+		if (categorie != null && categorie != "0") {
+			System.out.println(categorie);
+			articles.addAll(encheresService.consulterArticleParIdCategorie(Long.parseLong(categorie)));
+
+		}
+		System.out.println("motcle : " + motCle);
+		if (motCle != null && motCle != "") {
+			System.out.println("motcle : " + motCle);
+			articles.addAll(encheresService.consulterArticleParMotCle(motCle));
+
+		}
+
+		model.addAttribute("articles", articles);
+		model.addAttribute("categorie", categories);
+		return "encheres";
+
+	}
+
+	@GetMapping("/encheres/encherir")
+	public String encherir(@RequestParam(name = "idArticle") long idArticle, Model model,
+			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) {
+
+		System.out.println("l'id de l'article est :" + idArticle);
+		Article article = encheresService.consulterArticleParId(idArticle);
+		int montantMax = encheresService.montantMax(idArticle);
+		int enchereMin = montantMax + 1;
+		String utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle);
+		String categorieArticle = encheresService.categorieArticle(idArticle);
+
+		if (utilisateurEnSession.getIdUtilisateur() != 0) {
+			if (article != null) {
+				model.addAttribute("article", article);
+				model.addAttribute("montantMax", montantMax);
+				model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);
+				model.addAttribute("enchereMin", enchereMin);
+				model.addAttribute("categorieArticle", categorieArticle);
+			}
+			return "encherir";
+
+		}
+		return "connexion";
+	}
+
+	@PostMapping("/encheres/encherir")
+	public String encherirPost(@RequestParam(name = "montantEnchere") int montantEnchere,
+			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
+			@RequestParam(name = "idArticle") long idArticle, Model model, BindingResult bindingResult) {
+		model.addAttribute("montantEnchere", montantEnchere);
+		model.addAttribute("utilisateurEnSession", utilisateurEnSession);
+		model.addAttribute("idArticle", idArticle);
+
+		Utilisateur utilisateur = utilisateurService
+				.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
 
 		if (bindingResult.hasErrors()) {
 			return "redirect:/encheres/encherir?idArticle=" + idArticle;
@@ -146,8 +170,9 @@ public class EncheresController {
 			try {
 				encheresService.encherir(montantEnchere, utilisateur.getIdUtilisateur(), idArticle);
 
-
-	        }catch (BusinessException e) {
+		
+      
+      }catch (BusinessException e) {
 
 					e.getErrors().forEach(message->{
 						if(message.contains("Erreur_1")) {
@@ -166,8 +191,7 @@ public class EncheresController {
 		                }
 
 					});
-					e.printStackTrace();
-				    return "redirect:/encheres/encherir?idArticle=" + idArticle;  
+		
 				}
 	        
 	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
@@ -177,70 +201,18 @@ public class EncheresController {
     }
 
 
-    @GetMapping("/encheres/vente")
-    public String vente(@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, Model model) {
-        List<Categorie> categories = encheresService.consulterCategories();
-        Article article = new Article();
-        article.setCategorie(new Categorie());
-        
-        Retrait retrait = new Retrait();
-        retrait.setRue(utilisateurEnSession.getRue());
-        retrait.setVille(utilisateurEnSession.getVille());
-        retrait.setCodePostal(utilisateurEnSession.getCodePostal());
-        article.setRetrait(retrait);
-        
-        
-        
-        model.addAttribute("article", new Article());
-        model.addAttribute("categorie", categories);
-        model.addAttribute("retrait", retrait);
-        return "vente";
-    }
+	@GetMapping("/encheres/vente")
+	public String vente(@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, Model model) {
+		List<Categorie> categories = encheresService.consulterCategories();
+		Article article = new Article();
+		article.setCategorie(new Categorie());
 
+		model.addAttribute("utilisateur", utilisateurEnSession);
+		model.addAttribute("article", new Article());
+		model.addAttribute("categorie", categories);
 
-
-
-
-    /*@PostMapping("/encheres/vente")
-
-    public String ventePost(@ModelAttribute Article article, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
-                            @RequestParam("action") String action,
-                            Model model) {
-
-        List<Categorie> categories = encheresService.consulterCategories();
-        model.addAttribute("categorie", categories);
-
-        if ("categorieChoisie".equals(action)) {
-            if (article.getCategorie() != null && article.getCategorie().getIdCategorie() > 0) {
-                Categorie selectedCategorie = encheresService.consulterCategorieParId(article.getCategorie().getIdCategorie());
-                article.setCategorie(selectedCategorie);
-            }
-            model.addAttribute("article", article);
-            return "vente";
-        }
-
-        if ("validerFormulaire".equals(action)) {
-        	if(article.getCategorie()== null || article.getCategorie().getIdCategorie()==0) {
-        		model.addAttribute("error", "veuillez selectionner une catégorie");
-        		  model.addAttribute("article", article);
-        		  return "vente";
-        	}
-        	
-        		if (utilisateurEnSession == null || utilisateurEnSession.getIdUtilisateur()==0) {
-        			return "redirect:/connexion";
-        		}
-        	article.setUtilisateur(utilisateurEnSession);
-        	article.setEtatVente(1);
-        	
-            this.encheresService.creerVente(article);
-            return "redirect:/encheres";
-        }
-        model.addAttribute("article", article);
-        return "vente";
-    }*/
-
-
-
+		return "vente";
+	}
 
     @GetMapping("/encheres/detail")
     public String afficherDetailEnchere(@RequestParam(name="id") long idArticle, Model model) {
@@ -260,12 +232,21 @@ public class EncheresController {
 	@PostMapping("/encheres/vente")
 	public String creerArticle(@ModelAttribute Article article,
 			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
-			@RequestParam("action") String action, Model model) {
+			@RequestParam("action") String action, Model model, @RequestParam(name = "rue") String rue,
+			@RequestParam(name = "codePostal") String codePostal, @RequestParam(name = "ville") String ville) {
 
 		List<Categorie> categories = encheresService.consulterCategories();
 		model.addAttribute("categorie", categories);
+
+
+		Retrait retrait = new Retrait();
+		retrait.setRue(rue);
+		retrait.setVille(ville);
+		retrait.setCodePostal(codePostal);
+		article.setRetrait(retrait);
 		
 		/*if ("categorieChoisie".equals(action)) {
+
 			if (article.getCategorie() != null && article.getCategorie().getIdCategorie() > 0) {
 
 				Categorie selectedCategorie = encheresService
@@ -289,20 +270,13 @@ public class EncheresController {
 
 			if (utilisateurEnSession == null || utilisateurEnSession.getIdUtilisateur() == 0) {
 
-				return "redirect:/connexion";
+				return "connexion";
 			} else {
 
 				article.setUtilisateur(utilisateurEnSession);
 				article.setEtatVente(1);
 
 				this.encheresService.creerVente(article);
-//				article.setCategorie(article.getCategorie());
-//				article.setDateDebutEncheres(article.getDateDebutEncheres());
-//				article.setDateFinEncheres(article.getDateFinEncheres());
-//				article.setDescription(article.getDescription());
-//				article.setMiseAPrix(article.getMiseAPrix());
-//				article.setNomArticle(article.getNomArticle());
-//				article.setRetrait(article.getRetrait());
 
 				return "redirect:/encheres";
 			}
@@ -315,7 +289,13 @@ public class EncheresController {
 
 	}
 
-	
+
+	@ModelAttribute("utilisateurEnSession")
+	public Utilisateur addUtilisateurEnSession() {
+		System.out.println("Utilisateur en session");
+		return new Utilisateur();
+	}
+
 
 	
 

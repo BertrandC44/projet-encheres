@@ -23,19 +23,20 @@ public class BusinessException extends Exception{
 	}
 	
 	
-	/*private List<String> messages;
 
-	public BusinessException() {
-		this.messages = new ArrayList<String>();
-	}
-
-	public BusinessException(String string) {
-		this.messages = new ArrayList<String>();
-	}
-
-	public Iterable<String> getMessagesBE() {
-		return messages;
-	}*/
+//	private List<String> messages;
+//
+//	public BusinessException() {
+//		this.messages = new ArrayList<String>();
+//	}
+//
+//	public BusinessException(String string) {
+//		this.messages = new ArrayList<String>();
+//	}
+//
+//	public Iterable<String> getMessagesBE() {
+//		return messages;
+//	}
 
 
 

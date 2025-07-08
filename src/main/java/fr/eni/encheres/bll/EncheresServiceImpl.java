@@ -38,6 +38,7 @@ public class EncheresServiceImpl implements EncheresService{
 
 	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO,
 			UtilisateurDAO utilisateurDAO, RetraitDAO retraitDAO) {
+
 		this.enchereDAO = enchereDAO;
 		this.categorieDAO = categorieDAO;
 		this.articleDAO = articleDAO;
@@ -123,7 +124,7 @@ public class EncheresServiceImpl implements EncheresService{
 		return null;
 	}
 
-
+	
 	@Override
 	public void creerVente(Article article) {
 		Categorie categorie= article.getCategorie();
@@ -134,6 +135,7 @@ public class EncheresServiceImpl implements EncheresService{
 		categorieDAO.consulterCategorieParId(categorie.getIdCategorie());
 		retraitDAO.creer(retrait, article.getIdArticle());
 	}
+	
 
 	@Override
 	public void annulerVente(Article article) {
@@ -304,6 +306,25 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticleMesVentesTerminees(long idUtilisateur) {
 		List<Article> articles = articleDAO.consulterArticleMesVentesTerminees(idUtilisateur);
+	    for (Article a : articles) {
+	        assignerImageCategorie(a.getCategorie());
+	    }
+	    return articles;
+	}
+
+	@Override
+	public List<Article> consulterArticleParIdCategorie(long idCategorie) {
+		List<Article> articles = articleDAO.consulterArticleParCategorie(idCategorie);
+	    for (Article a : articles) {
+	        assignerImageCategorie(a.getCategorie());
+	    }
+	    return articles;
+	
+	}
+
+	@Override
+	public List<Article> consulterArticleParMotCle(String motCle) {
+		List<Article> articles = articleDAO.consulterArticleParMotCle(motCle);
 	    for (Article a : articles) {
 	        assignerImageCategorie(a.getCategorie());
 	    }

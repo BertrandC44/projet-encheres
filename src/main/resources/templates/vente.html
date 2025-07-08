@@ -23,7 +23,6 @@
   		<select id="idCategorie" name="idCategorie" th:field="*{categorie.idCategorie}">
     	  <option value =0 disabled> Choisir une catégorie</option>
     		<option th:each="c : ${categorie}" 
-           
             	th:value="${c.idCategorie}" 
             	th:text="${c.libelle}" >
     		</option>
@@ -94,19 +93,21 @@
 		<li>
     		
     		<label for="rue">Rue :</label>
-    		<input type="text" id="rue" th:field="*{retrait.rue}">
+
+    		<input type="text" id="rue"  th:field="${utilisateur.rue}">
+
     		<br><br>
     	</li>
 
 		<li>
     		<label for="codePostal">Code Postal :</label>
-    		<input type="text" id="codePostal" name="retrait.codePostal" th:field="*{retrait.codePostal}">
+    		<input type="text" id="codePostal"  th:field="${utilisateur.codePostal}">
     		<br><br>
     	</li>
 
 		<li>
     		<label for="ville">Ville :</label>
-    		<input type="text" id="ville" name="retrait.ville" th:field="*{retrait.ville}">
+    		<input type="text" id="ville"  th:field="${utilisateur.ville}">
     		<br><br>
     	</li>
 
