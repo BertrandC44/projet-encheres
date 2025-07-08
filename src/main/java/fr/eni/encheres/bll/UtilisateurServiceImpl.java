@@ -123,11 +123,13 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 
 	@Override
 	public boolean isEmailModifierValide(String email, Utilisateur utilisateur, Utilisateur utilisateurEnSession, BusinessException be) {
-		Utilisateur utilisateurAvecEmail = utilisateurDAO.utilisateurparEmail(email);
-	    if (utilisateurAvecEmail == null || utilisateurAvecEmail.getIdUtilisateur() == utilisateurEnSession.getIdUtilisateur()) {
-	      return true; 
+		Utilisateur Emailutilisateur = utilisateurDAO.utilisateurparEmail(email);
+	    if (Emailutilisateur == null || Emailutilisateur.getIdUtilisateur() == utilisateurEnSession.getIdUtilisateur()) {
+	    System.out.println("1");
+	    	return true; 
 	    }be.add("L'email \"" + email + "\" a déjà un compte associé");
-	      return false;
+	      System.out.println("2");
+	    return false;
 	    
 	}
 	
@@ -142,11 +144,13 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	
 	@Override
 	public boolean isPseudoModifierValide(String pseudo, Utilisateur utilisateur, Utilisateur utilisateurEnSession, BusinessException be) {
-		Utilisateur utilisateurAvecPseudo = utilisateurDAO.utilisateurParPseudo(pseudo);
-	    if (utilisateurAvecPseudo == null || utilisateurAvecPseudo.getIdUtilisateur() == utilisateurEnSession.getIdUtilisateur()) {
-	      return true;
+		Utilisateur Pseudoutilisateur = utilisateurDAO.utilisateurParPseudo(pseudo);
+	    if (Pseudoutilisateur == null || Pseudoutilisateur.getIdUtilisateur() == utilisateurEnSession.getIdUtilisateur()) {
+	      System.out.println("1");
+	    	return true;
 	    }be.add("Le pseudo \"" + pseudo + "\" a déjà un compte associé");
-	      return false;
+	    System.out.println("2");
+	    return false;
 	}
 	
 	@Override

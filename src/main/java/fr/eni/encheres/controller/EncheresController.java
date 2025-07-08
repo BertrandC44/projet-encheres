@@ -12,21 +12,16 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import fr.eni.encheres.bll.EncheresService;
 import fr.eni.encheres.bll.UtilisateurService;
 
-import fr.eni.encheres.bll.contexte.ContexteService;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
-import fr.eni.encheres.dal.CategorieDAO;
 import fr.eni.encheres.exception.BusinessException;
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 
 @Controller
 @SessionAttributes({"utilisateurEnSession","categorieEnSession"})
@@ -39,6 +34,7 @@ public class EncheresController {
     public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService) {
         this.encheresService = encheresService;
         this.utilisateurService = utilisateurService;
+    }
 
 
 	@GetMapping("/")
