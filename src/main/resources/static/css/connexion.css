@@ -26,7 +26,7 @@ main {
   }
 
 
-.login-form{
+.login-form, .object-form{
 	justify-content: center;
   display: flex;
   flex-direction: column;
@@ -80,8 +80,11 @@ li{
 }
 
 span{
-	margin-left: 20px;
+	margin-left: 1.20 rem;
+	
 }
+
+
 
 .form-list label{
 	width: 45%;
@@ -105,12 +108,31 @@ input#sesouvenirdemoi{
 }
 	
 
-label{	
+.object-form label, span, textarea, button, input, a{	
 	display:inline-block;
-	min-width:10rem;
-	
-  margin: 5px 0 5px 0;
+	max-width:15rem;
+	margin: 5px 0 5px 0;
 	
 }	
 
+.login-form label{	
+	display:inline-block;
+	min-width:8rem;
+	margin: 5px 0 5px 0;
+	
+}	
 
+.object-form li {
+	max-width:20rem;
+}
+
+.object-form img {
+	min-width:10rem;
+}
+
+.compte-rebours{
+display:inline-block;
+	max-width:15rem;
+	margin: 5px 0 5px 0;}
+	
+	
