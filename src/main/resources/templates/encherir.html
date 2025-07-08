@@ -32,12 +32,6 @@
 		
 		<h2 th:text="${article.nomArticle}"></h2> 
 
-
- 		
-		<ul>
-
-	
-
 		<ul class="form-list">
 
 
@@ -119,9 +113,9 @@
 			</li>
 			<li>
 				<label for="vendeur">Vendeur : </label>
-				<a type="text" id="utilisateur" th:text="${article.utilisateur.pseudo}" href="encheres/profil?pseudo= + '${article.utilisateur.pseudo}' "></a>
+				<a id="utilisateur" th:text="${article.utilisateur.pseudo}"th:href="@{'/encheres/profil'(pseudo=${article.utilisateur.pseudo})}"></a>
 			</li>
-			<li data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">
+			<li >
 		<!--  		<div th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
 				<p class="erreur" th:if="${#fields.hasErrors('erreurId')}" th:errors="*{erreurId}"></p> 
  				<p class="erreur" th:if="${#fields.hasErrors('erreurCredit')}" th:errors="*{erreurCredit}"></p> 
@@ -131,8 +125,8 @@
 				<label for="montantEnchere">Ma proposition : </label>
 				<input type="number" id="montantEnchere"  name="montantEnchere" th:attr="min=${enchereMin}" th:value="${montantEnchere}" required>
 			</li>
-			<li>
-				<button type="submit" class="form-button" name="encherir" data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">Enchérir</button>
+			<li >
+				<button type="submit" class="form-button" name="encherir" >Enchérir</button>
 			</li>	
 		</ul>
 	</form>

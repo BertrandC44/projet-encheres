@@ -153,6 +153,7 @@ public class EncheresServiceImpl implements EncheresService{
 		isValid &=isEnchereOpen(idArticle, be);
 		isValid &=isEnchereClose(idArticle, be);
 		isValid &=isNotSameEncherisseurVendeur(idArticle, idUtilisateur, be);
+		isValid &=enchereIsNotEnough(montantEnchere, idArticle, be);
 		if (isValid) {
 			Utilisateur utilisateurMax = utilisateurDAO.utilisateurparId(idUtilisateur);
 			int newCredit = debiter(montantEnchere, utilisateurMax);
@@ -211,6 +212,15 @@ public class EncheresServiceImpl implements EncheresService{
 		}
 		return true;
 	}
+	
+	private boolean enchereIsNotEnough (int montantEnchere, long idArticle, BusinessException be) {
+		if(this.enchereDAO.montantEnchereMax(idArticle)>=montantEnchere) {
+			be.add("Vous n'avez pas assez enchéri pour cette article");
+			return false;
+		}
+		return true;
+	}
+
 	
 //	@Override
 //	public void encherir(int montantEnchere, long idUtilisateur, long idArticle) throws BusinessException {
