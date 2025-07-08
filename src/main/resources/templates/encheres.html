@@ -112,6 +112,7 @@
               th:data-date-debut="${a.dateDebutEncheres}" 
               th:data-date-fin="${a.dateFinEncheres}"></span>
     </td>
+    
     <td th:text="${a.retrait?.rue + ' ' + a.retrait?.codePostal + ' ' + a.retrait?.ville}"></td>
 
     <td><a th:href="@{/encheres/profil(pseudo=${a.utilisateur.pseudo})}" th:text="${a.utilisateur.pseudo}"></a></td>
