@@ -11,36 +11,29 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import fr.eni.encheres.bll.EncheresService;
 import fr.eni.encheres.bll.UtilisateurService;
 
-import fr.eni.encheres.bll.contexte.ContexteService;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
-import fr.eni.encheres.dal.CategorieDAO;
 import fr.eni.encheres.exception.BusinessException;
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 
 @Controller
 @SessionAttributes({ "utilisateurEnSession", "categorieEnSession" })
 public class EncheresController {
 
-	private final UtilisateurController utilisateurController;
 
 	private EncheresService encheresService;
 	private UtilisateurService utilisateurService;
 
-	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService,
-			UtilisateurController utilisateurController) {
+	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService) {
 		this.encheresService = encheresService;
 		this.utilisateurService = utilisateurService;
-		this.utilisateurController = utilisateurController;
+
 	}
 
 	@GetMapping("/")
@@ -146,6 +139,7 @@ public class EncheresController {
 
 
 	        }catch (BusinessException e) {
+
 					e.getErrors().forEach(message->{
 						if(message.contains("Erreur_1")) {
 		                    bindingResult.rejectValue("Erreur1", "error.erreur1", message);
@@ -161,6 +155,7 @@ public class EncheresController {
 		                } else {
 		                    bindingResult.addError(new ObjectError("globalError", message));
 		                }
+
 					});
 					e.printStackTrace();
 				    return "redirect:/encheres/encherir?idArticle=" + idArticle;  
@@ -172,44 +167,6 @@ public class EncheresController {
 
     }
 
-//    @PostMapping("/encheres/vente")
-//    public String ventePost(@ModelAttribute Article article, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
-//                            @RequestParam("action") String action,
-//                            Model model) {
-//
-//        List<Categorie> categories = encheresService.consulterCategories();
-//        model.addAttribute("categorie", categories);
-//
-//        if ("categorieChoisie".equals(action)) {
-//            if (article.getCategorie() != null && article.getCategorie().getIdCategorie() > 0) {
-//                Categorie selectedCategorie = encheresService.consulterCategorieParId(article.getCategorie().getIdCategorie());
-//                article.setCategorie(selectedCategorie);
-//            }
-//            model.addAttribute("article", article);
-//            return "vente";
-//        }
-//
-//        if ("validerFormulaire".equals(action)) {
-//        	if(article.getCategorie()== null || article.getCategorie().getIdCategorie()==0) {
-//        		model.addAttribute("error", "veuillez selectionner une catégorie");
-//        		  model.addAttribute("article", article);
-//        		  return "vente";
-//        	}
-//        	
-//        		if (utilisateurEnSession == null || utilisateurEnSession.getIdUtilisateur()==0) {
-//        			return "redirect:/connexion";
-//        		}
-//        	article.setUtilisateur(utilisateurEnSession);
-//        	article.setEtatVente(1);
-//        	
-//            this.encheresService.creerVente(article);
-//            return "redirect:/encheres";
-//        }
-//        model.addAttribute("article", article);
-//        return "vente";
-//    }
-
-
 	@GetMapping("/encheres/vente")
 	public String vente(Model model) {
 		List<Categorie> categories = encheresService.consulterCategories();
@@ -219,6 +176,43 @@ public class EncheresController {
 		model.addAttribute("categorie", categories);
 		return "vente";
 	}
+
+    /*@PostMapping("/encheres/vente")
+    public String ventePost(@ModelAttribute Article article, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
+                            @RequestParam("action") String action,
+                            Model model) {
+
+        List<Categorie> categories = encheresService.consulterCategories();
+        model.addAttribute("categorie", categories);
+
+        if ("categorieChoisie".equals(action)) {
+            if (article.getCategorie() != null && article.getCategorie().getIdCategorie() > 0) {
+                Categorie selectedCategorie = encheresService.consulterCategorieParId(article.getCategorie().getIdCategorie());
+                article.setCategorie(selectedCategorie);
+            }
+            model.addAttribute("article", article);
+            return "vente";
+        }
+
+        if ("validerFormulaire".equals(action)) {
+        	if(article.getCategorie()== null || article.getCategorie().getIdCategorie()==0) {
+        		model.addAttribute("error", "veuillez selectionner une catégorie");
+        		  model.addAttribute("article", article);
+        		  return "vente";
+        	}
+        	
+        		if (utilisateurEnSession == null || utilisateurEnSession.getIdUtilisateur()==0) {
+        			return "redirect:/connexion";
+        		}
+        	article.setUtilisateur(utilisateurEnSession);
+        	article.setEtatVente(1);
+        	
+            this.encheresService.creerVente(article);
+            return "redirect:/encheres";
+        }
+        model.addAttribute("article", article);
+        return "vente";
+    }*/
 
 	@PostMapping("/encheres/vente")
 	public String creerArticle(@ModelAttribute Article article,

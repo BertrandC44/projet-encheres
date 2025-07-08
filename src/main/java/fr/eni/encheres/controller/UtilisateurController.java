@@ -57,10 +57,15 @@ public class UtilisateurController {
 	                    return "redirect:/encheres";
 
 	                } catch (BusinessException e) {
-	                    e.getErrors().forEach(m->{
-	                        ObjectError error = new ObjectError("globalError", m);
-	                        bindingResult.addError(error);
-	                    });
+	    	        	e.getErrors().forEach(message->{
+	    	        		if(message.contains("pseudo")) {
+	    	                    bindingResult.rejectValue("pseudo", "error.pseudo", message);
+	    	                } else if(message.contains("email")) {
+	    	                    bindingResult.rejectValue("email", "error.email", message);
+	    	                } else {
+	    	                    bindingResult.addError(new ObjectError("globalError", message));
+	    	                }
+	    				});
 	                    return "inscription";
 	                }
 	            }
@@ -118,10 +123,16 @@ public class UtilisateurController {
 	            return "redirect:/encheres";
 
 	        } catch (BusinessException e) {
-	            e.getErrors().forEach(message -> {
-	                ObjectError error = new ObjectError("globalError", message);
-	                bindingResult.addError(error);
-	            });
+	        	e.getErrors().forEach(message->{
+	        		if(message.contains("pseudo")) {
+	                    bindingResult.rejectValue("pseudo", "error.pseudo", message);
+	                } else if(message.contains("email")) {
+	                    bindingResult.rejectValue("email", "error.email", message);
+	                } else {
+	                    bindingResult.addError(new ObjectError("globalError", message));
+	                }
+				});
+	            
 	            return "modifier-profil";
 	        }
 	    }
