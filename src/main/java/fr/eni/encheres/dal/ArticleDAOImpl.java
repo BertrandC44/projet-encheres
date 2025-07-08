@@ -88,6 +88,7 @@ public class ArticleDAOImpl implements ArticleDAO {
         map.addValue("idCategorie", article.getCategorie().getIdCategorie());
         map.addValue("idUtilisateur", article.getUtilisateur().getIdUtilisateur());
 
+
 //        map.addValue("montantEnchere", article.getEncheres());
 
         this.jdbcTemplate.update(CREATE_ARTICLE, map,keyHolder);
@@ -186,10 +187,12 @@ public class ArticleDAOImpl implements ArticleDAO {
             a.setEtatVente(rs.getInt("etatVente"));
 
 
+
 //            //pour gérer la liste d'encheres
 //            if(a.getEncheres() == null) {
 //            	a.setEncheres(new ArrayList<Enchere>());
 //            }
+
 
             
             Categorie categorie = new Categorie();
@@ -208,9 +211,11 @@ public class ArticleDAOImpl implements ArticleDAO {
             a.setRetrait(retrait);
             
 
+
 //            Enchere enchere = new Enchere();
 //            enchere.setMontantEnchere(rs.getInt("montantEnchere"));
 //            a.getEncheres().add(enchere);
+
 
 
             // Supprimé la deuxième création de Utilisateur qui écrasait la première
