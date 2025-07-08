@@ -62,11 +62,11 @@
 			<span th:text="*{credit}" id="credit" disabled></span>
 			</li>
 			
-				
+			<th:block data-th-if="${utilisateurEnSession.idUtilisateur == utilisateur.idUtilisateur}">
 			<li>
 			<button type="submit" class="form-button">Modifier</button>
 			</li>
-			
+			</th:block>
 			
 		</ul>
 		

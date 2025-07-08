@@ -2,6 +2,7 @@ package fr.eni.encheres.dal;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
+import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Retrait;
 import fr.eni.encheres.bo.Utilisateur;
 
@@ -65,21 +67,25 @@ public class ArticleDAOImpl implements ArticleDAO {
 		return this.jdbcTemplate.queryForObject(FIND_BY_ID, map, new ArticleRowMapper());
 	}
 
-	@Override
-	public void creerVente(Article article) {
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-
-		MapSqlParameterSource map = new MapSqlParameterSource();
-		map.addValue("nomArticle", article.getNomArticle());
-		map.addValue("description", article.getDescription()); // corrigé ici
-		map.addValue("dateDebutEncheres", article.getDateDebutEncheres());
-		map.addValue("dateFinEncheres", article.getDateFinEncheres());
-		map.addValue("miseAPrix", article.getMiseAPrix());
-		map.addValue("prixVente", article.getPrixVente());
-		map.addValue("etatVente", article.getEtatVente());
-		map.addValue("idCategorie", article.getCategorie().getIdCategorie());
-		map.addValue("idUtilisateur", article.getUtilisateur().getIdUtilisateur());
-		this.jdbcTemplate.update(CREATE_ARTICLE, map, keyHolder);
+    @Override
+    public void creerVente(Article article) {
+    	KeyHolder keyHolder = new GeneratedKeyHolder();
+    	
+    	
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("nomArticle", article.getNomArticle());
+        map.addValue("description", article.getDescription()); // corrigé ici
+        map.addValue("dateDebutEncheres", article.getDateDebutEncheres());
+        map.addValue("dateFinEncheres", article.getDateFinEncheres());
+        map.addValue("miseAPrix", article.getMiseAPrix());
+        map.addValue("prixVente", article.getPrixVente());
+        map.addValue("etatVente", article.getEtatVente());
+        map.addValue("idCategorie", article.getCategorie().getIdCategorie());
+        map.addValue("idUtilisateur", article.getUtilisateur().getIdUtilisateur());
+        map.addValue("montantEnchere", article.getEncheres());
+        this.jdbcTemplate.update(CREATE_ARTICLE, map,keyHolder);
+       
+		
 
 		if (keyHolder != null && keyHolder.getKey() != null) {
 			// Mise à jour de l'identifiant du cours auto-généré par la base
@@ -156,44 +162,52 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 	
 	
-	// Garde une seule classe ArticleRowMapper corrigée
-	class ArticleRowMapper implements RowMapper<Article> {
 
-		@Override
-		public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Article a = new Article();
-			a.setIdArticle(rs.getLong("idArticle"));
-			a.setNomArticle(rs.getString("nomArticle"));
-			a.setDescription(rs.getString("description"));
-			a.setDateDebutEncheres(rs.getDate("dateDebutEncheres").toLocalDate());
-			a.setDateFinEncheres(rs.getDate("dateFinEncheres").toLocalDate());
-			a.setMiseAPrix(rs.getInt("miseAPrix"));
-			a.setPrixVente(rs.getInt("prixVente"));
-			a.setEtatVente(rs.getInt("etatVente"));
+    // Garde une seule classe ArticleRowMapper corrigée
+    class ArticleRowMapper implements RowMapper<Article> {
 
-			Categorie categorie = new Categorie();
-			categorie.setIdCategorie(rs.getInt("idCategorie"));
-			a.setCategorie(categorie);
+        @Override
+        public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Article a = new Article();
+            a.setIdArticle(rs.getLong("idArticle"));
+            a.setNomArticle(rs.getString("nomArticle"));
+            a.setDescription(rs.getString("description"));
+            a.setDateDebutEncheres(rs.getDate("dateDebutEncheres").toLocalDate());
+            a.setDateFinEncheres(rs.getDate("dateFinEncheres").toLocalDate());
+            a.setMiseAPrix(rs.getInt("miseAPrix"));
+            a.setPrixVente(rs.getInt("prixVente"));
+            a.setEtatVente(rs.getInt("etatVente"));
 
-			Utilisateur utilisateur = new Utilisateur();
-			utilisateur.setIdUtilisateur(rs.getInt("idUtilisateur"));
-			utilisateur.setPseudo(rs.getString("pseudo"));
-			a.setUtilisateur(utilisateur);
+            //pour gérer la liste d'encheres
+            if(a.getEncheres() == null) {
+            	a.setEncheres(new ArrayList<Enchere>());
+            }
+            
+            Categorie categorie = new Categorie();
+            categorie.setIdCategorie(rs.getInt("idCategorie"));
+            a.setCategorie(categorie);
 
-			Retrait retrait = new Retrait();
-			retrait.setRue(rs.getString("rue"));
-			retrait.setVille(rs.getString("ville"));
-			retrait.setCodePostal(rs.getString("codePostal"));
-			a.setRetrait(retrait);
+            Utilisateur utilisateur = new Utilisateur();
+            utilisateur.setIdUtilisateur(rs.getInt("idUtilisateur"));
+            utilisateur.setPseudo(rs.getString("pseudo"));
+            a.setUtilisateur(utilisateur);
 
-			// Supprimé la deuxième création de Utilisateur qui écrasait la première
+            Retrait retrait = new Retrait();
+            retrait.setRue(rs.getString("rue"));
+            retrait.setVille(rs.getString("ville"));
+            retrait.setCodePostal(rs.getString("codePostal"));
+            a.setRetrait(retrait);
+            
+            Enchere enchere = new Enchere();
+            enchere.setMontantEnchere(rs.getInt("montantEnchere"));
+            enchere.setDateEnchere(rs.getDate("dateEnchere").toLocalDate());
+            a.getEncheres().add(enchere);
 
-			return a;
-		}
-	}
+            // Supprimé la deuxième création de Utilisateur qui écrasait la première
 
-
-
+            return a;
+        }
+    }
 
 
 }
