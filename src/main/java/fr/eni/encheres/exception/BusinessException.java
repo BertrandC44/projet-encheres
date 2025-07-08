@@ -21,8 +21,7 @@ public class BusinessException extends Exception{
 	public boolean hasError() {
 		return errors.isEmpty();
 	}
-	
-	
+
 
 //	private List<String> messages;
 //
@@ -37,7 +36,6 @@ public class BusinessException extends Exception{
 //	public Iterable<String> getMessagesBE() {
 //		return messages;
 //	}
-
 
 
 }

@@ -73,11 +73,14 @@ public class EncheresController {
 
 		List<Categorie> categories = encheresService.consulterCategories();
 		List<Article> articles = new ArrayList<Article>();
+		
+		if (achats == null && ventes == null && categorie.equals("0") && motCle.equals("")) {
+					return "redirect:/encheres";	
+		}
 
 		if (utilisateurEnSession.getIdUtilisateur() != 0) {
 			if (achats != null) {
 				for (String a : achats) {
-					System.out.println("Filtre achat : " + a);
 					if ("eO".equals(a)) {
 						articles.addAll(encheresService
 								.consulterArticleEncheresEnCours(utilisateurEnSession.getIdUtilisateur()));
@@ -114,13 +117,11 @@ public class EncheresController {
 		}
 
 		if (categorie != null && categorie != "0") {
-			System.out.println(categorie);
 			articles.addAll(encheresService.consulterArticleParIdCategorie(Long.parseLong(categorie)));
 
 		}
-		System.out.println("motcle : " + motCle);
+
 		if (motCle != null && motCle != "") {
-			System.out.println("motcle : " + motCle);
 			articles.addAll(encheresService.consulterArticleParMotCle(motCle));
 
 		}
@@ -135,7 +136,6 @@ public class EncheresController {
 	public String encherir(@RequestParam(name = "idArticle") long idArticle, Model model,
 			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) {
 
-		System.out.println("l'id de l'article est :" + idArticle);
 		Article article = encheresService.consulterArticleParId(idArticle);
 		int montantMax = encheresService.montantMax(idArticle);
 		int enchereMin = montantMax + 1;
@@ -160,15 +160,17 @@ public class EncheresController {
 	public String encherirPost(@RequestParam(name = "montantEnchere") int montantEnchere,
 			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
 			@RequestParam(name = "idArticle") long idArticle, Model model, BindingResult bindingResult) {
+		
 		model.addAttribute("montantEnchere", montantEnchere);
 		model.addAttribute("utilisateurEnSession", utilisateurEnSession);
-		model.addAttribute("idArticle", idArticle);
+//		model.addAttribute("idArticle", idArticle);
 
 		Utilisateur utilisateur = utilisateurService
 				.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
 
 		if (bindingResult.hasErrors()) {
-			return "redirect:/encheres/encherir?idArticle=" + idArticle;
+			return "encherir";
+			//return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		} else {
 			System.out.println("id utilisateur= " + utilisateur.getIdUtilisateur());
 			System.out.println("Solde utilisateur= " + utilisateur.getCredit());
@@ -178,28 +180,29 @@ public class EncheresController {
 
 		
       
-      }catch (BusinessException e) {
+			}catch (BusinessException e) {
 
-					e.getErrors().forEach(message->{
-						if(message.contains("Erreur_1")) {
-		                    bindingResult.rejectValue("Erreur1", "error.erreur1", message);
-		                } else if(message.contains("Erreur_2")) {
-		                    bindingResult.rejectValue("Erreur2", "error.erreur2", message);
-		                } else if(message.contains("Erreur_3")) {
-		                    bindingResult.rejectValue("Erreur3", "error.erreur3", message);
-		                } else if(message.contains("Erreur_4")) {
-		                    bindingResult.rejectValue("Erreur2", "error.erreur4", message);
-		                
-		                
-		                
-		                } else {
-		                    bindingResult.addError(new ObjectError("globalError", message));
-		                }
 
-					});
-		
+//					e.getErrors().forEach(message->{
+//						if(message.contains("Erreur_1")) {
+//		                    bindingResult.rejectValue("erreurId", "error.erreurId", message);
+//		                } else if(message.contains("Erreur_2")) {
+//		                    bindingResult.rejectValue("erreurCredit", "error.erreurCredit", message);
+//		                } else if(message.contains("Erreur_3")) {
+//		                    bindingResult.rejectValue("erreurOpen", "error.erreurOpen", message);
+//		                } else if(message.contains("Erreur_4")) {
+//		                    bindingResult.rejectValue("erreurClose", "erreurClose", message);  
+//		                } else if(message.contains("Erreur_5")) {
+//		                    bindingResult.rejectValue("erreurVendeur", "erreurVendeur", message);   
+//		                    
+//		                } else {
+//		                    bindingResult.addError(new ObjectError("globalError", message));
+//		                }
+//
+//					});
+ 
 				}
-	        
+			model.addAttribute("utilisateur", utilisateur);
 	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		}  
 
