@@ -203,13 +203,13 @@ public class EncheresController {
 				article.setEtatVente(1);
 
 				this.encheresService.creerVente(article);
-				article.setCategorie(article.getCategorie());
-				article.setDateDebutEncheres(article.getDateDebutEncheres());
-				article.setDateFinEncheres(article.getDateFinEncheres());
-				article.setDescription(article.getDescription());
-				article.setMiseAPrix(article.getMiseAPrix());
-				article.setNomArticle(article.getNomArticle());
-				article.setRetrait(article.getRetrait());
+//				article.setCategorie(article.getCategorie());
+//				article.setDateDebutEncheres(article.getDateDebutEncheres());
+//				article.setDateFinEncheres(article.getDateFinEncheres());
+//				article.setDescription(article.getDescription());
+//				article.setMiseAPrix(article.getMiseAPrix());
+//				article.setNomArticle(article.getNomArticle());
+//				article.setRetrait(article.getRetrait());
 
 				return "redirect:/encheres";
 			}
