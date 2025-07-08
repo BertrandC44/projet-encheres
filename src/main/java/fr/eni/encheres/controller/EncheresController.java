@@ -253,7 +253,7 @@ public class EncheresController {
 		retrait.setCodePostal(codePostal);
 		article.setRetrait(retrait);
 		
-		/*if ("categorieChoisie".equals(action)) {
+		if ("categorieChoisie".equals(action)) {
 
 			if (article.getCategorie() != null && article.getCategorie().getIdCategorie() > 0) {
 
@@ -266,7 +266,7 @@ public class EncheresController {
 				return "vente";
 			}
 
-		}*/
+		}
 
 		if ("validerFormulaire".equals(action)) {
 			if (article.getCategorie() == null || article.getCategorie().getIdCategorie() == 0) {

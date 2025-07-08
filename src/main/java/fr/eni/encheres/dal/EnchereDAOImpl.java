@@ -87,6 +87,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 			}catch (EmptyResultDataAccessException e) {
 		return "pas d'encherisseur";
 		}
+
 	}
 
 	
@@ -132,3 +133,4 @@ public class EnchereDAOImpl implements EnchereDAO {
 	}
 
 }
+
