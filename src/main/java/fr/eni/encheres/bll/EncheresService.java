@@ -59,6 +59,10 @@ public interface EncheresService {
 	
 	List<Article> consulterArticleMesVentesTerminees(long idUtilisateur);
 	
+	List<Article> consulterArticleParIdCategorie(long idCategorie);
+	
+	List<Article> consulterArticleParMotCle(String motCle);
+	
 	
 	
 	
