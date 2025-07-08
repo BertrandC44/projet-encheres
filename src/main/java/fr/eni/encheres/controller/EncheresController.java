@@ -139,9 +139,23 @@ public class EncheresController {
 
 
 	        }catch (BusinessException e) {
-					e.getErrors().forEach(m->{
-						ObjectError error = new ObjectError("globalError", m);
-						bindingResult.addError(error);
+
+					e.getErrors().forEach(message->{
+						if(message.contains("Erreur_1")) {
+		                    bindingResult.rejectValue("Erreur1", "error.erreur1", message);
+		                } else if(message.contains("Erreur_2")) {
+		                    bindingResult.rejectValue("Erreur2", "error.erreur2", message);
+		                } else if(message.contains("Erreur_3")) {
+		                    bindingResult.rejectValue("Erreur3", "error.erreur3", message);
+		                } else if(message.contains("Erreur_4")) {
+		                    bindingResult.rejectValue("Erreur2", "error.erreur4", message);
+		                
+		                
+		                
+		                } else {
+		                    bindingResult.addError(new ObjectError("globalError", message));
+		                }
+
 					});
 					e.printStackTrace();
 				    return "redirect:/encheres/encherir?idArticle=" + idArticle;  
@@ -153,15 +167,15 @@ public class EncheresController {
 
     }
 
-    @GetMapping("/encheres/vente")
-    public String vente(Model model) {
-        List<Categorie> categories = encheresService.consulterCategories();
-        Article article = new Article();
-        article.setCategorie(new Categorie());
-        model.addAttribute("article", new Article());
-        model.addAttribute("categorie", categories);
-        return "vente";
-    }
+	@GetMapping("/encheres/vente")
+	public String vente(Model model) {
+		List<Categorie> categories = encheresService.consulterCategories();
+		Article article = new Article();
+		article.setCategorie(new Categorie());
+		model.addAttribute("article", new Article());
+		model.addAttribute("categorie", categories);
+		return "vente";
+	}
 
     /*@PostMapping("/encheres/vente")
     public String ventePost(@ModelAttribute Article article, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
@@ -199,7 +213,6 @@ public class EncheresController {
         model.addAttribute("article", article);
         return "vente";
     }*/
-
 
 	@PostMapping("/encheres/vente")
 	public String creerArticle(@ModelAttribute Article article,

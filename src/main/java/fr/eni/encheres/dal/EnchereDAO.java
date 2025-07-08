@@ -20,7 +20,11 @@ public interface EnchereDAO {
 	
 	long idUtilisateurMontantMax(long idArticle);
 	
+	long idUtilisateurARecrediter(long idArticle);
+	
 	void encherir(int montantEnchere, long idUtilisateur, long idArticle);
+	
+	int recrediter(long idArticle);
 	
 	Enchere consulterEnchereParId(long idArticle);
 	
