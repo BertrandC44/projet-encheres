@@ -160,14 +160,17 @@ public class EncheresServiceImpl implements EncheresService{
 		isValid &=isNotEnoughCredit(montantEnchere, idUtilisateur, be);
 		isValid &=isEnchereOpen(idArticle, be);
 		isValid &=isEnchereClose(idArticle, be);
+		isValid &=isNotSameEncherisseurVendeur(idArticle, idUtilisateur, be);
 		if (isValid) {
 			Utilisateur utilisateurMax = utilisateurDAO.utilisateurparId(idUtilisateur);
 			int newCredit = debiter(montantEnchere, utilisateurMax);
 			enchereDAO.encherir(montantEnchere, idUtilisateur, idArticle);
 			utilisateurDAO.majCredit(newCredit, idUtilisateur);
+			if (enchereDAO.nbEnchere(idArticle)!=0) {
 			Utilisateur utilisateurSecond = utilisateurDAO.utilisateurparId(enchereDAO.idUtilisateurARecrediter(idArticle));
 			int credit = utilisateurSecond.getCredit() + enchereDAO.recrediter(idArticle);
 			utilisateurDAO.majCredit(credit, utilisateurSecond.getIdUtilisateur());
+			}
 		} else {
 			throw be;
 		}
@@ -175,7 +178,7 @@ public class EncheresServiceImpl implements EncheresService{
 	
 	private boolean isNotSameEncherisseur (long idArticle, long idUtilisateur, BusinessException be) {
 		if(this.enchereDAO.idUtilisateurMontantMax(idArticle)==idUtilisateur) {
-			be.add("Erreur_1 : Vous êtes pour le moment le meilleur enchérisseur");
+			be.add("Vous êtes pour le moment le meilleur enchérisseur");
 			return false;
 		}
 		return true;
@@ -183,7 +186,7 @@ public class EncheresServiceImpl implements EncheresService{
 	
 	private boolean isNotEnoughCredit (int montantEnchere, long idUtilisateur, BusinessException be) {
 		if (montantEnchere>=this.utilisateurDAO.utilisateurparId(idUtilisateur).getCredit()) {
-			be.add("Erreur_2 : Vous n'avez pas assez de crédit pour enchérir !");
+			be.add("Vous n'avez pas assez de crédit pour enchérir !");
 			return false;
 		}
 		return true;
@@ -204,6 +207,14 @@ public class EncheresServiceImpl implements EncheresService{
 		LocalDate finEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
 		if (today.isAfter(finEnchereDate)) {
 			be.add("Les enchères sur cet article sont terminées.");
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean isNotSameEncherisseurVendeur (long idArticle, long idUtilisateur, BusinessException be) {
+		if(this.enchereDAO.idUtilisateurVendeur(idArticle)==idUtilisateur) {
+			be.add("Vous ne pouvez pas encherir sur votre article...");
 			return false;
 		}
 		return true;
