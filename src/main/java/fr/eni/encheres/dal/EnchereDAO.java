@@ -30,5 +30,9 @@ public interface EnchereDAO {
 	
 	String categorieArticle(long idArticle);
 	
+	public int nbEnchere(long idArticle);
+	
+	long idUtilisateurVendeur(long idArticle);
+	
 
 }

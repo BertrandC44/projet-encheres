@@ -23,13 +23,15 @@ public class EnchereDAOImpl implements EnchereDAO {
 	
 	private static final String FIND_ALL = "SELECT * FROM ENCHERE";
 	private static final String FIND_BY_ID = "SELECT * FROM ENCHERE WHERE idArticle = :idArticle";
+	private static final String FIND_ID_VENDEUR = "SELECT idUtilisateur FROM ARTICLE WHERE idArticle = :idArticle";
 
 	private static final String FIND_MONTANT_MAX = "SELECT MAX(montantEnchere) from ENCHERE WHERE idArticle=:idArticle";
 	private static final String FIND_MONTANT_SECOND = "SELECT montantEnchere FROM ENCHERE WHERE idArticle = :idArticle ORDER BY montantEnchere DESC OFFSET 1 ROW FETCH NEXT 1 ROWS ONLY";
 	private static final String FIND_UTILISATEUR_MAX = "SELECT U.pseudo	FROM ENCHERE E JOIN UTILISATEUR U ON E.idUtilisateur = U.idUtilisateur WHERE E.idArticle = :idArticle AND E.montantEnchere = (SELECT MAX(montantEnchere) FROM ENCHERE WHERE idArticle = :idArticle)";
 	private static final String FIND_IDUTILISATEUR_MAX = "SELECT U.idUtilisateur FROM ENCHERE E JOIN UTILISATEUR U ON E.idUtilisateur = U.idUtilisateur WHERE E.idArticle = :idArticle AND E.montantEnchere = (SELECT MAX(montantEnchere) FROM ENCHERE WHERE idArticle = :idArticle)";
 	private static final String FIND_IDUTILISATEUR_SECOND = "SELECT idUtilisateur FROM ENCHERE WHERE idArticle = :idArticle ORDER BY montantEnchere DESC OFFSET 1 ROW FETCH NEXT 1 ROWS ONLY";
-	
+	private static final String COUNT_ENCHERE = "SELECT count(idEnchere) FROM ENCHERE WHERE idArticle = :idArticle";
+
 	private static final String FIND_CATEGORIE = "SELECT C.libelle FROM CATEGORIE C JOIN ARTICLE A  ON A.idCategorie = C.idCategorie WHERE A.idArticle = :idArticle";
 	
 	private static final String INSERT_ENCHERE = "INSERT INTO ENCHERE (dateEnchere, montantEnchere, idUtilisateur, idArticle) VALUES (:dateEnchere, :montantEnchere, :idUtilisateur, :idArticle)";
@@ -87,6 +89,14 @@ public class EnchereDAOImpl implements EnchereDAO {
 		}
 	}
 
+	
+	public int nbEnchere(long idArticle) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idArticle", idArticle);
+		return this.namedParameterJdbcTemplate.queryForObject(COUNT_ENCHERE, map, Integer.class);
+	}
+	
+
 	@Override
 	public long idUtilisateurMontantMax(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -113,7 +123,12 @@ public class EnchereDAOImpl implements EnchereDAO {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idArticle", idArticle);
 		return this.namedParameterJdbcTemplate.queryForObject(FIND_MONTANT_SECOND, map, Integer.class);
-		
+	}
+	
+	public long idUtilisateurVendeur(long idArticle) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idArticle", idArticle);
+		return this.namedParameterJdbcTemplate.queryForObject(FIND_ID_VENDEUR, map, Integer.class);
 	}
 
 }
