@@ -194,7 +194,8 @@ public class EncheresController {
 //		                    bindingResult.rejectValue("erreurClose", "erreurClose", message);  
 //		                } else if(message.contains("Erreur_5")) {
 //		                    bindingResult.rejectValue("erreurVendeur", "erreurVendeur", message);   
-//		                    
+//              		} else if(message.contains("Erreur_6")) {
+//              			bindingResult.rejectValue("erreurEnchere", "erreurEnchere", message);		                    
 //		                } else {
 //		                    bindingResult.addError(new ObjectError("globalError", message));
 //		                }
@@ -304,7 +305,35 @@ public class EncheresController {
 		return new Utilisateur();
 	}
 
+<<<<<<< HEAD
+	@ModelAttribute("categorieEnSession")
+	public List<Categorie> chargerCategoriesEnSession() {
+		return this.encheresService.consulterCategories();	}
+=======
 
 	
+>>>>>>> c5f7bd3ae6f18609c2ab1e60ffc175b89ddb7e60
 
+//    @GetMapping("/encheres/acquisition")
+//    public String acquerir(@RequestParam(name="idArticle") long idArticle, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, Model model) {
+//
+//        Article article = encheresService.consulterArticleParId(idArticle);
+//       
+//        int montantMax = encheresService.montantMax(idArticle);
+//        
+//        string telephone = utilisateurEnSession.
+//
+//        String categorieArticle = encheresService.categorieArticle(idArticle);
+//        if (article != null) {
+//            model.addAttribute("article", article);
+//            model.addAttribute("montantMax", montantMax);
+//
+//            model.addAttribute("enchereMin", article.getMiseAPrix());
+//            model.addAttribute("categorieArticle", categorieArticle);
+//        }
+//        return "encherir";
+//    }
+	
+	
+	
 }

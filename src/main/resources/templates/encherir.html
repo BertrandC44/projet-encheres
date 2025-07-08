@@ -122,9 +122,14 @@
 			<li>
 				<label for="vendeur">Vendeur : </label>
 
-				<span><a id="utilisateur" th:text="${article.utilisateur.pseudo}"th:href="@{'/encheres/profil'(pseudo=${article.utilisateur.pseudo})}"></span></a>
+				<a id="utilisateur" th:text="${article.utilisateur.pseudo}"th:href="@{'/encheres/profil'(pseudo=${article.utilisateur.pseudo})}"></a>
 			</li>
-			<li data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}"></li>
+			<li >
+		<!--  		<div th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+				<p class="erreur" th:if="${#fields.hasErrors('erreurId')}" th:errors="*{erreurId}"></p> 
+ 				<p class="erreur" th:if="${#fields.hasErrors('erreurCredit')}" th:errors="*{erreurCredit}"></p> 
+ 				<p class="erreur" th:if="${#fields.hasErrors('erreurOpen')}" th:errors="*{erreurOpen}"></p> 
+ 				<p class="erreur" th:if="${#fields.hasErrors('erreurClose')}" th:errors="*{erreurClose}"></p>   -->
 
 				
 				<!--  <p class="erreur" th:if="${#fields.hasErrors('Erreur1')}" th:errors="*{Erreur1}"></p> 
@@ -137,8 +142,10 @@
 				<label for="montantEnchere">Ma proposition : </label>
 				<input type="number" id="montantEnchere"  name="montantEnchere" th:attr="min=${enchereMin}" th:value="${montantEnchere}" required>
 			</li>
-			<li>
-				<button type="submit" class="form-button" name="encherir">Enchérir</button>
+
+			<li >
+				<button type="submit" class="form-button" name="encherir" >Enchérir</button>
+
 			</li>	
 		</ul>
 	</form>

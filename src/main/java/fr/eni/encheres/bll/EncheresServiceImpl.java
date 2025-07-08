@@ -152,6 +152,7 @@ public class EncheresServiceImpl implements EncheresService{
 		isValid &=isEnchereOpen(idArticle, be);
 		isValid &=isEnchereClose(idArticle, be);
 		isValid &=isNotSameEncherisseurVendeur(idArticle, idUtilisateur, be);
+		isValid &=enchereIsNotEnough(montantEnchere, idArticle, be);
 
 		if (isValid) {
 			Utilisateur utilisateurMax = utilisateurDAO.utilisateurparId(idUtilisateur);
@@ -208,6 +209,15 @@ public class EncheresServiceImpl implements EncheresService{
 	private boolean isNotSameEncherisseurVendeur (long idArticle, long idUtilisateur, BusinessException be) {
 		if(this.enchereDAO.idUtilisateurVendeur(idArticle)==idUtilisateur) {
 			be.add("Vous ne pouvez pas encherir sur votre article...");
+			return false;
+		}
+		return true;
+	}
+
+	
+	private boolean enchereIsNotEnough (int montantEnchere, long idArticle, BusinessException be) {
+		if(this.enchereDAO.montantEnchereMax(idArticle)>=montantEnchere) {
+			be.add("Vous n'avez pas assez enchéri pour cette article");
 			return false;
 		}
 		return true;
