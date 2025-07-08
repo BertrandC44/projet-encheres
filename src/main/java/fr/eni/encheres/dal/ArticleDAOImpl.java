@@ -22,10 +22,11 @@ import fr.eni.encheres.bo.Utilisateur;
 @Repository
 public class ArticleDAOImpl implements ArticleDAO {
 
+
 	private static final String FIND_ALL = "SELECT * FROM ARTICLE";
 	private static final String FIND_BY_ID = "SELECT * FROM ARTICLE INNER JOIN UTILISATEUR ON ARTICLE.idUtilisateur=utilisateur.idUtilisateur WHERE idArticle = :idArticle";
-	private static final String CREATE_ARTICLE = "INSERT INTO ARTICLE (nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, idCategorie, idUtilisateur) VALUES "
-			+ "(:nomArticle, :description, :dateDebutEncheres, :dateFinEncheres, :miseAPrix, :prixVente, :etatVente, :idCategorie, :idUtilisateur)";
+	private static final String CREATE_ARTICLE = "INSERT INTO ARTICLE (nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, idCategorie, idUtilisateur, montantEnchere) VALUES "
+			+ "(:nomArticle, :description, :dateDebutEncheres, :dateFinEncheres, :miseAPrix, :prixVente, :etatVente, :idCategorie, :idUtilisateur, :montantEnchere)";
 	private static final String DELETE_ARTICLE = "DELETE FROM ARTICLE WHERE idArticle = :idArticle";
 	// private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo,
 	// r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON
@@ -49,6 +50,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 	public ArticleDAOImpl(NamedParameterJdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
+
 
 	@Override
 	public List<Article> consulterArticles() {
@@ -200,7 +202,6 @@ public class ArticleDAOImpl implements ArticleDAO {
             
             Enchere enchere = new Enchere();
             enchere.setMontantEnchere(rs.getInt("montantEnchere"));
-            enchere.setDateEnchere(rs.getDate("dateEnchere").toLocalDate());
             a.getEncheres().add(enchere);
 
             // Supprimé la deuxième création de Utilisateur qui écrasait la première
