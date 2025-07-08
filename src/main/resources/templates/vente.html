@@ -14,7 +14,7 @@
   
   
   <!-- Formulaire 1 : choix de catégorie -->
- <form th:action="@{/encheres/vente}" method="post" th:object="${article}" class="login-form" enctype="multipart/form-data">
+ <form th:action="@{/encheres/vente}" method="post" th:object="${article}" class="login-form">
   <h2>Nouvelle vente</h2>
   <br>
  <ul class="form-list">
@@ -36,9 +36,11 @@
   	</li>-->
   	
   	
-  	
-	<!-- <label for="fichier">Fichier</label>
-   		 <input id="fichier" name="fichier" type="file"/> -->
+  	<!--  <li>
+	<label for="fichier">Fichier</label>
+   		<input type="file" id="fichier" name="fichier" th:field="*{image}>"
+   		<div class="preview"></div>
+   	</li> -->
     	
     	
     	
@@ -59,7 +61,7 @@
 -->
   	
   		<li>
-    		<label for="article">Article</label>
+    		<label for="article">Article : </label>
     		<input type="text" id="article" name="nomArticle" th:field="*{nomArticle}">
     		<br><br>
     	</li>
@@ -118,6 +120,33 @@
     </ul>
   </form>
 </main>
+
+
+<!--  <script>
+
+var input = document.querySelector("input");
+var preview = document.querySelector(".preview");
+
+input.addEventListener("change", viderAppercu);
+
+function viderAppercu() {
+  preview.innerHTML = "";
+
+  var fichierSelection = input.files;
+  if (fichierSelection.length === 0) {
+	return
+  }
+  
+  var fichier = fichierSelection[0];
+
+
+    var image = document.createElement("img");
+    image.src = window.URL.createObjectURL(fichier);
+    preview.appendChild(image);
+}
+
+</script>-->
+
 
 </body>
 </html>
