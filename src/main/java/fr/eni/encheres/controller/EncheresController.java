@@ -148,9 +148,23 @@ public class EncheresController {
 
 
 	        }catch (BusinessException e) {
-					e.getErrors().forEach(m->{
-						ObjectError error = new ObjectError("globalError", m);
-						bindingResult.addError(error);
+
+					e.getErrors().forEach(message->{
+						if(message.contains("Erreur_1")) {
+		                    bindingResult.rejectValue("Erreur1", "error.erreur1", message);
+		                } else if(message.contains("Erreur_2")) {
+		                    bindingResult.rejectValue("Erreur2", "error.erreur2", message);
+		                } else if(message.contains("Erreur_3")) {
+		                    bindingResult.rejectValue("Erreur3", "error.erreur3", message);
+		                } else if(message.contains("Erreur_4")) {
+		                    bindingResult.rejectValue("Erreur2", "error.erreur4", message);
+		                
+		                
+		                
+		                } else {
+		                    bindingResult.addError(new ObjectError("globalError", message));
+		                }
+
 					});
 					e.printStackTrace();
 				    return "redirect:/encheres/encherir?idArticle=" + idArticle;  
@@ -161,6 +175,7 @@ public class EncheresController {
 
 
     }
+
 
     @GetMapping("/encheres/vente")
     public String vente(@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, Model model) {
@@ -181,6 +196,9 @@ public class EncheresController {
         model.addAttribute("retrait", retrait);
         return "vente";
     }
+
+
+
 
 
     /*@PostMapping("/encheres/vente")
@@ -223,6 +241,7 @@ public class EncheresController {
 
 
 
+
     @GetMapping("/encheres/detail")
     public String afficherDetailEnchere(@RequestParam(name="id") long idArticle, Model model) {
         Article article = encheresService.consulterArticleParId(idArticle);
@@ -236,6 +255,7 @@ public class EncheresController {
     }
 
 	
+
 
 	@PostMapping("/encheres/vente")
 	public String creerArticle(@ModelAttribute Article article,
