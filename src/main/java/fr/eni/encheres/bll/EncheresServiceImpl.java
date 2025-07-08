@@ -116,15 +116,6 @@ public class EncheresServiceImpl implements EncheresService{
 	}
 
 	
-
-
-	@Override
-	public Article rechercheParMotCle(String motCle) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
 	@Override
 	public void creerVente(Article article) {
 		Categorie categorie= article.getCategorie();
@@ -160,6 +151,7 @@ public class EncheresServiceImpl implements EncheresService{
 		isValid &=isNotEnoughCredit(montantEnchere, idUtilisateur, be);
 		isValid &=isEnchereOpen(idArticle, be);
 		isValid &=isEnchereClose(idArticle, be);
+	
 		if (isValid) {
 			Utilisateur utilisateurMax = utilisateurDAO.utilisateurparId(idUtilisateur);
 			int newCredit = debiter(montantEnchere, utilisateurMax);
@@ -208,6 +200,8 @@ public class EncheresServiceImpl implements EncheresService{
 		}
 		return true;
 	}
+	
+
 	
 //	@Override
 //	public void encherir(int montantEnchere, long idUtilisateur, long idArticle) throws BusinessException {
