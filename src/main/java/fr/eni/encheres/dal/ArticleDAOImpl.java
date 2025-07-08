@@ -8,7 +8,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.incrementer.SybaseAnywhereMaxValueIncrementer;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import fr.eni.encheres.bo.Article;
@@ -80,6 +81,9 @@ public class ArticleDAOImpl implements ArticleDAO {
 
     @Override
     public void creerVente(Article article) {
+    	KeyHolder keyHolder = new GeneratedKeyHolder();
+    	
+    	
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("nomArticle", article.getNomArticle());
         map.addValue("description", article.getDescription()); // corrigé ici
@@ -90,7 +94,14 @@ public class ArticleDAOImpl implements ArticleDAO {
         map.addValue("etatVente", article.getEtatVente());
         map.addValue("idCategorie", article.getCategorie().getIdCategorie());
         map.addValue("idUtilisateur", article.getUtilisateur().getIdUtilisateur());
-        this.jdbcTemplate.update(CREATE_ARTICLE, map);
+        this.jdbcTemplate.update(CREATE_ARTICLE, map,keyHolder);
+       
+		
+		if (keyHolder != null && keyHolder.getKey() != null) {
+			// Mise à jour de l'identifiant du cours auto-généré par la base
+			article.setIdArticle(keyHolder.getKey().longValue());
+		}
+		
     }
 
     @Override

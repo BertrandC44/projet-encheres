@@ -2,6 +2,7 @@ package fr.eni.encheres.bll;
 
 import java.util.List;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -13,7 +14,7 @@ import fr.eni.encheres.exception.BusinessException;
 public class UtilisateurServiceImpl implements UtilisateurService{
 	
 	private UtilisateurDAO utilisateurDAO;
-
+	
 
 	public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO) {
 		this.utilisateurDAO = utilisateurDAO;
@@ -95,7 +96,8 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		isValid &= isPseudoModifierValide(utilisateur.getPseudo(), utilisateur, utilisateurEnsession,  be);
 		
 		if (isValid) {
-			utilisateurDAO.modifierUtilisateur(utilisateur);
+				utilisateurDAO.modifierUtilisateur(utilisateur);
+			
 		} else {
 			throw be;
 		}
@@ -127,7 +129,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	    if (Emailutilisateur == null || Emailutilisateur.getIdUtilisateur() == utilisateurEnSession.getIdUtilisateur()) {
 	    System.out.println("1");
 	    	return true; 
-	    }be.add("L'email \"" + email + "\" a déjà un compte associé");
+	    }be.add("L'email est déjà utilisé");
 	      System.out.println("2");
 	    return false;
 	    
@@ -148,7 +150,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	    if (Pseudoutilisateur == null || Pseudoutilisateur.getIdUtilisateur() == utilisateurEnSession.getIdUtilisateur()) {
 	      System.out.println("1");
 	    	return true;
-	    }be.add("Le pseudo \"" + pseudo + "\" a déjà un compte associé");
+	    }be.add("Le pseudo est déjà utilisé");
 	    System.out.println("2");
 	    return false;
 	}

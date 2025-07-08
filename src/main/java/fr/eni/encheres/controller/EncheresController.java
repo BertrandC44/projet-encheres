@@ -1,6 +1,5 @@
 package fr.eni.encheres.controller;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,18 +23,18 @@ import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.BusinessException;
 
 @Controller
-@SessionAttributes({"utilisateurEnSession","categorieEnSession"})
+@SessionAttributes({ "utilisateurEnSession", "categorieEnSession" })
 public class EncheresController {
 
 
-    private EncheresService encheresService;
-    private UtilisateurService utilisateurService;
+	private EncheresService encheresService;
+	private UtilisateurService utilisateurService;
 
-    public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService) {
-        this.encheresService = encheresService;
-        this.utilisateurService = utilisateurService;
-    }
+	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService) {
+		this.encheresService = encheresService;
+		this.utilisateurService = utilisateurService;
 
+	}
 
 	@GetMapping("/")
     public String index() {
@@ -128,17 +127,19 @@ public class EncheresController {
         model.addAttribute("idArticle", idArticle);
 
         Utilisateur utilisateur = utilisateurService.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
+
 		if (bindingResult.hasErrors()) {
 			return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		} else {
-	        System.out.println("id utilisateur= " + utilisateur.getIdUtilisateur());
-	        System.out.println("Solde utilisateur= " + utilisateur.getCredit());
-	        System.out.println("id article= " + idArticle);
-	        try {
+			System.out.println("id utilisateur= " + utilisateur.getIdUtilisateur());
+			System.out.println("Solde utilisateur= " + utilisateur.getCredit());
+			System.out.println("id article= " + idArticle);
+			try {
 				encheresService.encherir(montantEnchere, utilisateur.getIdUtilisateur(), idArticle);
 
+
 	        }catch (BusinessException e) {
-					e.getMessagesBE().forEach(m->{
+					e.getErrors().forEach(m->{
 						ObjectError error = new ObjectError("globalError", m);
 						bindingResult.addError(error);
 					});
@@ -162,7 +163,7 @@ public class EncheresController {
         return "vente";
     }
 
-    @PostMapping("/encheres/vente")
+    /*@PostMapping("/encheres/vente")
     public String ventePost(@ModelAttribute Article article, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
                             @RequestParam("action") String action,
                             Model model) {
@@ -197,21 +198,77 @@ public class EncheresController {
         }
         model.addAttribute("article", article);
         return "vente";
-    }
+    }*/
 
 
-    @GetMapping("/encheres/detail")
-    public String afficherDetailEnchere(@RequestParam(name="id") long idArticle, Model model) {
-        Article article = encheresService.consulterArticleParId(idArticle);
-        model.addAttribute("article", article);
-        return "enchere-en-cours";
-    }
+	@PostMapping("/encheres/vente")
+	public String creerArticle(@ModelAttribute Article article,
+			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
+			@RequestParam("action") String action, Model model) {
 
+		List<Categorie> categories = encheresService.consulterCategories();
+		model.addAttribute("categorie", categories);
 
-    @ModelAttribute("categorieEnSession")
-    public List<Categorie> chargerCategoriesEnSession() {
-        return this.encheresService.consulterCategories();
-    }
+		if ("categorieChoisie".equals(action)) {
+			if (article.getCategorie() != null && article.getCategorie().getIdCategorie() > 0) {
+
+				Categorie selectedCategorie = encheresService
+						.consulterCategorieParId(article.getCategorie().getIdCategorie());
+				article.setCategorie(selectedCategorie);
+			} else {
+
+				model.addAttribute("article", article);
+				return "vente";
+			}
+
+		}
+
+		if ("validerFormulaire".equals(action)) {
+			if (article.getCategorie() == null || article.getCategorie().getIdCategorie() == 0) {
+
+				model.addAttribute("error", "veuillez selectionner une catégorie");
+				model.addAttribute("article", article);
+				return "vente";
+			}
+
+			if (utilisateurEnSession == null || utilisateurEnSession.getIdUtilisateur() == 0) {
+
+				return "redirect:/connexion";
+			} else {
+
+				article.setUtilisateur(utilisateurEnSession);
+				article.setEtatVente(1);
+
+				this.encheresService.creerVente(article);
+//				article.setCategorie(article.getCategorie());
+//				article.setDateDebutEncheres(article.getDateDebutEncheres());
+//				article.setDateFinEncheres(article.getDateFinEncheres());
+//				article.setDescription(article.getDescription());
+//				article.setMiseAPrix(article.getMiseAPrix());
+//				article.setNomArticle(article.getNomArticle());
+//				article.setRetrait(article.getRetrait());
+
+				return "redirect:/encheres";
+			}
+
+		} else
+
+			model.addAttribute("article", article);
+
+		return "vente";
+
+	}
+
+	@GetMapping("/encheres/detail")
+	public String afficherDetailEnchere(@RequestParam(name = "id") long idArticle, Model model) {
+		Article article = encheresService.consulterArticleParId(idArticle);
+		model.addAttribute("article", article);
+		return "enchere-en-cours";
+	}
+
+	@ModelAttribute("categorieEnSession")
+	public List<Categorie> chargerCategoriesEnSession() {
+		return this.encheresService.consulterCategories();
+	}
 
 }
-

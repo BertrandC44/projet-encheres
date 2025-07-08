@@ -23,7 +23,7 @@ public class BusinessException extends Exception{
 	}
 	
 	
-	private List<String> messages;
+	/*private List<String> messages;
 
 	public BusinessException() {
 		this.messages = new ArrayList<String>();
@@ -35,7 +35,7 @@ public class BusinessException extends Exception{
 
 	public Iterable<String> getMessagesBE() {
 		return messages;
-	}
+	}*/
 
 
 

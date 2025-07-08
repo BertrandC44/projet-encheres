@@ -70,7 +70,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("pseudo", pseudo);
 		try {
-		return namedParameterJdbcTemplate.queryForObject(FIND_BY_PSEUDO, map, new BeanPropertyRowMapper<>(Utilisateur.class));
+			return namedParameterJdbcTemplate.queryForObject(FIND_BY_PSEUDO, map, new BeanPropertyRowMapper<>(Utilisateur.class));
 		} catch (EmptyResultDataAccessException e) {
 	        return null;
 	    }
