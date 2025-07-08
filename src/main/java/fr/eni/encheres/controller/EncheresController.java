@@ -1,7 +1,13 @@
 package fr.eni.encheres.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +17,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -67,11 +73,14 @@ public class EncheresController {
 
 		List<Categorie> categories = encheresService.consulterCategories();
 		List<Article> articles = new ArrayList<Article>();
+		
+		if (achats == null && ventes == null && categorie.equals("0") && motCle.equals("")) {
+					return "redirect:/encheres";	
+		}
 
 		if (utilisateurEnSession.getIdUtilisateur() != 0) {
 			if (achats != null) {
 				for (String a : achats) {
-					System.out.println("Filtre achat : " + a);
 					if ("eO".equals(a)) {
 						articles.addAll(encheresService
 								.consulterArticleEncheresEnCours(utilisateurEnSession.getIdUtilisateur()));
@@ -108,13 +117,11 @@ public class EncheresController {
 		}
 
 		if (categorie != null && categorie != "0") {
-			System.out.println(categorie);
 			articles.addAll(encheresService.consulterArticleParIdCategorie(Long.parseLong(categorie)));
 
 		}
-		System.out.println("motcle : " + motCle);
+
 		if (motCle != null && motCle != "") {
-			System.out.println("motcle : " + motCle);
 			articles.addAll(encheresService.consulterArticleParMotCle(motCle));
 
 		}
@@ -129,7 +136,6 @@ public class EncheresController {
 	public String encherir(@RequestParam(name = "idArticle") long idArticle, Model model,
 			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) {
 
-		System.out.println("l'id de l'article est :" + idArticle);
 		Article article = encheresService.consulterArticleParId(idArticle);
 		int montantMax = encheresService.montantMax(idArticle);
 		int enchereMin = montantMax + 1;
@@ -154,15 +160,17 @@ public class EncheresController {
 	public String encherirPost(@RequestParam(name = "montantEnchere") int montantEnchere,
 			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
 			@RequestParam(name = "idArticle") long idArticle, Model model, BindingResult bindingResult) {
+		
 		model.addAttribute("montantEnchere", montantEnchere);
 		model.addAttribute("utilisateurEnSession", utilisateurEnSession);
-		model.addAttribute("idArticle", idArticle);
+//		model.addAttribute("idArticle", idArticle);
 
 		Utilisateur utilisateur = utilisateurService
 				.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
 
 		if (bindingResult.hasErrors()) {
-			return "redirect:/encheres/encherir?idArticle=" + idArticle;
+			return "encherir";
+			//return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		} else {
 			System.out.println("id utilisateur= " + utilisateur.getIdUtilisateur());
 			System.out.println("Solde utilisateur= " + utilisateur.getCredit());
@@ -172,7 +180,7 @@ public class EncheresController {
 
 		
       
-      }catch (BusinessException e) {
+			}catch (BusinessException e) {
 
 
 //					e.getErrors().forEach(message->{
@@ -204,11 +212,11 @@ public class EncheresController {
 
 
 	@GetMapping("/encheres/vente")
-	public String vente(@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, Model model) {
+	public String vente(@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,  Model model) {
 		List<Categorie> categories = encheresService.consulterCategories();
 		Article article = new Article();
 		article.setCategorie(new Categorie());
-
+		
 		model.addAttribute("utilisateur", utilisateurEnSession);
 		model.addAttribute("article", new Article());
 		model.addAttribute("categorie", categories);
@@ -240,14 +248,13 @@ public class EncheresController {
 		List<Categorie> categories = encheresService.consulterCategories();
 		model.addAttribute("categorie", categories);
 
-
 		Retrait retrait = new Retrait();
 		retrait.setRue(rue);
 		retrait.setVille(ville);
 		retrait.setCodePostal(codePostal);
 		article.setRetrait(retrait);
 		
-		/*if ("categorieChoisie".equals(action)) {
+		if ("categorieChoisie".equals(action)) {
 
 			if (article.getCategorie() != null && article.getCategorie().getIdCategorie() > 0) {
 
@@ -260,7 +267,7 @@ public class EncheresController {
 				return "vente";
 			}
 
-		}*/
+		}
 
 		if ("validerFormulaire".equals(action)) {
 			if (article.getCategorie() == null || article.getCategorie().getIdCategorie() == 0) {

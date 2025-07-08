@@ -5,12 +5,16 @@
 *{
 	margin: 0;
 }
-
+.entete a{
+	text-decoration:none;
+}
 a{
 	outline:none;
-	text-decoration:none;
-	color : black;
 	
+	color : black;
+	text-decoration: underline;
+	font-weight: bold;
+
 }
 
 h1,h2{
