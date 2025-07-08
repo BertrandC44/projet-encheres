@@ -111,6 +111,7 @@ public class EncheresServiceImpl implements EncheresService{
 	}catch (EmptyResultDataAccessException e) {
 		return null;
 	}
+	}
 
 	@Override
 	public Article rechercheParMotCle(String motCle) {

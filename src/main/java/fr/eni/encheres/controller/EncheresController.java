@@ -40,7 +40,7 @@ public class EncheresController {
         this.encheresService = encheresService;
         this.utilisateurService = utilisateurService;
 
-
+    }
 	@GetMapping("/")
     public String index() {
         System.out.println("Clic vers Index");
