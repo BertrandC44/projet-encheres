@@ -26,8 +26,8 @@ public class ArticleDAOImpl implements ArticleDAO {
 
     private static final String FIND_BY_ID = "SELECT * FROM ARTICLE INNER JOIN UTILISATEUR ON ARTICLE.idUtilisateur=utilisateur.idUtilisateur WHERE idArticle = :idArticle";
 
-    private static final String CREATE_ARTICLE = "INSERT INTO ARTICLE (nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, idCategorie, idUtilisateur) VALUES "
-            + "(:nomArticle, :description, :dateDebutEncheres, :dateFinEncheres, :miseAPrix, :prixVente, :etatVente, :idCategorie, :idUtilisateur)";
+    private static final String CREATE_ARTICLE = "INSERT INTO ARTICLE (nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, idCategorie, idUtilisateur, montantEnchere) VALUES "
+            + "(:nomArticle, :description, :dateDebutEncheres, :dateFinEncheres, :miseAPrix, :prixVente, :etatVente, :idCategorie, :idUtilisateur, :montantEnchere)";
 
     private static final String DELETE_ARTICLE = "DELETE FROM ARTICLE WHERE idArticle = :idArticle";
 
@@ -196,7 +196,6 @@ public class ArticleDAOImpl implements ArticleDAO {
             
             Enchere enchere = new Enchere();
             enchere.setMontantEnchere(rs.getInt("montantEnchere"));
-            enchere.setDateEnchere(rs.getDate("dateEnchere").toLocalDate());
             a.getEncheres().add(enchere);
 
             // Supprimé la deuxième création de Utilisateur qui écrasait la première
