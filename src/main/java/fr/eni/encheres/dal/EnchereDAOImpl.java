@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.hibernate.validator.cfg.context.ReturnValueConstraintMappingContext;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -66,19 +67,28 @@ public class EnchereDAOImpl implements EnchereDAO {
 
 	}
 
+	
 	@Override
 	public int montantEnchereMax(long idArticle) {
 		MapSqlParameterSource map= new MapSqlParameterSource();
 		map.addValue("idArticle", idArticle);
-		return this.namedParameterJdbcTemplate.queryForObject(FIND_MONTANT_MAX, map, Integer.class);
+		Integer montant = this.namedParameterJdbcTemplate.queryForObject(FIND_MONTANT_MAX, map, Integer.class);
+		//pour gérer s'il n'y a pas d'enchère (création de nouvel article)
+		return montant != null ? montant : 0;
 	}
-
+ 
 	@Override
 	public String utilisateurMontantMax(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idArticle", idArticle);
-		return this.namedParameterJdbcTemplate.queryForObject(FIND_UTILISATEUR_MAX, map, String.class);
+		//try catch pour gérer s'il n'y a pas encore d'enchérisseur (création de nouvel article)
+		try {
+				return namedParameterJdbcTemplate.queryForObject(FIND_UTILISATEUR_MAX, map, String.class);
+			}catch (EmptyResultDataAccessException e) {
+		return "pas d'encherisseur";
+		}
 	}
+
 	
 	public int nbEnchere(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -86,6 +96,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 		return this.namedParameterJdbcTemplate.queryForObject(COUNT_ENCHERE, map, Integer.class);
 	}
 	
+
 	@Override
 	public long idUtilisateurMontantMax(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
