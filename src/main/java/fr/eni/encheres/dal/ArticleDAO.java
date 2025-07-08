@@ -27,5 +27,9 @@ public interface ArticleDAO {
 	List<Article> consulterArticleMesVentesFutures(long idUtilisateur);
 	
 	List<Article> consulterArticleMesVentesTerminees(long idUtilisateur);
+	
+	List<Article> consulterArticleParCategorie(long idCategorie);
+	
+	List<Article> consulterArticleParMotCle(String motCle);
 
 }
