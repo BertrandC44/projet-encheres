@@ -24,7 +24,7 @@
 
 	
 	<form class="login-form" th:action="@{/encheres/encherir(idArticle=${article.idArticle})}" method="post" th:object=${enchere}>
-		<h1>Enchérir</h1>
+		<h1>Détail de la vente</h1>
 		<input type="hidden" name="idArticle" th:value="${article.idArticle}" />
 		  
 		<input type="hidden" name="dateEnchere" th:value="${dateEnchere}" /> 
@@ -34,10 +34,13 @@
 		<h2 th:text="${article.nomArticle}"></h2> 
 
 
-<!-- 		<p class="erreur" th:if="${#fields.hasErrors('encherir')}" th:errors="*{encherir}"></p>   -->
+ 		<!--  <p class="erreur" th:if="${#fields.hasErrors('encherir')}" th:errors="*{encherir}"></p>  -->
+		<ul>
+
 	
 
 		<ul class="form-list">
+
 
 			<li>
 			<img class="img-enchere" th:src="@{${'/images/'+ article.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
@@ -62,23 +65,69 @@
 			</li>
 			<li>
 				<label for="dateFinEncheres">Fin de l'enchère : </label>
-				<span id="dateFinEncheres" th:text="${#temporals.format(article.dateFinEncheres, 'dd/MM/yyyy')}"></span>
+	<!-- 			<span id="dateFinEncheres" th:text="${#temporals.format(article.dateFinEncheres, 'dd/MM/yyyy')}"></span>   -->
+				<span th:text="${#temporals.format(article.dateFinEncheres,'dd-MM-yyyy HH:mm')}"></span>
+				<span class="compte-rebours"
+            		  th:data-date-debut="${article.dateDebutEncheres}" 
+            		  th:data-date-fin="${article.dateFinEncheres}"></span>
+				 <script>
+ 
+				 	function startChrono(element){
+						const dateFin = new Date(element.dataset.dateFin);
+						const dateDebut = new Date(element.dataset.dateDebut);
+						
+						
+				 			function updateChrono(){
+								const maintenant = new Date();
+								
+								
+								if(maintenant < dateDebut){
+									element.textContent = "Enchère non commencée";
+									return;
+									}
+								const diff = dateFin - maintenant;
+								
+									if(diff<= 0){
+										element.textContent = "Enchère terminée";
+										return;
+										}
+									 const jours = Math.floor(diff / (1000 * 60 * 60 * 24));
+									    const heures = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+									    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+									    const secondes = Math.floor((diff % (1000 * 60)) / 1000);
+							
+							element.textContent=
+								`${jours}j   ${heures.toString().padStart(2,'0')}h   `+
+								`${minutes.toString().padStart(2,'0')}m   `+
+								`${secondes.toString().padStart(2,'0')}s`;
+								
+								
+				 	}
+				 			updateChrono();
+							        setInterval(updateChrono,1000);
+				 	}
+				 	document.addEventListener('DOMContentLoaded', () => {
+						const elements=document.querySelectorAll(".compte-rebours");
+						elements.forEach(el => startChrono(el));
+				 	});
+				
+				 	
+				 </script>
 			</li>
 			<li>
 				<label for="retrait">Retrait : </label>
-				<p type="text" id="retrait" th:text="${article.retrait.rue}"></p>
-				<p type="text" id="retrait" th:text="${article.retrait.codePostal} + ' ' + ${article.retrait.ville}" > </p>
+				<span type="text" id="retrait" th:text="${article.retrait.rue + '&nbsp;&nbsp; - &nbsp;&nbsp;' + article.retrait.codePostal + '&nbsp;&nbsp;' + article.retrait.ville}"></span>
 			</li>
 			<li>
 				<label for="vendeur">Vendeur : </label>
 				<span type="text" id="utilisateur" th:text="${article.utilisateur.pseudo}" > </span>
 			</li>
-			<li>
+			<li data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">
 				<label for="montantEnchere">Ma proposition : </label>
 				<input type="number" id="montantEnchere"  name="montantEnchere" th:attr="min=${enchereMin}" th:value="${montantEnchere}" required>
 			</li>
 			<li>
-				<button type="submit" class="form-button" name="encherir">Enchérir</button>
+				<button type="submit" class="form-button" name="encherir" data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">Enchérir</button>
 			</li>	
 		</ul>
 	</form>

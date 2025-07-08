@@ -1,5 +1,6 @@
 package fr.eni.encheres.bll;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -110,7 +111,6 @@ public class EncheresServiceImpl implements EncheresService{
 
 	}
 
-	
 
 	@Override
 	public Article rechercheParMotCle(String motCle) {
@@ -125,12 +125,8 @@ public class EncheresServiceImpl implements EncheresService{
 		articleDAO.creerVente(article);
 		
 		categorieDAO.consulterCategorieParId(categorie.getIdCategorie());
-		
 	
-		
 	}
-
-	
 
 	@Override
 	public void annulerVente(Article article) {
@@ -151,20 +147,84 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public void encherir(int montantEnchere, long idUtilisateur, long idArticle) throws BusinessException{
 		BusinessException be = new BusinessException();
-		Utilisateur utilisateur = utilisateurDAO.utilisateurparId(idUtilisateur);
-		try {
-			if (idUtilisateurMontantMax(idArticle)!=idUtilisateur) {
-				if (utilisateur.getCredit()>=montantEnchere) {
-					int solde = debiter(montantEnchere, utilisateur);
-					enchereDAO.encherir(montantEnchere, idUtilisateur, idArticle);
-					utilisateurDAO.majCredit(solde, idUtilisateur);
-				} be.add("Vous n'avez pas assez de crédit pour enchérir !");
-			}be.add("Vous êtes pour le moment le meilleur enchérisseur");
-		} catch (DataAccessException e) {
-
+		boolean isValid = isNotSameEncherisseur(idArticle, idUtilisateur, be);
+		isValid &=isNotEnoughCredit(montantEnchere, idUtilisateur, be);
+		isValid &=isEnchereOpen(idArticle, be);
+		isValid &=isEnchereClose(idArticle, be);
+		if (isValid) {
+			Utilisateur utilisateur = utilisateurDAO.utilisateurparId(idUtilisateur);
+			int solde = debiter(montantEnchere, utilisateur);
+			enchereDAO.encherir(montantEnchere, idUtilisateur, idArticle);
+			utilisateurDAO.majCredit(solde, idUtilisateur);
+		} else {
 			throw be;
 		}
 	}
+	
+	private boolean isNotSameEncherisseur (long idArticle, long idUtilisateur, BusinessException be) {
+		if(this.enchereDAO.idUtilisateurMontantMax(idArticle)==idUtilisateur) {
+			be.add("Vous êtes pour le moment le meilleur enchérisseur");
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean isNotEnoughCredit (int montantEnchere, long idUtilisateur, BusinessException be) {
+		if (this.utilisateurDAO.utilisateurparId(idUtilisateur).getCredit()>=montantEnchere) {
+			be.add("Vous n'avez pas assez de crédit pour enchérir !");
+			return false;
+		}
+		return true;
+	} 
+	
+	private boolean isEnchereOpen (long idArticle, BusinessException be) {
+		LocalDate today = LocalDate.now();
+		LocalDate debutEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
+		if (today.isAfter(debutEnchereDate)) {
+			be.add("Cet article n'est pas encore en mis en enchère.");
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean isEnchereClose (long idArticle, BusinessException be) {
+		LocalDate today = LocalDate.now();
+		LocalDate finEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
+		if (today.isBefore(finEnchereDate)) {
+			be.add("Les enchères sur cet article sont terminées.");
+			return false;
+		}
+		return true;
+	}
+	
+//	@Override
+//	public void encherir(int montantEnchere, long idUtilisateur, long idArticle) throws BusinessException {
+//	    BusinessException be = new BusinessException();
+//	    Utilisateur utilisateur = utilisateurDAO.utilisateurparId(idUtilisateur);
+//
+//	    if (idUtilisateurMontantMax(idArticle) == idUtilisateur) {
+//	        be.add("Vous êtes déjà le meilleur enchérisseur.");
+//	    }
+//
+//	    if (utilisateur.getCredit() < montantEnchere) {
+//	        be.add("Vous n'avez pas assez de crédit pour enchérir !");
+//	    }
+//
+//
+//	    if (be.hasError()) {
+//	        throw be;
+//	    }
+//
+//	    try {
+//	        int nouveauSolde = debiter(montantEnchere, utilisateur);
+//	        enchereDAO.encherir(montantEnchere, idUtilisateur, idArticle);
+//	        utilisateurDAO.majCredit(nouveauSolde, idUtilisateur);
+//	    } catch (DataAccessException e) {
+//	        // Erreur technique → tu peux logger ici aussi
+//	        throw new BusinessException("Erreur lors du traitement. Veuillez recommencer.");
+//	    }
+//	}
+
 
 	@Override
 	public int montantMax(long idArticle) {
