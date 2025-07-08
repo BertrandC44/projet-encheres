@@ -14,7 +14,7 @@
   
   
   <!-- Formulaire 1 : choix de catégorie -->
- <form th:action="@{/encheres/vente}" method="post" th:object="${article}" class="login-form">
+ <form th:action="@{/encheres/vente}" method="post" th:object="${article}" class="login-form" enctype="multipart/form-data">
   <h2>Nouvelle vente</h2>
   <br>
  <ul class="form-list">
@@ -28,13 +28,23 @@
             	th:text="${c.libelle}" >
     		</option>
     	
+    	
   		</select>
   	</li>
 
-  	<li th:if="${article.categorie != null}">
-   		<img th:src="@{'/images/' + ${article.categorie.image}}" alt="Image catégorie" width="150" />
-  	</li>
-
+  	<!-- <li th:if="${article.categorie != null}">
+   		<img th:src="@{'/images/' + ${article.categorie.image}}" alt="Image catégorie" width="150" /> 
+  	</li>-->
+  	
+  	
+  	
+	<!-- <label for="fichier">Fichier</label>
+   		 <input id="fichier" name="fichier" type="file"/> -->
+    	
+    	
+    	
+    	
+    	
 <!-- 
 	<li>
   		<button class="form-button" type="submit" name="action" value="categorieChoisie">Valider la catégorie</button>
@@ -84,7 +94,7 @@
 		<li>
     		
     		<label for="rue">Rue :</label>
-    		<input type="text" id="rue" name="retrait.rue" th:field="*{retrait.rue}">
+    		<input type="text" id="rue" th:field="*{retrait.rue}">
     		<br><br>
     	</li>
 

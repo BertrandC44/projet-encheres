@@ -19,7 +19,12 @@ import fr.eni.encheres.bll.UtilisateurService;
 
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
+import fr.eni.encheres.bo.Retrait;
 import fr.eni.encheres.bo.Utilisateur;
+
+import fr.eni.encheres.dal.ArticleDAO;
+import fr.eni.encheres.dal.CategorieDAO;
+
 import fr.eni.encheres.exception.BusinessException;
 
 @Controller
@@ -30,7 +35,11 @@ public class EncheresController {
 	private EncheresService encheresService;
 	private UtilisateurService utilisateurService;
 
-	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService) {
+
+
+	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService,
+			UtilisateurController utilisateurController) {
+
 		this.encheresService = encheresService;
 		this.utilisateurService = utilisateurService;
 
@@ -167,17 +176,33 @@ public class EncheresController {
 
     }
 
-	@GetMapping("/encheres/vente")
-	public String vente(Model model) {
-		List<Categorie> categories = encheresService.consulterCategories();
-		Article article = new Article();
-		article.setCategorie(new Categorie());
-		model.addAttribute("article", new Article());
-		model.addAttribute("categorie", categories);
-		return "vente";
-	}
+
+    @GetMapping("/encheres/vente")
+    public String vente(@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, Model model) {
+        List<Categorie> categories = encheresService.consulterCategories();
+        Article article = new Article();
+        article.setCategorie(new Categorie());
+        
+        Retrait retrait = new Retrait();
+        retrait.setRue(utilisateurEnSession.getRue());
+        retrait.setVille(utilisateurEnSession.getVille());
+        retrait.setCodePostal(utilisateurEnSession.getCodePostal());
+        article.setRetrait(retrait);
+        
+        
+        
+        model.addAttribute("article", new Article());
+        model.addAttribute("categorie", categories);
+        model.addAttribute("retrait", retrait);
+        return "vente";
+    }
+
+
+
+
 
     /*@PostMapping("/encheres/vente")
+
     public String ventePost(@ModelAttribute Article article, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
                             @RequestParam("action") String action,
                             Model model) {
@@ -214,6 +239,24 @@ public class EncheresController {
         return "vente";
     }*/
 
+
+
+
+    @GetMapping("/encheres/detail")
+    public String afficherDetailEnchere(@RequestParam(name="id") long idArticle, Model model) {
+        Article article = encheresService.consulterArticleParId(idArticle);
+        model.addAttribute("article", article);
+        return "enchere-en-cours";
+    }
+  
+    @ModelAttribute("categorieEnSession")
+    public List<Categorie> chargerCategoriesEnSession() {
+        return this.encheresService.consulterCategories();
+    }
+
+	
+
+
 	@PostMapping("/encheres/vente")
 	public String creerArticle(@ModelAttribute Article article,
 			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
@@ -221,8 +264,8 @@ public class EncheresController {
 
 		List<Categorie> categories = encheresService.consulterCategories();
 		model.addAttribute("categorie", categories);
-
-		if ("categorieChoisie".equals(action)) {
+		
+		/*if ("categorieChoisie".equals(action)) {
 			if (article.getCategorie() != null && article.getCategorie().getIdCategorie() > 0) {
 
 				Categorie selectedCategorie = encheresService
@@ -234,7 +277,7 @@ public class EncheresController {
 				return "vente";
 			}
 
-		}
+		}*/
 
 		if ("validerFormulaire".equals(action)) {
 			if (article.getCategorie() == null || article.getCategorie().getIdCategorie() == 0) {
@@ -272,16 +315,8 @@ public class EncheresController {
 
 	}
 
-	@GetMapping("/encheres/detail")
-	public String afficherDetailEnchere(@RequestParam(name = "id") long idArticle, Model model) {
-		Article article = encheresService.consulterArticleParId(idArticle);
-		model.addAttribute("article", article);
-		return "enchere-en-cours";
-	}
+	
 
-	@ModelAttribute("categorieEnSession")
-	public List<Categorie> chargerCategoriesEnSession() {
-		return this.encheresService.consulterCategories();
-	}
+	
 
 }

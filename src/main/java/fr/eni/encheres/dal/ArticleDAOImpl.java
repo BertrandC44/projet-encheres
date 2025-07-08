@@ -2,6 +2,7 @@ package fr.eni.encheres.dal;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
+import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Retrait;
 import fr.eni.encheres.bo.Utilisateur;
 
@@ -94,6 +96,7 @@ public class ArticleDAOImpl implements ArticleDAO {
         map.addValue("etatVente", article.getEtatVente());
         map.addValue("idCategorie", article.getCategorie().getIdCategorie());
         map.addValue("idUtilisateur", article.getUtilisateur().getIdUtilisateur());
+        map.addValue("montantEnchere", article.getEncheres());
         this.jdbcTemplate.update(CREATE_ARTICLE, map,keyHolder);
        
 		
@@ -171,6 +174,11 @@ public class ArticleDAOImpl implements ArticleDAO {
             a.setPrixVente(rs.getInt("prixVente"));
             a.setEtatVente(rs.getInt("etatVente"));
 
+            //pour gérer la liste d'encheres
+            if(a.getEncheres() == null) {
+            	a.setEncheres(new ArrayList<Enchere>());
+            }
+            
             Categorie categorie = new Categorie();
             categorie.setIdCategorie(rs.getInt("idCategorie"));
             a.setCategorie(categorie);
@@ -185,6 +193,11 @@ public class ArticleDAOImpl implements ArticleDAO {
             retrait.setVille(rs.getString("ville"));
             retrait.setCodePostal(rs.getString("codePostal"));
             a.setRetrait(retrait);
+            
+            Enchere enchere = new Enchere();
+            enchere.setMontantEnchere(rs.getInt("montantEnchere"));
+            enchere.setDateEnchere(rs.getDate("dateEnchere").toLocalDate());
+            a.getEncheres().add(enchere);
 
             // Supprimé la deuxième création de Utilisateur qui écrasait la première
 
