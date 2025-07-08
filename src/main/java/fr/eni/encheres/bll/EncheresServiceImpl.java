@@ -33,18 +33,14 @@ public class EncheresServiceImpl implements EncheresService{
 	private ArticleDAO articleDAO;
 	private UtilisateurDAO utilisateurDAO;
 
-	
-
-
-	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO, UtilisateurDAO utilisateurDAO) {
-	    this.enchereDAO = enchereDAO;
-	    this.categorieDAO = categorieDAO;
-	    this.articleDAO = articleDAO;
-	    this.utilisateurDAO = utilisateurDAO;
+	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO,
+			UtilisateurDAO utilisateurDAO) {
+		this.enchereDAO = enchereDAO;
+		this.categorieDAO = categorieDAO;
+		this.articleDAO = articleDAO;
+		this.utilisateurDAO = utilisateurDAO;
 	}
-
-
-
+	
 	// méthode pour assigner l'image en fonction de l'id de la catégorie
 	private void assignerImageCategorie(Categorie c) {
 	    if (c != null) {
@@ -112,6 +108,9 @@ public class EncheresServiceImpl implements EncheresService{
 	}catch (EmptyResultDataAccessException e) {
 		return null;
 	}
+
+	}
+
 
 	@Override
 	public Article rechercheParMotCle(String motCle) {
