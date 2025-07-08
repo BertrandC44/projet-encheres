@@ -2,6 +2,7 @@ package fr.eni.encheres.bll;
 
 import java.util.List;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -13,7 +14,7 @@ import fr.eni.encheres.exception.BusinessException;
 public class UtilisateurServiceImpl implements UtilisateurService{
 	
 	private UtilisateurDAO utilisateurDAO;
-
+	
 
 	public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO) {
 		this.utilisateurDAO = utilisateurDAO;
@@ -95,7 +96,8 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		isValid &= isPseudoModifierValide(utilisateur.getPseudo(), utilisateur, utilisateurEnsession,  be);
 		
 		if (isValid) {
-			utilisateurDAO.modifierUtilisateur(utilisateur);
+				utilisateurDAO.modifierUtilisateur(utilisateur);
+			
 		} else {
 			throw be;
 		}
@@ -123,11 +125,13 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 
 	@Override
 	public boolean isEmailModifierValide(String email, Utilisateur utilisateur, Utilisateur utilisateurEnSession, BusinessException be) {
-		Utilisateur utilisateurAvecEmail = utilisateurDAO.utilisateurparEmail(email);
-	    if (utilisateurAvecEmail == null || utilisateurAvecEmail.getIdUtilisateur() == utilisateurEnSession.getIdUtilisateur()) {
-	      return true; 
-	    }be.add("L'email \"" + email + "\" a déjà un compte associé");
-	      return false;
+		Utilisateur Emailutilisateur = utilisateurDAO.utilisateurparEmail(email);
+	    if (Emailutilisateur == null || Emailutilisateur.getIdUtilisateur() == utilisateurEnSession.getIdUtilisateur()) {
+	    System.out.println("1");
+	    	return true; 
+	    }be.add("L'email est déjà utilisé");
+	      System.out.println("2");
+	    return false;
 	    
 	}
 	
@@ -142,11 +146,13 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	
 	@Override
 	public boolean isPseudoModifierValide(String pseudo, Utilisateur utilisateur, Utilisateur utilisateurEnSession, BusinessException be) {
-		Utilisateur utilisateurAvecPseudo = utilisateurDAO.utilisateurParPseudo(pseudo);
-	    if (utilisateurAvecPseudo == null || utilisateurAvecPseudo.getIdUtilisateur() == utilisateurEnSession.getIdUtilisateur()) {
-	      return true;
-	    }be.add("Le pseudo \"" + pseudo + "\" a déjà un compte associé");
-	      return false;
+		Utilisateur Pseudoutilisateur = utilisateurDAO.utilisateurParPseudo(pseudo);
+	    if (Pseudoutilisateur == null || Pseudoutilisateur.getIdUtilisateur() == utilisateurEnSession.getIdUtilisateur()) {
+	      System.out.println("1");
+	    	return true;
+	    }be.add("Le pseudo est déjà utilisé");
+	    System.out.println("2");
+	    return false;
 	}
 	
 	@Override

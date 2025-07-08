@@ -11,36 +11,29 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import fr.eni.encheres.bll.EncheresService;
 import fr.eni.encheres.bll.UtilisateurService;
 
-import fr.eni.encheres.bll.contexte.ContexteService;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
-import fr.eni.encheres.dal.CategorieDAO;
 import fr.eni.encheres.exception.BusinessException;
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 
 @Controller
 @SessionAttributes({ "utilisateurEnSession", "categorieEnSession" })
 public class EncheresController {
 
-	private final UtilisateurController utilisateurController;
 
 	private EncheresService encheresService;
 	private UtilisateurService utilisateurService;
 
-	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService,
-			UtilisateurController utilisateurController) {
+	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService) {
 		this.encheresService = encheresService;
 		this.utilisateurService = utilisateurService;
-		this.utilisateurController = utilisateurController;
+
 	}
 
 	@GetMapping("/")
@@ -146,7 +139,7 @@ public class EncheresController {
 
 
 	        }catch (BusinessException e) {
-					e.getMessagesBE().forEach(m->{
+					e.getErrors().forEach(m->{
 						ObjectError error = new ObjectError("globalError", m);
 						bindingResult.addError(error);
 					});
@@ -170,7 +163,7 @@ public class EncheresController {
         return "vente";
     }
 
-    @PostMapping("/encheres/vente")
+    /*@PostMapping("/encheres/vente")
     public String ventePost(@ModelAttribute Article article, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
                             @RequestParam("action") String action,
                             Model model) {
@@ -205,32 +198,8 @@ public class EncheresController {
         }
         model.addAttribute("article", article);
         return "vente";
-    }
+    }*/
 
-
-    @GetMapping("/encheres/detail")
-    public String afficherDetailEnchere(@RequestParam(name="id") long idArticle, Model model) {
-        Article article = encheresService.consulterArticleParId(idArticle);
-        model.addAttribute("article", article);
-        return "enchere-en-cours";
-    }
-
-
-    @ModelAttribute("categorieEnSession")
-    public List<Categorie> chargerCategoriesEnSession() {
-        return this.encheresService.consulterCategories();
-    }
-
-
-	@GetMapping("/encheres/vente")
-	public String vente(Model model) {
-		List<Categorie> categories = encheresService.consulterCategories();
-		Article article = new Article();
-		article.setCategorie(new Categorie());
-		model.addAttribute("article", new Article());
-		model.addAttribute("categorie", categories);
-		return "vente";
-	}
 
 	@PostMapping("/encheres/vente")
 	public String creerArticle(@ModelAttribute Article article,

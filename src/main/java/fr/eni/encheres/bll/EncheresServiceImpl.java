@@ -108,8 +108,9 @@ public class EncheresServiceImpl implements EncheresService{
 	}catch (EmptyResultDataAccessException e) {
 		return null;
 	}
-
 	}
+
+	
 
 
 	@Override
