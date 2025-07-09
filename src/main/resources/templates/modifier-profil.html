@@ -11,7 +11,12 @@
 		<form class="login-form" th:action="@{/encheres/profil/modifier}" method="post" th:object=${utilisateur}>
 		<h2>Mon profil</h2><br>
 		<input type="hidden" th:field="*{idUtilisateur}" id="idUtilisateur" />
-		<p class="erreur" th:if="${#fields.hasErrors()}" th:text="#{error.message}" ></p><br>
+		<p class="erreur" th:if="${#fields.hasErrors()}" th:text="#{error.message}" ></p>
+
+			<div th:if="${#fields.hasErrors('global')}" class="erreur">
+            		<p th:errors="*{global}"></p>
+    		</div>
+		
 		
 		<ul class="form-list">
 		
