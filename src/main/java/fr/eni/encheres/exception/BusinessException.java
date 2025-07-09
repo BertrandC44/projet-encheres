@@ -22,9 +22,12 @@ public class BusinessException extends Exception{
 		return errors.isEmpty();
 	}
 
+<<<<<<< HEAD
 	public void addError(String message) {
 		errors.add(message);
 	}
+=======
+>>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 
 //	private List<String> messages;
 //

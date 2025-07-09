@@ -116,15 +116,6 @@ public class EncheresServiceImpl implements EncheresService{
 	}
 
 	
-
-
-	@Override
-	public Article rechercheParMotCle(String motCle) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
 	@Override
 	public void creerVente(Article article) {
 		Categorie categorie= article.getCategorie();
@@ -162,6 +153,7 @@ public class EncheresServiceImpl implements EncheresService{
 		isValid &=isEnchereClosed2(idArticle, be);
 		isValid &=isNotSameEncherisseurVendeur(idArticle, idUtilisateur, be);
 		isValid &=enchereIsNotEnough(montantEnchere, idArticle, be);
+
 		if (isValid) {
 			Utilisateur utilisateurMax = utilisateurDAO.utilisateurparId(idUtilisateur);
 			int newCredit = debiter(montantEnchere, utilisateurMax);
@@ -217,6 +209,7 @@ public class EncheresServiceImpl implements EncheresService{
 		return true;
 	}
 	
+<<<<<<< HEAD
 	@Override
 	public boolean isEnchereClosed (long idArticle) {
 		LocalDate today = LocalDate.now();
@@ -227,6 +220,9 @@ public class EncheresServiceImpl implements EncheresService{
 		return true;
 	}
 	
+=======
+
+>>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 	private boolean isNotSameEncherisseurVendeur (long idArticle, long idUtilisateur, BusinessException be) {
 		if(this.enchereDAO.idUtilisateurVendeur(idArticle)==idUtilisateur) {
 			be.add("Vous ne pouvez pas encherir sur votre article...");
@@ -234,6 +230,7 @@ public class EncheresServiceImpl implements EncheresService{
 		}
 		return true;
 	}
+
 	
 	private boolean enchereIsNotEnough (int montantEnchere, long idArticle, BusinessException be) {
 		if(this.enchereDAO.montantEnchereMax(idArticle)>=montantEnchere) {
