@@ -45,7 +45,7 @@
 			</li>
 			
 			<li>
-				<div th:if="${#fields.hasErrors('global')}" class="alert alert-danger">
+				<div th:if="${#fields.hasErrors('global')}" class="erreur">
 	        		<ul>
 	            		<li th:errors="*{global}"></li>
 	       			</ul>
@@ -80,9 +80,9 @@
 
 				<span type="text" id="telephone" th:text="${utilisateur.telephone}"></span>
 
- 
-			<li >
-				<button type="submit" class="form-button" name="retrait" >Retrait effectué</button>
+ 			</li>
+			<li th:switch="${utilisateurEnSession.idUtilisateur}">
+				<button type="submit" class="form-button" name="retrait" th:case="${idUtilisateurMontantMax}">Retrait effectué</button>
  
 			</li>	
 		</ul>

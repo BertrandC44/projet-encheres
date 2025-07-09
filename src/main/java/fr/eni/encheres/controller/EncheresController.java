@@ -205,10 +205,10 @@ public class EncheresController {
 				    return "encherir";
 
 
-
 				}
 			
 		}  
+
 
 	
 

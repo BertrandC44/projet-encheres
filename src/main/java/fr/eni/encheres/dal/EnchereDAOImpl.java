@@ -117,6 +117,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 	}
 
 	@Override
+
 	public int nbEnchere(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idArticle", idArticle);
