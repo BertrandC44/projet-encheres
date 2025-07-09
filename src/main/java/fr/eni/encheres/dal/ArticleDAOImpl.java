@@ -17,6 +17,10 @@ import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Retrait;
 import fr.eni.encheres.bo.Utilisateur;
 
+/**
+ * Implémentation du DAO pour la gestion des articles.
+ * Gère les opérations de création, consultation, suppression et recherches spécifiques.
+ */
 @Repository
 public class ArticleDAOImpl implements ArticleDAO {
 
@@ -49,22 +53,42 @@ public class ArticleDAOImpl implements ArticleDAO {
 
 	
 	private NamedParameterJdbcTemplate jdbcTemplate;
-
+	
+	/**
+     * Constructeur avec injection du NamedParameterJdbcTemplate.
+     * 
+     * @param jdbcTemplate Template JDBC avec nommage de paramètres.
+     */
 	public ArticleDAOImpl(NamedParameterJdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-
+	/**
+     * Retourne tous les articles sans détail utilisateur ou retrait.
+     * 
+     * @return Liste des articles.
+     */
 	@Override
 	public List<Article> consulterArticles() {
 		return this.jdbcTemplate.query(FIND_ALL, new BeanPropertyRowMapper<>(Article.class));
 	}
 
+	/**
+     * Retourne les articles avec informations de retrait et utilisateur.
+     * 
+     * @return Liste des articles enrichis.
+     */
 	@Override
 	public List<Article> consulterArticlePseudo() {
 		return jdbcTemplate.query(RETRAIT_UTILISATEUR, new ArticleRowMapper());
 	}
 
+	/**
+     * Retourne un article par son ID, avec utilisateur inclus.
+     * 
+     * @param id Identifiant de l'article.
+     * @return Article détaillé.
+     */
 	@Override
 	public Article consulterArticleParId(long id) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -72,6 +96,11 @@ public class ArticleDAOImpl implements ArticleDAO {
 		return this.jdbcTemplate.queryForObject(FIND_BY_ID, map, new ArticleRowMapper());
 	}
 
+	/**
+     * Crée un nouvel article en base, et récupère sa clé auto-générée.
+     * 
+     * @param article Article à insérer.
+     */
     @Override
     public void creerVente(Article article) {
     	KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -99,6 +128,11 @@ public class ArticleDAOImpl implements ArticleDAO {
 
 	}
 
+    /**
+     * Supprime un article de la base.
+     * 
+     * @param article Article à supprimer.
+     */
 	@Override
 	public void annulerVente(Article article) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -106,6 +140,12 @@ public class ArticleDAOImpl implements ArticleDAO {
 		this.jdbcTemplate.update(DELETE_ARTICLE, map);
 	}
 
+	 /**
+     * Retourne la liste des articles dont les enchères sont en cours, sauf pour le vendeur.
+     * 
+     * @param idUtilisateur ID du vendeur à exclure.
+     * @return Liste des articles ouverts aux enchères.
+     */
 	@Override
 	public List<Article> consulterArticleEncheresEnCours(long idUtilisateur) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -113,14 +153,25 @@ public class ArticleDAOImpl implements ArticleDAO {
 		return jdbcTemplate.query(FIND_ENCHERES_EN_COURS, map, new ArticleRowMapper());
 	}
 
-	@Override
+	/**
+     * Liste les articles sur lesquels l'utilisateur a enchéri et qui sont encore en cours.
+     * 
+     * @param idUtilisateur ID de l'acheteur.
+     * @return Liste d'articles.
+     */
+    @Override
 	public List<Article> consulterArticleMesEncheresEnCours(long idUtilisateur) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idUtilisateur", idUtilisateur);
 
 		return jdbcTemplate.query(FIND_MES_ENCHERES_EN_COURS, map, new ArticleRowMapper());
 	}
-
+    /**
+     * Liste les articles remportés par l'utilisateur.
+     * 
+     * @param idUtilisateur ID de l'acheteur.
+     * @return Articles remportés.
+     */
 	@Override
 	public List<Article> consulterArticleMesEncheresRemportees(long idUtilisateur) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -129,6 +180,12 @@ public class ArticleDAOImpl implements ArticleDAO {
 		return jdbcTemplate.query(FIND_MES_ENCHERES_REMPORTEES, map, new ArticleRowMapper());
 	}
 
+	/**
+     * Liste les articles que l'utilisateur a mis en vente et dont les enchères sont en cours.
+     * 
+     * @param idUtilisateur ID du vendeur.
+     * @return Liste des ventes en cours.
+     */
 	@Override
 	public List<Article> consulterArticleMesVentesEnCours(long idUtilisateur) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -136,6 +193,12 @@ public class ArticleDAOImpl implements ArticleDAO {
 		return jdbcTemplate.query(FIND_MES_VENTES_EN_COURS, map, new ArticleRowMapper());
 	}
 
+	/**
+     * Liste les ventes à venir pour l'utilisateur.
+     * 
+     * @param idUtilisateur ID du vendeur.
+     * @return Liste des ventes futures.
+     */
 	@Override
 	public List<Article> consulterArticleMesVentesFutures(long idUtilisateur) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -143,6 +206,12 @@ public class ArticleDAOImpl implements ArticleDAO {
 		return jdbcTemplate.query(FIND_MES_VENTES_A_VENIR, map, new ArticleRowMapper());
 	}
 
+	/**
+     * Liste les ventes terminées de l'utilisateur.
+     * 
+     * @param idUtilisateur ID du vendeur.
+     * @return Liste des ventes terminées.
+     */
 	@Override
 	public List<Article> consulterArticleMesVentesTerminees(long idUtilisateur) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -150,13 +219,25 @@ public class ArticleDAOImpl implements ArticleDAO {
 		return jdbcTemplate.query(FIND_MES_VENTES_TERMINEES, map, new ArticleRowMapper());
 	}
 	
+	/**
+     * Liste les articles par catégorie.
+     * 
+     * @param idCategorie ID de la catégorie.
+     * @return Liste des articles correspondants.
+     */
 	@Override
 	public List<Article> consulterArticleParCategorie(long idCategorie) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idCategorie", idCategorie);
 		return jdbcTemplate.query(FIND_BY_IDCATEGORIE, map, new ArticleRowMapper());
 	}
-
+	
+	/**
+     * Recherche d’articles par mot-clé sur le nom.
+     * 
+     * @param motCle Mot-clé recherché.
+     * @return Liste filtrée des articles.
+     */
 	@Override
 	public List<Article> consulterArticleParMotCle(String motCle) {
 		String contient = "%" + motCle + "%";
@@ -167,7 +248,9 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 	
 	
-
+	/**
+     * Mapper personnalisé pour transformer les lignes de résultats en objets Article.
+     */
     // Garde une seule classe ArticleRowMapper corrigée
     class ArticleRowMapper implements RowMapper<Article> {
 

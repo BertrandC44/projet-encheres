@@ -200,13 +200,8 @@ public class EncheresController {
 				}
 				    return "encherir";
 
-
-
-				}
-			model.addAttribute("utilisateur", utilisateurEnSession);
-
-	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
-		}  
+			}
+ 
 
 	}
 	

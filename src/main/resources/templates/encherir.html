@@ -93,14 +93,13 @@
 				<a id="utilisateur" th:text="${article.utilisateur.pseudo}"th:href="@{'/encheres/profil'(pseudo=${article.utilisateur.pseudo})}"></a>
 				</span>
 			</li>
-			<li >
-			    
-				<li>
+						    
+				<li th:if="${utilisateurEnSession.idUtilisateur != article.utilisateur.idUtilisateur}">
 				<label for="montantEnchere">Ma proposition : </label>
 				<input type="number" id="montantEnchere"  name="montantEnchere" th:attr="min=${enchereMin}" th:value="${montantEnchere}" required>
 				</li>
 
-			<li >
+			<li th:if="${utilisateurEnSession.idUtilisateur != article.utilisateur.idUtilisateur}">
 				<button type="submit" class="form-button" name="encherir" >Enchérir</button>
 
 			</li>	
