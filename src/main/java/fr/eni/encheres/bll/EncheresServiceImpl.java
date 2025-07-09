@@ -172,6 +172,7 @@ public class EncheresServiceImpl implements EncheresService{
 	private boolean isNotSameEncherisseur (long idArticle, long idUtilisateur, BusinessException be) {
 		if(this.enchereDAO.idUtilisateurMontantMax(idArticle)==idUtilisateur) {
 			be.add("Vous êtes pour le moment le meilleur enchérisseur");
+			System.out.println("Vous êtes pour le moment le meilleur enchérisseur");
 			return false;
 		}
 		return true;
