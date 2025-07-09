@@ -1,7 +1,7 @@
 -- Insertions utilisateurs
 
 INSERT INTO UTILISATEUR (pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, credit, administrateur) VALUES
-('abaille', 'Baille', 'Annelise', 'abaille@campus-eni.fr', '0601020304', '10 rue des Lilas', '75000', 'Paris', 'Annelise', 100, 0),
+('abaille', 'Baille', 'Annelise', 'abaille@campus-eni.fr', '0601020304', '10 rue des Lilas', '75000', 'Paris', 'Annelise10+', 100, 0),
 ('sgobin', 'Gobin', 'Stephane', 'sgobin@campus-eni.fr', '0605060708', '15 rue du Bac', '69000', 'Lyon', 'Stephane', 200, 1),
 ('jtrillard', 'Trillard', 'Julien', 'jtrillard@campus-eni.fr', '0608091011', '22 avenue Victor', '33000', 'Bordeaux', 'Julien', 150, 0),
 ('sdautais', 'Dautais', 'Servane', 'sdautais@campus-eni.fr', '0611121314', '5 boulevard Haussmann', '31000', 'Toulouse', 'Servane', 50, 0);
@@ -16,11 +16,11 @@ INSERT INTO CATEGORIE (libelle) VALUES
 
 -- Insertions articles
 
-INSERT INTO ARTICLE (nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, idCategorie, idUtilisateur) VALUES
-('Clavier', 'Clavier mécanique AZERTY', '2025-07-01', '2025-07-10', 50, 0, 0, 1, 1),
-('Chaise', 'Chaise en bois massif', '2025-06-25', '2025-07-05', 30, 0, 0, 2, 2),
-('Tondeuse', 'Tondeuse à gazon électrique', '2025-07-03', '2025-07-12', 100, 0, 0, 3, 3),
-('Raquette', 'Raquette de tennis neuve', '2025-07-02', '2025-07-15', 70, 0, 0, 4, 4);
+INSERT INTO ARTICLE (nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, idCategorie, idUtilisateur, imageArticle) VALUES
+('Clavier', 'Clavier mécanique AZERTY', '2025-07-01', '2025-07-10', 50, 0, 0, 1, 1, 'clavier.jpg'),
+('Chaise', 'Chaise en bois massif', '2025-06-25', '2025-07-05', 30, 0, 0, 2, 2, 'chaise-en-bois.jpg'),
+('Tondeuse', 'Tondeuse à gazon électrique', '2025-07-03', '2025-07-12', 100, 0, 0, 3, 3, 'tondeuse.png'),
+('Raquette', 'Raquette de tennis neuve', '2025-07-02', '2025-07-15', 70, 0, 0, 4, 4, 'tennis.png');
 
 -- Insertions retraits
 
