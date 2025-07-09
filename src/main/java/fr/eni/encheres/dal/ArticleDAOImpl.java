@@ -2,7 +2,6 @@ package fr.eni.encheres.dal;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
-import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Retrait;
 import fr.eni.encheres.bo.Utilisateur;
 
@@ -46,7 +44,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 	private static final String FIND_MES_VENTES_TERMINEES = "SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE dateFinEncheres<=GETDATE() AND a.idUtilisateur=:idUtilisateur";
 	private static final String FIND_BY_IDCATEGORIE = "SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE idCategorie=:idCategorie";
 	private static final String FIND_BY_MOT_CLE = "SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE nomArticle LIKE :motCle";		
-	
+
 	//SELECT * FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE a.idArticle =6
 
 	
@@ -185,7 +183,6 @@ public class ArticleDAOImpl implements ArticleDAO {
             a.setPrixVente(rs.getInt("prixVente"));
             a.setEtatVente(rs.getInt("etatVente"));
 
-            
             Categorie categorie = new Categorie();
             categorie.setIdCategorie(rs.getInt("idCategorie"));
             a.setCategorie(categorie);
@@ -201,7 +198,6 @@ public class ArticleDAOImpl implements ArticleDAO {
             retrait.setCodePostal(rs.getString("codePostal"));
             a.setRetrait(retrait);
             
-
             // Supprimé la deuxième création de Utilisateur qui écrasait la première
 
             return a;
