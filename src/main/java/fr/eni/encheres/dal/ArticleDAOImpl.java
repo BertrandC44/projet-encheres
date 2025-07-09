@@ -24,7 +24,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 
 
 	private static final String FIND_ALL = "SELECT * FROM ARTICLE";
-	private static final String FIND_BY_ID = "SELECT * FROM ARTICLE INNER JOIN UTILISATEUR ON ARTICLE.idUtilisateur=utilisateur.idUtilisateur WHERE idArticle = :idArticle";
+	private static final String FIND_BY_ID = "SELECT * FROM ARTICLE a JOIN RETRAIT r ON a.idArticle = r.idArticle JOIN UTILISATEUR u ON a.idUtilisateur=u.idUtilisateur WHERE a.idArticle = :idArticle";
 	private static final String CREATE_ARTICLE = "INSERT INTO ARTICLE (nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, idCategorie, idUtilisateur) VALUES "
 			+ "(:nomArticle, :description, :dateDebutEncheres, :dateFinEncheres, :miseAPrix, :prixVente, :etatVente, :idCategorie, :idUtilisateur)";
 	private static final String DELETE_ARTICLE = "DELETE FROM ARTICLE WHERE idArticle = :idArticle";
@@ -33,19 +33,19 @@ public class ArticleDAOImpl implements ArticleDAO {
 	// a.idUtilisateur = u.idUtilisateur LEFT JOIN RETRAIT r ON r.idArticle =
 	// a.idArticle";
 
-	private static final String FIND_BY_ID_USER = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE u.idUtilisateur=:idUtilisateur";
+	private static final String FIND_BY_ID_USER = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur WHERE u.idUtilisateur=:idUtilisateur";
 	private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle";
-	private static final String FIND_ENCHERES_EN_COURS = "SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE dateDebutEncheres<=GETDATE() AND dateFinEncheres>GETDATE() AND a.idUtilisateur<>:idUtilisateur";
+	private static final String FIND_ENCHERES_EN_COURS = "SELECT * FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur WHERE dateDebutEncheres<=GETDATE() AND dateFinEncheres>GETDATE() AND a.idUtilisateur<>:idUtilisateur";
 	private static final String FIND_MES_ENCHERES_EN_COURS = "  SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN ENCHERE e ON a.idArticle = e.idArticle\r\n"
 
 			+ "  WHERE dateDebutEncheres<=GETDATE() AND dateFinEncheres>GETDATE() and e.idUtilisateur =:idUtilisateur";
-	private static final String FIND_MES_ENCHERES_REMPORTEES = " SELECT TOP 1 * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur LEFT JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN ENCHERE e ON a.idArticle = e.idArticle\r\n"
+	private static final String FIND_MES_ENCHERES_REMPORTEES = " SELECT TOP 1 * FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN ENCHERE e ON a.idArticle = e.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur \r\n"
 			+ "  WHERE dateFinEncheres<=GETDATE() and e.idUtilisateur =:idUtilisateur";
 	private static final String FIND_MES_VENTES_EN_COURS = " SELECT * FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur WHERE dateDebutEncheres<=GETDATE() AND dateFinEncheres>GETDATE() AND a.idUtilisateur=:idUtilisateur";
-	private static final String FIND_MES_VENTES_A_VENIR = "SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE dateDebutEncheres>GETDATE() AND a.idUtilisateur=:idUtilisateur";
-	private static final String FIND_MES_VENTES_TERMINEES = "SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE dateFinEncheres<=GETDATE() AND a.idUtilisateur=:idUtilisateur";
-	private static final String FIND_BY_IDCATEGORIE = "SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE idCategorie=:idCategorie";
-	private static final String FIND_BY_MOT_CLE = "SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE nomArticle LIKE :motCle";		
+	private static final String FIND_MES_VENTES_A_VENIR = "SELECT * FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur WHERE dateDebutEncheres>GETDATE() AND a.idUtilisateur=:idUtilisateur";
+	private static final String FIND_MES_VENTES_TERMINEES = "SELECT * FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle  JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur WHERE dateFinEncheres<=GETDATE() AND a.idUtilisateur=:idUtilisateur";
+	private static final String FIND_BY_IDCATEGORIE = "SELECT * FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur WHERE idCategorie=:idCategorie";
+	private static final String FIND_BY_MOT_CLE = "SELECT * FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur WHERE nomArticle LIKE :motCle";		
 	
 	//SELECT * FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE a.idArticle =6
 
@@ -77,8 +77,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public void creerVente(Article article) {
     	KeyHolder keyHolder = new GeneratedKeyHolder();
-    	
-    	
+ 
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("nomArticle", article.getNomArticle());
         map.addValue("description", article.getDescription()); // corrigé ici

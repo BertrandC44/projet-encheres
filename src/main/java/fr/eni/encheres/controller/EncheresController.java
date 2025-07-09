@@ -1,27 +1,17 @@
 package fr.eni.encheres.controller;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
+
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import org.springframework.web.multipart.MultipartFile;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,9 +24,6 @@ import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Retrait;
 import fr.eni.encheres.bo.Utilisateur;
-
-import fr.eni.encheres.dal.ArticleDAO;
-import fr.eni.encheres.dal.CategorieDAO;
 
 import fr.eni.encheres.exception.BusinessException;
 
@@ -141,11 +128,14 @@ public class EncheresController {
 	public String encherir(@RequestParam(name = "idArticle") long idArticle, Model model,
 			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) {
 		
-		  Enchere enchere = new Enchere();
-		   model.addAttribute("enchere", enchere);
+		Enchere enchere = new Enchere();
+		model.addAttribute("enchere", enchere);
 
 		Article article = encheresService.consulterArticleParId(idArticle);
 		model.addAttribute("article", article);
+		
+//		Retrait retrait = encheresService.consulterArticleParId(idArticle).getRetrait();
+//		model.addAttribute("retrait",retrait);
 		
 		int montantMax = encheresService.montantMax(idArticle);
 		int enchereMin = montantMax + 1;

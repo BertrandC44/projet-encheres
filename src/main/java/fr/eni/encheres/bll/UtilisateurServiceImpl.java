@@ -72,8 +72,9 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	public void creerUtilisateur(Utilisateur utilisateur) throws BusinessException {
 		BusinessException be = new BusinessException();
 		
-		boolean isValid = isEmailValide(utilisateur.getEmail(), be);
-		isValid &= isPseudoValide(utilisateur.getPseudo(), be);
+		boolean isValid = isPseudoValide(utilisateur.getPseudo(), be);
+		isValid &= isEmailValide(utilisateur.getEmail(), be);
+		isValid &= isConfMdpValide(utilisateur, be);
 		
 		if(isValid) {
 			utilisateurDAO.creerUtilisateur(utilisateur);
@@ -153,10 +154,11 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	
 	@Override
 	public boolean isPseudoValide(String pseudo, BusinessException be) {
-		if(utilisateurDAO.isPseudoValide(pseudo)) {
-			return true;
-		}be.add("Le pseudo \"" + pseudo + "\" existe déjà");
-		return false;
+		if(!utilisateurDAO.isPseudoValide(pseudo)) {
+			be.add("Le pseudo \"" + pseudo + "\" existe déjà");
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -173,6 +175,15 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 			return true;
 		}be.add("Action non autorisée, vous n'êtes pas administrateur du site");
 		return false;
+	}
+	
+	@Override
+	public boolean isConfMdpValide(Utilisateur utilisateur, BusinessException be) {
+		if (!utilisateur.getConfMdp().equals(utilisateur.getMotDePasse())) {
+			be.add("La confirmation est différente du mot de passe saisi");
+            return false;
+        }
+		return true;
 	}
 
 //	@Override

@@ -58,13 +58,13 @@ public class UtilisateurController {
 
 	                } catch (BusinessException e) {
 	    	        	e.getErrors().forEach(message->{
-	    	        		if(message.contains("pseudo")) {
-	    	                    bindingResult.rejectValue("pseudo", "error.pseudo", message);
-	    	                } else if(message.contains("email")) {
-	    	                    bindingResult.rejectValue("email", "error.email", message);
-	    	                } else {
+//	    	        		if(message.contains("pseudo")) {
+//	    	                    bindingResult.rejectValue("pseudo", "error.pseudo", message);
+//	    	                } else if(message.contains("email")) {
+//	    	                    bindingResult.rejectValue("email", "error.email", message);
+//	    	                } else {
 	    	                    bindingResult.addError(new ObjectError("globalError", message));
-	    	                }
+//	    	                }
 	    				});
 	                    return "inscription";
 	                }
@@ -102,10 +102,10 @@ public class UtilisateurController {
 
 	    @PostMapping("encheres/profil/modifier")
 	    public String modifierProfil(@Valid @ModelAttribute Utilisateur utilisateur, BindingResult bindingResult, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) { 
-	        if (!utilisateur.getConfMdp().equals(utilisateur.getMotDePasse())) {
-	            bindingResult.rejectValue("confMdp", "password.mismatch", "La confirmation est différente du mot de passe saisi");
-	        }
-
+	        
+        	if (!utilisateur.getConfMdp().equals(utilisateur.getMotDePasse())) {
+            bindingResult.rejectValue("confMdp", "password.mismatch", "La confirmation est différente du mot de passe saisi");
+        }
 	        if (bindingResult.hasErrors()) {
 	            return "modifier-profil";
 	        }
@@ -124,14 +124,15 @@ public class UtilisateurController {
 	            return "redirect:/encheres";
 
 	        } catch (BusinessException e) {
+
 	        	e.getErrors().forEach(message->{
-	        		if(message.contains("pseudo")) {
-	                    bindingResult.rejectValue("pseudo", "error.pseudo", message);
-	                } else if(message.contains("email")) {
-	                    bindingResult.rejectValue("email", "error.email", message);
-	                } else {
+//	        		if(message.contains("pseudo")) {
+//	                    bindingResult.rejectValue("pseudo", "error.pseudo", message);
+//	                } else if(message.contains("email")) {
+//	                    bindingResult.rejectValue("email", "error.email", message);
+//	                } else {
 	                    bindingResult.addError(new ObjectError("globalError", message));
-	                }
+//	                }
 				});
 	            
 	            return "modifier-profil";
