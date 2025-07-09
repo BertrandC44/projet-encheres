@@ -21,6 +21,13 @@
 
 		<p class="erreur" th:if="${#fields.hasAnyErrors()}" th:text="#{error.message}" ></p>
 		
+		
+			<div th:if="${#fields.hasErrors('global')}" class="erreur">
+        		<ul>
+            		<li th:errors="*{global}"></li>
+       			</ul>
+    		</div>
+		
 		<ul class="form-list">
 			<p class="erreur" th:if="${#fields.hasErrors('pseudo')}" th:errors="*{pseudo}"></p>
 			<li class="form-input">

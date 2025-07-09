@@ -11,7 +11,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import fr.eni.encheres.bo.Utilisateur;
-import fr.eni.encheres.exception.BusinessException;
 
 @Repository
 public class UtilisateurDAOImpl implements UtilisateurDAO{

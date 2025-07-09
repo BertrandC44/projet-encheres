@@ -59,12 +59,16 @@ public interface EncheresService {
 	
 	List<Article> consulterArticleParMotCle(String motCle);
 
-	
 	public int nbEnchere(long idArticle);
 	
 	long idUtilisateurVendeur(long idArticle);
 	
 	boolean isEnchereClosed (long idArticle);
+
+	
+	void majEtatVente(long idArticle);
+
+
 
 
 }

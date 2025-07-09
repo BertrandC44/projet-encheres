@@ -21,28 +21,6 @@ public class BusinessException extends Exception{
 	public boolean hasError() {
 		return errors.isEmpty();
 	}
-
-
-	public void addError(String message) {
-		errors.add(message);
-	}
-
-
-//	private List<String> messages;
-//
-//	public BusinessException() {
-//		this.messages = new ArrayList<String>();
-//	}
-//
-//	public BusinessException(String string) {
-//		this.messages = new ArrayList<String>();
-//	}
-//
-//	public Iterable<String> getMessagesBE() {
-//		return messages;
-//	}
-
-
 }
 
 
