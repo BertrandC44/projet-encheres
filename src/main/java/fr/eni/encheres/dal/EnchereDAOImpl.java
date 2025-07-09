@@ -3,17 +3,13 @@ package fr.eni.encheres.dal;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.hibernate.validator.cfg.context.ReturnValueConstraintMappingContext;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import fr.eni.encheres.bo.Enchere;
 
@@ -60,10 +56,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 		map.addValue("idArticle", idArticle);
 		return this.namedParameterJdbcTemplate.queryForObject(FIND_CATEGORIE, map, String.class);
 	}
-<<<<<<< HEAD
-=======
 
->>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 	
 	@Override
 	public int montantEnchereMax(long idArticle) {
@@ -73,11 +66,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 		//pour gérer s'il n'y a pas d'enchère (création de nouvel article)
 		return montant != null ? montant : 0;
 	}
-<<<<<<< HEAD
-	
-=======
- 
->>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
+
 	@Override
 	public String utilisateurMontantMax(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -91,17 +80,10 @@ public class EnchereDAOImpl implements EnchereDAO {
 
 	}
 
+
 	
-<<<<<<< HEAD
-=======
-	public int nbEnchere(long idArticle) {
-		MapSqlParameterSource map = new MapSqlParameterSource();
-		map.addValue("idArticle", idArticle);
-		return this.namedParameterJdbcTemplate.queryForObject(COUNT_ENCHERE, map, Integer.class);
-	}
 	
 
->>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 	@Override
 	public long idUtilisateurMontantMax(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -136,12 +118,14 @@ public class EnchereDAOImpl implements EnchereDAO {
 		return this.namedParameterJdbcTemplate.queryForObject(FIND_MONTANT_SECOND, map, Integer.class);
 	}
 	
+	@Override
 	public int nbEnchere(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idArticle", idArticle);
 		return this.namedParameterJdbcTemplate.queryForObject(COUNT_ENCHERE, map, Integer.class);
 	}
-		
+	
+
 	@Override
 	public long idUtilisateurVendeur(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();

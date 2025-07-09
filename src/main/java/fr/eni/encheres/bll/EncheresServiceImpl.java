@@ -35,10 +35,10 @@ public class EncheresServiceImpl implements EncheresService{
 	private ArticleDAO articleDAO;
 	private UtilisateurDAO utilisateurDAO;
 	private RetraitDAO retraitDAO;
+	private LocalDate today = LocalDate.now();
 
 	public EncheresServiceImpl(EnchereDAO enchereDAO, CategorieDAO categorieDAO, ArticleDAO articleDAO,
 			UtilisateurDAO utilisateurDAO, RetraitDAO retraitDAO) {
-
 		this.enchereDAO = enchereDAO;
 		this.categorieDAO = categorieDAO;
 		this.articleDAO = articleDAO;
@@ -147,6 +147,7 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public void encherir(int montantEnchere, long idUtilisateur, long idArticle) throws BusinessException{
 		BusinessException be = new BusinessException();
+		
 		boolean isValid = isNotSameEncherisseur(idArticle, idUtilisateur, be);
 		isValid &=isNotEnoughCredit(montantEnchere, idUtilisateur, be);
 		isValid &=isEnchereOpen(idArticle, be);
@@ -159,23 +160,20 @@ public class EncheresServiceImpl implements EncheresService{
 			int newCredit = debiter(montantEnchere, utilisateurMax);
 			enchereDAO.encherir(montantEnchere, idUtilisateur, idArticle);
 			utilisateurDAO.majCredit(newCredit, idUtilisateur);
-			if (enchereDAO.nbEnchere(idArticle)!=0) {
-			Utilisateur utilisateurSecond = utilisateurDAO.utilisateurparId(enchereDAO.idUtilisateurARecrediter(idArticle));
-			int credit = utilisateurSecond.getCredit() + enchereDAO.recrediter(idArticle);
-			utilisateurDAO.majCredit(credit, utilisateurSecond.getIdUtilisateur());
-			}
-		} else {
-			
-			be.addError("Vous n'avez pas assez de crédits.");
-			be.addError("L'enchère est déjà terminée.");
-			throw be;
-		
-		}
+				if (enchereDAO.nbEnchere(idArticle)!=0) {
+					Utilisateur utilisateurSecond = utilisateurDAO.utilisateurparId(enchereDAO.idUtilisateurARecrediter(idArticle));
+					int credit = utilisateurSecond.getCredit() + enchereDAO.recrediter(idArticle);
+					utilisateurDAO.majCredit(credit, utilisateurSecond.getIdUtilisateur());
+					}
+			} else {
+				throw be;
+				}
 	}
 	
 	private boolean isNotSameEncherisseur (long idArticle, long idUtilisateur, BusinessException be) {
 		if(this.enchereDAO.idUtilisateurMontantMax(idArticle)==idUtilisateur) {
 			be.add("Vous êtes pour le moment le meilleur enchérisseur");
+			System.out.println("Vous êtes pour le moment le meilleur enchérisseur");
 			return false;
 		}
 		return true;
@@ -188,11 +186,11 @@ public class EncheresServiceImpl implements EncheresService{
 		}
 		return true;
 	} 
-	
+	 
 	private boolean isEnchereOpen (long idArticle, BusinessException be) {
-		LocalDate today = LocalDate.now();
-		LocalDate debutEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
-		if (today.isAfter(debutEnchereDate)) {
+		
+		LocalDate debutEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateDebutEncheres();
+		if (today.isBefore(debutEnchereDate)) {
 			be.add("Cet article n'est pas encore mis en enchère.");
 			return false;
 		}
@@ -200,7 +198,6 @@ public class EncheresServiceImpl implements EncheresService{
 	}
 	
 	private boolean isEnchereClosed2 (long idArticle, BusinessException be) {
-		LocalDate today = LocalDate.now();
 		LocalDate finEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
 		if (today.isAfter(finEnchereDate)) {
 			be.add("Les enchères sur cet article sont terminées.");
@@ -209,10 +206,9 @@ public class EncheresServiceImpl implements EncheresService{
 		return true;
 	}
 	
-<<<<<<< HEAD
+
 	@Override
 	public boolean isEnchereClosed (long idArticle) {
-		LocalDate today = LocalDate.now();
 		LocalDate finEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
 		if (today.isAfter(finEnchereDate)) {
 			return false;
@@ -220,9 +216,7 @@ public class EncheresServiceImpl implements EncheresService{
 		return true;
 	}
 	
-=======
 
->>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 	private boolean isNotSameEncherisseurVendeur (long idArticle, long idUtilisateur, BusinessException be) {
 		if(this.enchereDAO.idUtilisateurVendeur(idArticle)==idUtilisateur) {
 			be.add("Vous ne pouvez pas encherir sur votre article...");
