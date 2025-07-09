@@ -81,7 +81,6 @@ public class EnchereDAOImpl implements EnchereDAO {
 
 	}
 
-
 	@Override
 	public long idUtilisateurMontantMax(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();

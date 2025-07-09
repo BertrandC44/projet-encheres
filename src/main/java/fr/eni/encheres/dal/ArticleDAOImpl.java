@@ -94,7 +94,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 	public Article consulterArticleParId(long id) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idArticle", id);
-		return this.jdbcTemplate.queryForObject(FIND_BY_ID, map, new ArticleRowMapper());
+		return this.jdbcTemplate.queryForObject(FIND_BY_ID, map, new ArticleTelRowMapper());
 	}
 
 	/**
@@ -285,6 +285,43 @@ public class ArticleDAOImpl implements ArticleDAO {
 
             return a;
         }
+    }
+    
+    // Garde une seule classe ArticleRowMapper corrigée
+    class ArticleTelRowMapper implements RowMapper<Article> {
+    	
+    	@Override
+    	public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
+    		Article a = new Article();
+    		a.setIdArticle(rs.getLong("idArticle"));
+    		a.setNomArticle(rs.getString("nomArticle"));
+    		a.setDescription(rs.getString("description"));
+    		a.setDateDebutEncheres(rs.getDate("dateDebutEncheres").toLocalDate());
+    		a.setDateFinEncheres(rs.getDate("dateFinEncheres").toLocalDate());
+    		a.setMiseAPrix(rs.getInt("miseAPrix"));
+    		a.setPrixVente(rs.getInt("prixVente"));
+    		a.setEtatVente(rs.getInt("etatVente"));
+    		
+    		Categorie categorie = new Categorie();
+    		categorie.setIdCategorie(rs.getInt("idCategorie"));
+    		a.setCategorie(categorie);
+    		
+    		Utilisateur utilisateur = new Utilisateur();
+    		utilisateur.setIdUtilisateur(rs.getInt("idUtilisateur"));
+    		utilisateur.setPseudo(rs.getString("pseudo"));
+    		utilisateur.setTelephone(rs.getString("telephone"));
+    		a.setUtilisateur(utilisateur);
+    		
+    		Retrait retrait = new Retrait();
+    		retrait.setRue(rs.getString("rue"));
+    		retrait.setVille(rs.getString("ville"));
+    		retrait.setCodePostal(rs.getString("codePostal"));
+    		a.setRetrait(retrait);
+    		
+    		// Supprimé la deuxième création de Utilisateur qui écrasait la première
+    		
+    		return a;
+    	}
     }
 
 

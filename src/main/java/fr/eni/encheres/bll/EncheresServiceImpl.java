@@ -41,7 +41,7 @@ public class EncheresServiceImpl implements EncheresService{
 		this.utilisateurDAO = utilisateurDAO;
 		this.retraitDAO = retraitDAO;
 	}
-	
+
 	// méthode pour assigner l'image en fonction de l'id de la catégorie
 	
     /**
@@ -49,7 +49,6 @@ public class EncheresServiceImpl implements EncheresService{
      * 
      * @param c La catégorie à laquelle assigner une image.
      */
-p
 	private void assignerImageCategorie(Categorie c) {
 	    if (c != null) {
 	        switch ((int) c.getIdCategorie()) {
@@ -64,6 +63,7 @@ p
 	
 	
 
+
     /**
      * Retourne la liste de toutes les enchères disponibles.
      * 
@@ -76,13 +76,13 @@ p
 	}
 	
 
+
     /**
      * Retourne l'enchère liée à un article donné.
      * 
      * @param idArticle L'identifiant de l'article.
      * @return L'enchère correspondante ou null si non trouvée.
      */
-
 	@Override
 	public Enchere consulterEnchereParId(long idArticle) {
 	    return enchereDAO.consulterEnchereParId(idArticle);
@@ -94,7 +94,6 @@ p
      * 
      * @return Liste des catégories.
      */
-
 	@Override
 	public List<Categorie> consulterCategories() {
 	    List<Categorie> categories = categorieDAO.consulterCategories();
@@ -104,24 +103,24 @@ p
 	    return categories;
 	}
 
+
     /**
      * Retourne une catégorie par son identifiant.
      * 
      * @param idCategorie Identifiant de la catégorie.
      * @return La catégorie correspondante.
      */
-
 	@Override
 	public Categorie consulterCategorieParId(long idCategorie) {
 	    return categorieDAO.consulterCategorieParId(idCategorie);
 	}
+
 
     /**
      * Retourne la liste de tous les articles disponibles.
      * 
      * @return Liste des articles.
      */
-
 	@Override
 	public List<Article> consulterArticles() {
 	    List<Article> articles = articleDAO.consulterArticles();
@@ -137,7 +136,6 @@ p
      * 
      * @return Liste des articles.
      */
-
 	@Override
 	public List<Article> consulterArticlePseudo() {
 	    List<Article> articles = articleDAO.consulterArticlePseudo();
@@ -147,17 +145,15 @@ p
 	    return articles;
 	}
 	
-
     /**
      * Retourne un article par son identifiant.
      * 
      * @param idArticle Identifiant de l'article.
      * @return Article correspondant ou null si non trouvé.
      */
-
 	@Override
 	public Article consulterArticleParId(long idArticle) {
-		//pour éviter de renvoyer une erruer s'il n'y a pas d'id 
+		//pour éviter de renvoyer une erreur s'il n'y a pas d'id 
 	
 		try {
 	    Article article = articleDAO.consulterArticleParId(idArticle);
@@ -176,7 +172,6 @@ p
      * 
      * @param article L'article à vendre.
      */
-
 	@Override
 	public void creerVente(Article article) {
 		Categorie categorie= article.getCategorie();
@@ -189,17 +184,18 @@ p
 	}
 	
 
+
     /**
      * Annule une vente. (Méthode à implémenter)
      * 
      * @param article L'article dont la vente doit être annulée.
      */
-
 	@Override
 	public void annulerVente(Article article) {
 		// TODO Auto-generated method stub
 		
 	}
+
 
    /**
      * Débite le crédit d'un utilisateur après une enchère.
@@ -208,7 +204,6 @@ p
      * @param utilisateur Utilisateur à débiter.
      * @return Nouveau solde.
      */
-
 	@Override
 	public int debiter(int montantEnchere, Utilisateur utilisateur) {
 		int solde = utilisateur.getCredit();
@@ -258,13 +253,13 @@ p
 	}
 	
 
+
     /**
      * Vérifie si l'enchère est terminée pour un article donné.
      * 
      * @param idArticle ID de l'article.
      * @return true si encore ouverte, false sinon.
      */
-
 	private boolean isNotSameEncherisseur (long idArticle, long idUtilisateur, BusinessException be) {
 		if(this.enchereDAO.idUtilisateurMontantMax(idArticle)==idUtilisateur) {
 			be.add("Vous êtes pour le moment le meilleur enchérisseur");
@@ -274,6 +269,7 @@ p
 		return true;
 	}
 	
+
 	/**
 
      * Vérifie si l'utilisateur a suffisamment de crédit pour enchérir.
@@ -283,7 +279,6 @@ p
      * @param be Exception métier à enrichir.
      * @return true si le crédit est suffisant, false sinon.
      */
-
 	private boolean isNotEnoughCredit (int montantEnchere, long idUtilisateur, BusinessException be) {
 		if (montantEnchere>=this.utilisateurDAO.utilisateurparId(idUtilisateur).getCredit()) {
 			be.add("Vous n'avez pas assez de crédit pour enchérir !");
@@ -292,6 +287,7 @@ p
 		return true;
 	} 
 	 
+
 	/**
 
      * Vérifie si l'enchère est ouverte pour l'article donné.
@@ -300,7 +296,6 @@ p
      * @param be Exception métier à enrichir.
      * @return true si l'enchère est ouverte, false sinon.
      */
-
 	private boolean isEnchereOpen (long idArticle, BusinessException be) {
 		LocalDate debutEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateDebutEncheres();
 		if (today.isBefore(debutEnchereDate)) {
@@ -310,6 +305,7 @@ p
 		return true;
 	}
 
+
 	 /**
      * Vérifie si l'enchère est terminée pour l'article donné.
      * 
@@ -317,7 +313,6 @@ p
      * @param be Exception métier à enrichir.
      * @return true si l'enchère n'est pas terminée, false sinon.
      */
-
 	private boolean isEnchereClosed2 (long idArticle, BusinessException be) {
 		LocalDate finEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
 		if (today.isAfter(finEnchereDate)) {
@@ -333,6 +328,7 @@ p
      * @param idArticle ID de l'article.
      * @return true si l'enchère est encore en cours, false sinon.
      */
+
 
 	@Override
 	public boolean isEnchereClosed (long idArticle) {
