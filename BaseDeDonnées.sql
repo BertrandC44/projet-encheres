@@ -36,6 +36,7 @@ CREATE TABLE [ARTICLE](
 	[etatVente] int NOT NULL,
 	[idCategorie] int NOT NULL,
 	[idUtilisateur] int NOT NULL,
+	[imageArticle] [VARCHAR](250),
 	)
 
 
