@@ -1,41 +1,29 @@
 package fr.eni.encheres.controller;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import org.springframework.web.multipart.MultipartFile;
-
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import fr.eni.encheres.bll.EncheresService;
+import fr.eni.encheres.bll.ImageService;
 import fr.eni.encheres.bll.UtilisateurService;
-
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Retrait;
 import fr.eni.encheres.bo.Utilisateur;
 
-import fr.eni.encheres.dal.ArticleDAO;
-import fr.eni.encheres.dal.CategorieDAO;
 
 import fr.eni.encheres.exception.BusinessException;
 
@@ -46,10 +34,12 @@ public class EncheresController {
 
 	private EncheresService encheresService;
 	private UtilisateurService utilisateurService;
+	private ImageService imageService;
 
-	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService) {
+	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ImageService imageService) {
 		this.encheresService = encheresService;
 		this.utilisateurService = utilisateurService;
+		this.imageService = imageService;
 
 	}
 
@@ -179,8 +169,8 @@ public class EncheresController {
 //		model.addAttribute("utilisateurEnSession", utilisateurEnSession);
 //		
 
-//		Utilisateur utilisateur = utilisateurService
-//				.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
+		Utilisateur utilisateur = utilisateurService
+				.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
 
 		if (bindingResult.hasErrors()) {
 			
@@ -255,7 +245,8 @@ public class EncheresController {
 			model.addAttribute("utilisateur", utilisateurEnSession);
 
 	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
-		}  
+		} 
+	}
 
 
 
@@ -280,19 +271,14 @@ public class EncheresController {
         return "enchere-en-cours";
     }
   
-    @ModelAttribute("categorieEnSession")
-    public List<Categorie> chargerCategoriesEnSession() {
-        return this.encheresService.consulterCategories();
-    }
-
-	
-
+  
 
 	@PostMapping("/encheres/vente")
 	public String creerArticle(@ModelAttribute Article article,
 			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
 			@RequestParam("action") String action, Model model, @RequestParam(name = "rue") String rue,
-			@RequestParam(name = "codePostal") String codePostal, @RequestParam(name = "ville") String ville) {
+			@RequestParam(name = "codePostal") String codePostal, @RequestParam(name = "ville") String ville,
+			@RequestParam("file") MultipartFile file) {
 
 		List<Categorie> categories = encheresService.consulterCategories();
 		model.addAttribute("categorie", categories);
@@ -302,6 +288,7 @@ public class EncheresController {
 		retrait.setVille(ville);
 		retrait.setCodePostal(codePostal);
 		article.setRetrait(retrait);
+		
 		
 		if ("categorieChoisie".equals(action)) {
 

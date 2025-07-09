@@ -19,6 +19,7 @@ public class Article {
 	private Categorie categorie;
 	private Retrait retrait;
 	private List<Enchere> encheres = new ArrayList<Enchere>();
+	private String image;
 
 	
 
@@ -27,7 +28,7 @@ public class Article {
 
 	public Article(String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres,
 			int miseAPrix, int prixVente, int etatVente, Utilisateur utilisateur, Categorie categorie,
-			Retrait retrait) {
+			Retrait retrait, String image) {
 		this.nomArticle = nomArticle;
 		this.description = description;
 		this.dateDebutEncheres = dateDebutEncheres;
@@ -38,14 +39,15 @@ public class Article {
 		this.utilisateur = utilisateur;
 		this.categorie = categorie;
 		this.retrait = retrait;
+		this.image = image;
 
 	}
 
 	public Article(long idArticle, String nomArticle, String description, LocalDate dateDebutEncheres,
 			LocalDate dateFinEncheres, int miseAPrix, int prixVente, int etatVente, Utilisateur utilisateur,
-			Categorie categorie, Retrait retrait) {
+			Categorie categorie, Retrait retrait, String image) {
 		this(nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, utilisateur,
-				categorie, retrait);
+				categorie, retrait, image);
 		this.idArticle = idArticle;
 	}
 
@@ -143,6 +145,15 @@ public class Article {
 
 	public void setEncheres(List<Enchere> encheres) {
 		this.encheres = encheres;
+	}
+
+	
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	@Override
