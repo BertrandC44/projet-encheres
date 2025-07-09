@@ -28,7 +28,11 @@
 
 
 		<h1>Détail de la vente</h1>
+<<<<<<< HEAD
+<!--		<input type="hidden" name="idArticle" th:value="${article.idArticle}" /> -->
+=======
 		
+>>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 		  
 		<input type="hidden" name="dateEnchere" th:value="${dateEnchere}" /> 
 		
@@ -37,6 +41,17 @@
 		<input type="hidden" name="utilisateurEnSession" th:value="${utilisateurEnSession}" /> 
 		 -->
 		<h2 th:text="${article.nomArticle}"></h2> 
+<!-- 			<div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+			    <ul>
+			        <li th:each="err : ${#fields.globalErrors()}"
+			            th:text="${err.defaultMessage}">Erreur</li>
+			    </ul>  
+			</div>  -->
+
+
+
+			
+			
 
 		<ul class="form-list">
 
@@ -143,15 +158,45 @@
 			</li>
 			<li>
 				<label for="vendeur">Vendeur : </label>
+<<<<<<< HEAD
+				<span>
+=======
 
+>>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 				<a id="utilisateur" th:text="${article.utilisateur.pseudo}"th:href="@{'/encheres/profil'(pseudo=${article.utilisateur.pseudo})}"></a>
+				</span>
 			</li>
 			<li >
-		<!--  		<div th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+<!--  		    <div th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
 				<p class="erreur" th:if="${#fields.hasErrors('erreurId')}" th:errors="*{erreurId}"></p> 
  				<p class="erreur" th:if="${#fields.hasErrors('erreurCredit')}" th:errors="*{erreurCredit}"></p> 
  				<p class="erreur" th:if="${#fields.hasErrors('erreurOpen')}" th:errors="*{erreurOpen}"></p> 
  				<p class="erreur" th:if="${#fields.hasErrors('erreurClose')}" th:errors="*{erreurClose}"></p>   -->
+<<<<<<< HEAD
+						
+<!--  			    
+			   
+			    <div th:if="${#fields.hasErrors('montantEnchere')}" class="erreur-champ">
+			        <p th:each="err : ${#fields.errors('error.meilleur')}" th:text="${err}"></p>
+			    </div>
+			    <div th:if="${#fields.hasErrors('montantEnchere')}" class="erreur-champ">
+			        <p th:each="err : ${#fields.errors('error.credit')}" th:text="${err}"></p>
+			    </div>
+			    			    <div th:if="${#fields.hasErrors('montantEnchere')}" class="erreur-champ">
+			        <p th:each="err : ${#fields.errors('error.debut')}" th:text="${err}"></p>
+			    </div>
+			    			    <div th:if="${#fields.hasErrors('montantEnchere')}" class="erreur-champ">
+			        <p th:each="err : ${#fields.errors('error.fin')}" th:text="${err}"></p>
+			    </div>
+			    			    <div th:if="${#fields.hasErrors('montantEnchere')}" class="erreur-champ">
+			        <p th:each="err : ${#fields.errors('error.vendeur')}" th:text="${err}"></p>
+			    </div>
+			    			    <div th:if="${#fields.hasErrors('montantEnchere')}" class="erreur-champ">
+			        <p th:each="err : ${#fields.errors('error.montant')}" th:text="${err}"></p>
+			    </div>
+			
+-->
+=======
 
 
 			<li>
@@ -159,8 +204,13 @@
 
 				<li>
 
+>>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 				<label for="montantEnchere">Ma proposition : </label>
 				<input type="number" id="montantEnchere"  name="montantEnchere" th:attr="min=${enchereMin}" th:value="${montantEnchere}" required>
+				<form th:action="@{/encheres/encherir}" method="post" th:object="${enchereForm}">
+    <button type="submit">Enchérir</button>
+</form>
+				
 			</li>
 
 			<li >

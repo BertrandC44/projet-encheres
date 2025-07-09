@@ -32,7 +32,11 @@ public interface EncheresService {
 	int debiter(int montantEnchere, Utilisateur utilisateur);
 	
 	void encherir(int montantEnchere, long idUtilisateur, long idArticle ) throws BusinessException;
+<<<<<<< HEAD
+	
+=======
 
+>>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 	int montantMax(long idArticle);
 	
 	long idUtilisateurMontantMax(long idArticle);
@@ -58,6 +62,19 @@ public interface EncheresService {
 	List<Article> consulterArticleParIdCategorie(long idCategorie);
 	
 	List<Article> consulterArticleParMotCle(String motCle);
+<<<<<<< HEAD
+	
+	public int nbEnchere(long idArticle);
+	
+	long idUtilisateurVendeur(long idArticle);
+	
+	boolean isEnchereClosed (long idArticle);
+	
+	
+	
+	
+=======
 
+>>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 
 }

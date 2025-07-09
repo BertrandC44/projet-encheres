@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import fr.eni.encheres.bll.EncheresService;
-import fr.eni.encheres.bll.EncheresServiceImpl;
 import fr.eni.encheres.bll.UtilisateurService;
 
 import fr.eni.encheres.bo.Article;
@@ -189,39 +188,29 @@ public class EncheresController {
 			//return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		} else {
 			try {
-				encheresService.encherir(montantEnchere, utilisateurEnSession.getIdUtilisateur(), idArticle);
 
-		
-      
-			}catch (BusinessException e) {
+				encheresService.encherir(montantEnchere, utilisateur.getIdUtilisateur(), idArticle);
+			} catch (BusinessException e) {
+				    for (String message : e.getErrors()) {
+				        if (message.contains("meilleur enchérisseur")) {
+				        	bindingResult.rejectValue("montantEnchere", "error.meilleur", "Vous êtes pour le moment le meilleur enchérisseur");
+				        } else if (message.contains("crédit")) {
+				            bindingResult.rejectValue("montantEnchere", "error.credit", "Vous n'avez pas assez de crédit pour enchérir !");
+				        } else if (message.contains("pas encore mis en enchère") ){
+				            bindingResult.rejectValue("montantEnchere", "error.debut", "Cet article n'est pas encore mis en enchère.");
+				        } else if (message.contains("terminées")) {
+				            bindingResult.rejectValue("montantEnchere", "error.fin", "Les enchères sur cet article sont terminées.");
+				        } else if (message.contains("votre article")) {
+				            bindingResult.rejectValue("montantEnchere", "error.vendeur", "Vous ne pouvez pas encherir sur votre article...");
+				        } else if (message.contains("assez enchéri")) {
+				            bindingResult.rejectValue("montantEnchere", "error.montant", "Vous n'avez pas assez enchéri pour cette article");
+				        } else {
+				        	bindingResult.addError(new ObjectError("globalError", "Une erreur inconnue est survenue."));
+				        }
+				    }
+				    return "encherir";
 
-				e.getErrors().forEach(message->{
-					   if (message.contains("idArticle")) {
-				            redirectAttrs.addAttribute("idArticle", idArticle);
-				            redirectAttrs.addAttribute("errorIdArticle", "Vous êtes pour le moment le meilleur enchérisseur");
-				           
-		                    //bindingResult.rejectValue("idArticle", "error.idArticle", "Vous êtes pour le moment le meilleur enchérisseur");
-		                } else if(message.contains("Erreur_2")) {
-		                    bindingResult.rejectValue("erreurCredit", "error.erreurCredit", message);
-		                } else if(message.contains("Erreur_3")) {
-		                    bindingResult.rejectValue("erreurOpen", "error.erreurOpen", message);
-		                } else if(message.contains("Erreur_4")) {
-		                    bindingResult.rejectValue("erreurClose", "erreurClose", message);  
-		                } else if(message.contains("Erreur_5")) {
-		                    bindingResult.rejectValue("erreurVendeur", "erreurVendeur", message);   
-		                    
-		                } else {
-		                    bindingResult.addError(new ObjectError("globalError", message));
-		                }
-
-					});
-					model.addAttribute("idArticle", idArticle);
 					
-					redirectAttrs.addAttribute("idArticle",idArticle);
-					return "redirect:/encheres/encherir";
-					//return "redirect:/encheres/encherir?idArticle={idArticle}";
-							
-							
 							
 //					@RequestMapping(value = "/accounts", method = RequestMethod.POST)
 //					 public String handle(Account account, BindingResult result, RedirectAttributes redirectAttrs) {
@@ -264,11 +253,11 @@ public class EncheresController {
 
 				}
 			model.addAttribute("utilisateur", utilisateurEnSession);
+
 	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		}  
 
 
-    }
 
 
 	@GetMapping("/encheres/vente")
@@ -366,31 +355,39 @@ public class EncheresController {
 	}
 
 
+
 	@ModelAttribute("categorieEnSession")
 	public List<Categorie> chargerCategoriesEnSession() {
 		return this.encheresService.consulterCategories();	}
 
 
-//    @GetMapping("/encheres/acquisition")
-//    public String acquerir(@RequestParam(name="idArticle") long idArticle, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, Model model) {
-//
-//        Article article = encheresService.consulterArticleParId(idArticle);
-//       
-//        int montantMax = encheresService.montantMax(idArticle);
-//        
-//        string telephone = utilisateurEnSession.
-//
-//        String categorieArticle = encheresService.categorieArticle(idArticle);
-//        if (article != null) {
-//            model.addAttribute("article", article);
-//            model.addAttribute("montantMax", montantMax);
-//
-//            model.addAttribute("enchereMin", article.getMiseAPrix());
-//            model.addAttribute("categorieArticle", categorieArticle);
-//        }
-//        return "encherir";
-//    }
+
+	@GetMapping("/encheres/acquisition")
+	public String acquerir(@RequestParam(name = "idArticle") long idArticle, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, Model model) {
+
+		Article article = encheresService.consulterArticleParId(idArticle);
+		Utilisateur vendeur = utilisateurService.consulterUtilisateursParId(article.getUtilisateur().getIdUtilisateur());
+		System.out.println(article);
 	
+		if (encheresService.isEnchereClosed(idArticle)) {
+			if (utilisateurEnSession.getIdUtilisateur() != 0) {
+				if (article != null) {
+					model.addAttribute("article", article);
+					model.addAttribute("vendeur", vendeur);
+					model.addAttribute("montantMax", encheresService.montantMax(idArticle));
+					model.addAttribute("utilisateurMontantMax", encheresService.utilisateurMontantMax(idArticle));
+					if (utilisateurEnSession.getIdUtilisateur() == encheresService.idUtilisateurMontantMax(idArticle)) {
+						model.addAttribute("titreAcquereur", "Vous avez remporté l'enchère");
+					} else {
+						model.addAttribute("titre", "L'enchère a été remporté");
+					}
+					
+				}
+				return "acquisition";
 	
+			}
+		}
+		return "connexion";
+	}
 	
 }

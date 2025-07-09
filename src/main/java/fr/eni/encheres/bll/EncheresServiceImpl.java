@@ -150,7 +150,7 @@ public class EncheresServiceImpl implements EncheresService{
 		boolean isValid = isNotSameEncherisseur(idArticle, idUtilisateur, be);
 		isValid &=isNotEnoughCredit(montantEnchere, idUtilisateur, be);
 		isValid &=isEnchereOpen(idArticle, be);
-		isValid &=isEnchereClose(idArticle, be);
+		isValid &=isEnchereClosed2(idArticle, be);
 		isValid &=isNotSameEncherisseurVendeur(idArticle, idUtilisateur, be);
 		isValid &=enchereIsNotEnough(montantEnchere, idArticle, be);
 
@@ -165,7 +165,11 @@ public class EncheresServiceImpl implements EncheresService{
 			utilisateurDAO.majCredit(credit, utilisateurSecond.getIdUtilisateur());
 			}
 		} else {
+			
+			be.addError("Vous n'avez pas assez de crédits.");
+			be.addError("L'enchère est déjà terminée.");
 			throw be;
+		
 		}
 	}
 	
@@ -190,13 +194,13 @@ public class EncheresServiceImpl implements EncheresService{
 		LocalDate today = LocalDate.now();
 		LocalDate debutEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
 		if (today.isAfter(debutEnchereDate)) {
-			be.add("Cet article n'est pas encore en mis en enchère.");
+			be.add("Cet article n'est pas encore mis en enchère.");
 			return false;
 		}
 		return true;
 	}
 	
-	private boolean isEnchereClose (long idArticle, BusinessException be) {
+	private boolean isEnchereClosed2 (long idArticle, BusinessException be) {
 		LocalDate today = LocalDate.now();
 		LocalDate finEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
 		if (today.isAfter(finEnchereDate)) {
@@ -206,7 +210,20 @@ public class EncheresServiceImpl implements EncheresService{
 		return true;
 	}
 	
+<<<<<<< HEAD
+	@Override
+	public boolean isEnchereClosed (long idArticle) {
+		LocalDate today = LocalDate.now();
+		LocalDate finEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
+		if (today.isAfter(finEnchereDate)) {
+			return false;
+		}
+		return true;
+	}
+	
+=======
 
+>>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 	private boolean isNotSameEncherisseurVendeur (long idArticle, long idUtilisateur, BusinessException be) {
 		if(this.enchereDAO.idUtilisateurVendeur(idArticle)==idUtilisateur) {
 			be.add("Vous ne pouvez pas encherir sur votre article...");
@@ -345,6 +362,16 @@ public class EncheresServiceImpl implements EncheresService{
 	        assignerImageCategorie(a.getCategorie());
 	    }
 	    return articles;
+	}
+
+	@Override
+	public int nbEnchere(long idArticle) {
+		return enchereDAO.nbEnchere(idArticle);
+	}
+
+	@Override
+	public long idUtilisateurVendeur(long idArticle) {
+		return enchereDAO.idUtilisateurVendeur(idArticle);
 	}
 
 }

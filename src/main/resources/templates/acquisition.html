@@ -22,7 +22,7 @@
 <main>
 
 	
-	<form class="login-form" th:action="@{/encheres/encherir(idArticle=${article.idArticle})}" method="post" th:object=${enchere}>
+	<form class="login-form" th:action="@{/encheres/acquisition(idArticle=${article.idArticle})}" method="post" th:object="${article}">
 		<h1>Vous avez remporté l'enchère</h1>
 		<input type="hidden" name="idArticle" th:value="${article.idArticle}" />
 		  
@@ -43,19 +43,21 @@
 			</li>
 			<li>
 				<label for="miseAPrix">Mise à prix : </label>
-				<span type="text" id="miseAPrix" th:text="${article.miseAPrix} + ' points'" > </span>
+				<span type="text" id="miseAPrix" th:text="*{miseAPrix} + ' points'" > </span>
 			</li>
 			<li>
 				<label for="retrait">Retrait : </label>
-				<span type="text" id="retrait" th:text="${article.retrait.rue + '&nbsp;&nbsp; - &nbsp;&nbsp;' + article.retrait.codePostal + '&nbsp;&nbsp;' + article.retrait.ville}"></span>
+				<span type="text" id="retrait" th:text="*{retrait.rue + '&nbsp;&nbsp; - &nbsp;&nbsp;' + retrait.codePostal + '&nbsp;&nbsp;' + retrait.ville}"></span>
 			</li>
 			<li>
 				<label for="vendeur">Vendeur : </label>
-				<a id="utilisateur" th:text="${article.utilisateur.pseudo}"th:href="@{'/encheres/profil'(pseudo=${article.utilisateur.pseudo})}"></a>
+				<span>
+				<a id="utilisateur" th:text="*{utilisateur.pseudo}" th:href="@{'/encheres/profil'(pseudo=${article.utilisateur.pseudo})}"></a>
+				</span>
 			</li>
 			<li>
-				<label for="tel">Tel : </label>
-				<a id="utilisateur" th:text="${article.utilisateur.telephone}"></a>
+				<label for="telephone">Téléphone : </label>
+				<span type="text" id="retrait" th:text="${vendeur.telephone}"></span>
 			</li>			
 			<li >
 				<button type="submit" class="form-button" name="retrait" >Retrait effectué</button>
