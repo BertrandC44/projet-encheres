@@ -81,13 +81,6 @@ public class EnchereDAOImpl implements EnchereDAO {
 
 	}
 
-	public int nbEnchere(long idArticle) {
-		MapSqlParameterSource map = new MapSqlParameterSource();
-		map.addValue("idArticle", idArticle);
-		return this.namedParameterJdbcTemplate.queryForObject(COUNT_ENCHERE, map, Integer.class);
-	}
-
-
 	@Override
 	public long idUtilisateurMontantMax(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();

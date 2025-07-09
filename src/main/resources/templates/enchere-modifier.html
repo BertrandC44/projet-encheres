@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 
 
-<title>Enchères en cours</title>
+<title>Modifier enchère</title>
 
 
 
@@ -40,49 +40,41 @@
 			<li>
 			<img class="img-enchere" th:src="@{${'/images/'+ article.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
 			</li>
-			
+			<!-- 
 			<li>
 				<div th:if="${#fields.hasErrors('global')}" class="erreur">
+
 	        		<ul>
 	            		<li th:errors="*{global}"></li>
 	       			</ul>
 	    		</div>
-	    	</li>	
-	    		
+	    	</li>
+	    	 -->
+	    	
 			<li>
 				<label for="description">Description : </label>
-				<span type="text" id="description" th:text="${article.description}" ></span>
+				<input type="text" id="description" th:value="${article.description}">
 			</li>
 			
 			<li>
 				<label for="categorie">Catégorie : </label>
-				<span type="text" id="categorie" th:text="${categorieArticle}" ></span>
-			</li>
-			
-			<li>
-				<label for="mOffre">Meilleure offre : </label>
- 				<span type="text" id="mOffre" th:text="${montantMax} + ' points (' +  ${utilisateurMontantMax} + ')'" ></span>
+				<input type="text" id="categorie" th:value="${categorieArticle}" >
 			</li>
 			
 			<li>
 				<label for="miseAPrix">Mise à prix : </label>
-				<span type="text" id="miseAPrix" th:text="${article.miseAPrix} + ' points'" > </span>
+				<input type="text" id="miseAPrix" th:value="${article.miseAPrix}">
 			</li>
 			
 			<li>
 				<label for="dateFinEncheres">Fin de l'enchère : </label>
-				<span th:text="${#temporals.format(article.dateFinEncheres,'dd-MM-yyyy HH:mm')}"></span>
-				</li>
-				<li>
-				<label></label>
-				<span class="compte-rebours"
-            		  th:data-date-debut="${article.dateDebutEncheres}"
-            		  th:data-date-fin="${article.dateFinEncheres}"></span>
-            		</li>   
+				<input th:value="${#temporals.format(article.dateFinEncheres,'dd-MM-yyyy HH:mm')}">
+			</li>
+				  
 			
 			<li>
 				<label for="retrait">Retrait : </label>
-				<span type="text" id="retrait" th:text="${article.retrait.rue + '&nbsp;&nbsp; - &nbsp;&nbsp;' + article.retrait.codePostal + '&nbsp;&nbsp;' + article.retrait.ville}"></span>
+				<input type="text" id="retrait" th:value="${article.retrait.rue + '&nbsp;&nbsp; - &nbsp;&nbsp;' + article.retrait.codePostal + '&nbsp;&nbsp;' + article.retrait.ville}">
 			</li>
 			<li>
 				<label for="vendeur">Vendeur : </label>
@@ -103,8 +95,8 @@
 				<button type="submit" class="form-button" name="encherir" >Enchérir</button>
 			</li>
 					
-			<li th:if="${utilisateurEnSession.idUtilisateur == article.utilisateur.idUtilisateur and article.dateDebutEncheres.isAfter(dateActuelle) }">
-				<a th:href="@{/encheres/modifier(idArticle=${article.idArticle})}">
+			<li >
+				<a th:href="@{/encheres/modifier}">
 				<button type="button" class="form-button" name="modifier" >Modifier</button>
 				</a>
 			</li>
@@ -158,4 +150,4 @@
 				 </script>
 
 </body>
-</html>
+</html>>
