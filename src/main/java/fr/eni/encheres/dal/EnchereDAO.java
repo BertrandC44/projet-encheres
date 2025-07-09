@@ -29,7 +29,6 @@ public interface EnchereDAO {
 	
 	long idUtilisateurVendeur(long idArticle);
 	
-
-	
+	void majEtatVente(long idArticle);
 
 }

@@ -64,6 +64,9 @@ public interface EncheresService {
 	long idUtilisateurVendeur(long idArticle);
 	
 	boolean isEnchereClosed (long idArticle);
+	
+	void majEtatVente(long idArticle);
+
 
 
 }
