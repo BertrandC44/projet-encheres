@@ -58,7 +58,7 @@ public interface EncheresService {
 	List<Article> consulterArticleParIdCategorie(long idCategorie);
 	
 	List<Article> consulterArticleParMotCle(String motCle);
-	
+
 	public int nbEnchere(long idArticle);
 	
 	long idUtilisateurVendeur(long idArticle);
@@ -66,6 +66,7 @@ public interface EncheresService {
 	boolean isEnchereClosed (long idArticle);
 	
 	void majEtatVente(long idArticle);
+
 
 
 }

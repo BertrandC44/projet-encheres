@@ -4,6 +4,7 @@
 
 *{
 	margin: 0;
+	font-family: 'Lato';
 }
 .entete a{
 	text-decoration:none;
@@ -17,14 +18,16 @@ a{
 
 }
 
+form a{
+	color:white;
+}
+
 h1,h2{
 	 font-family: "Passion One";
 }
-p, a, label, span, input, textarea, td, th{
-	font-family: 'Lato';
-}
 
-p.erreur{
+
+.erreur{
   color:red;
   white-space: pre-line;
 }

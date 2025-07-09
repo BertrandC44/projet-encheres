@@ -82,12 +82,13 @@ public class UtilisateurController {
 	    }
 	    
 	    @GetMapping("encheres/profil")
-	    public String afficherProfil(@RequestParam(name="pseudo") String pseudo, Model model) {
+	    public String afficherProfil(@RequestParam(name="pseudo") String pseudo, Model model, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) {
 	        Utilisateur utilisateur = utilisateurService.consulterUtilisateurParPseudo(pseudo);
-	        if (utilisateur != null) {
-	            model.addAttribute("utilisateur", utilisateur);
+	        if (utilisateurEnSession.getIdUtilisateur() != 0) {
+	        		model.addAttribute("utilisateur", utilisateur);
+	        		return "profil";
 	        }
-	        return "profil";
+	        return "connexion";
 	    }
 
 	    @PostMapping("encheres/profil")

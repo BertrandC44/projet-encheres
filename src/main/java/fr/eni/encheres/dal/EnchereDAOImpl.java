@@ -87,6 +87,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 		return this.namedParameterJdbcTemplate.queryForObject(COUNT_ENCHERE, map, Integer.class);
 	}
 
+
 	@Override
 	public long idUtilisateurMontantMax(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -121,7 +122,13 @@ public class EnchereDAOImpl implements EnchereDAO {
 		return this.namedParameterJdbcTemplate.queryForObject(FIND_MONTANT_SECOND, map, Integer.class);
 	}
 	
-		
+	@Override
+	public int nbEnchere(long idArticle) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idArticle", idArticle);
+		return this.namedParameterJdbcTemplate.queryForObject(COUNT_ENCHERE, map, Integer.class);
+	}
+
 	@Override
 	public long idUtilisateurVendeur(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();

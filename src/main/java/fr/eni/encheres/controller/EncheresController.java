@@ -166,44 +166,40 @@ public class EncheresController {
 	@PostMapping("/encheres/encherir")
 	public String encherirPost(@RequestParam(name = "montantEnchere") int montantEnchere,
 			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
-			@ModelAttribute("enchere") Enchere enchere,
-			@RequestParam(name = "idArticle") long idArticle, BindingResult bindingResult, RedirectAttributes redirectAttrs,Model model) {
+			@ModelAttribute("enchere") Enchere enchere, BindingResult bindingResult,
+			@RequestParam(name = "idArticle") long idArticle, Model model) {
 		
-		model.addAttribute(enchere);
-		model.addAttribute("montantEnchere", montantEnchere);
-//		model.addAttribute("utilisateurEnSession", utilisateurEnSession);
-//		
+		Article article = encheresService.consulterArticleParId(idArticle);
+	    model.addAttribute("article", article);
+	    
+	    int montantMax = encheresService.montantMax(idArticle);
+		model.addAttribute("montantMax", montantMax);
+		
+		String utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle) ;
+		model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);
+		
 
-		Utilisateur utilisateur = utilisateurService
-				.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
+		String categorieArticle = encheresService.categorieArticle(idArticle);
+		model.addAttribute("categorieArticle", categorieArticle);
+		
+		model.addAttribute("enchere",enchere);
+		model.addAttribute("montantEnchere", montantEnchere);
+//		model.addAttribute("idArticle", idArticle);
 
 		if (bindingResult.hasErrors()) {
 			
-			return "encherir";
-			//return "redirect:/encheres/encherir?idArticle=" + idArticle;
+			return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		} else {
 			try {
 
-				encheresService.encherir(montantEnchere, utilisateur.getIdUtilisateur(), idArticle);
+				encheresService.encherir(montantEnchere, utilisateurEnSession.getIdUtilisateur(), idArticle);
 			} catch (BusinessException e) {
-				    for (String message : e.getErrors()) {
-				        if (message.contains("meilleur enchérisseur")) {
-				        	bindingResult.rejectValue("montantEnchere", "error.meilleur", "Vous êtes pour le moment le meilleur enchérisseur");
-				        } else if (message.contains("crédit")) {
-				            bindingResult.rejectValue("montantEnchere", "error.credit", "Vous n'avez pas assez de crédit pour enchérir !");
-				        } else if (message.contains("pas encore mis en enchère") ){
-				            bindingResult.rejectValue("montantEnchere", "error.debut", "Cet article n'est pas encore mis en enchère.");
-				        } else if (message.contains("terminées")) {
-				            bindingResult.rejectValue("montantEnchere", "error.fin", "Les enchères sur cet article sont terminées.");
-				        } else if (message.contains("votre article")) {
-				            bindingResult.rejectValue("montantEnchere", "error.vendeur", "Vous ne pouvez pas encherir sur votre article...");
-				        } else if (message.contains("assez enchéri")) {
-				            bindingResult.rejectValue("montantEnchere", "error.montant", "Vous n'avez pas assez enchéri pour cette article");
-				        } else {
-				        	bindingResult.addError(new ObjectError("globalError", "Une erreur inconnue est survenue."));
-				        }
-				    }
+				e.getErrors().forEach(message->{
+				    bindingResult.addError(new ObjectError("globalError", message));
+					});
+				}
 				    return "encherir";
+
 
 
 				}
@@ -214,16 +210,14 @@ public class EncheresController {
 
 	}
 	
-//	@GetMapping("/encheres/acquisition")
-//	public String acquisition(){
-//		return "encheres";
-//	}
+
 
 	@PostMapping("/encheres/acquisition")
 	public String retraitArticle(@RequestParam(name = "idArticle") long idArticle, Model model) {	
 	    encheresService.majEtatVente(idArticle);
 		return "redirect:/encheres";
 	}
+
 
 	@GetMapping("/encheres/vente")
 	public String vente(@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,  Model model) {
@@ -244,14 +238,6 @@ public class EncheresController {
         model.addAttribute("article", article);
         return "enchere-en-cours";
     }
-  
-    @ModelAttribute("categorieEnSession")
-    public List<Categorie> chargerCategoriesEnSession() {
-        return this.encheresService.consulterCategories();
-    }
-
-	
-
 
 	@PostMapping("/encheres/vente")
 	public String creerArticle(@ModelAttribute Article article,
@@ -319,36 +305,5 @@ public class EncheresController {
 		return new Utilisateur();
 	}
 
-
-
-
-
-//	@GetMapping("/encheres/acquisition")
-//	public String acquerir(@RequestParam(name = "idArticle") long idArticle, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, Model model) {
-//
-//		Article article = encheresService.consulterArticleParId(idArticle);
-//		Utilisateur vendeur = utilisateurService.consulterUtilisateursParId(article.getUtilisateur().getIdUtilisateur());
-//		System.out.println(article);
-//	
-//		if (encheresService.isEnchereClosed(idArticle)) {
-//			if (utilisateurEnSession.getIdUtilisateur() != 0) {
-//				if (article != null) {
-//					model.addAttribute("article", article);
-//					model.addAttribute("vendeur", vendeur);
-//					model.addAttribute("montantMax", encheresService.montantMax(idArticle));
-//					model.addAttribute("utilisateurMontantMax", encheresService.utilisateurMontantMax(idArticle));
-//					if (utilisateurEnSession.getIdUtilisateur() == encheresService.idUtilisateurMontantMax(idArticle)) {
-//						model.addAttribute("titreAcquereur", "Vous avez remporté l'enchère");
-//					} else {
-//						model.addAttribute("titre", "L'enchère a été remporté");
-//					}
-//					
-//				}
-//				return "acquisition";
-//	
-//			}return "connexion";
-//		}
-//		return "encherir";
-//	}
 	
 }

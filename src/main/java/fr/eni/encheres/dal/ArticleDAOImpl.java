@@ -31,7 +31,6 @@ public class ArticleDAOImpl implements ArticleDAO {
 	// a.idUtilisateur = u.idUtilisateur LEFT JOIN RETRAIT r ON r.idArticle =
 	// a.idArticle";
 
-
 	private static final String FIND_BY_ID_USER = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE u.idUtilisateur=:idUtilisateur";
 	private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle";
 	private static final String FIND_ENCHERES_EN_COURS = "SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE dateDebutEncheres<=GETDATE() AND dateFinEncheres>GETDATE() AND a.idUtilisateur<>:idUtilisateur";
@@ -88,10 +87,6 @@ public class ArticleDAOImpl implements ArticleDAO {
         map.addValue("etatVente", article.getEtatVente());
         map.addValue("idCategorie", article.getCategorie().getIdCategorie());
         map.addValue("idUtilisateur", article.getUtilisateur().getIdUtilisateur());
-
-
-
-//        map.addValue("montantEnchere", article.getEncheres());
 
         this.jdbcTemplate.update(CREATE_ARTICLE, map,keyHolder);
        
@@ -188,14 +183,6 @@ public class ArticleDAOImpl implements ArticleDAO {
             a.setPrixVente(rs.getInt("prixVente"));
             a.setEtatVente(rs.getInt("etatVente"));
 
-
-            //pour gérer la liste d'encheres
-//            if(a.getEncheres() == null) {
-//            	a.setEncheres(new ArrayList<Enchere>());
-//            }
-
-
-           
             Categorie categorie = new Categorie();
             categorie.setIdCategorie(rs.getInt("idCategorie"));
             a.setCategorie(categorie);
@@ -211,13 +198,6 @@ public class ArticleDAOImpl implements ArticleDAO {
             retrait.setCodePostal(rs.getString("codePostal"));
             a.setRetrait(retrait);
             
-
-//            Enchere enchere = new Enchere();
-//            enchere.setMontantEnchere(rs.getInt("montantEnchere"));
-//            a.getEncheres().add(enchere);
-
-
-
             // Supprimé la deuxième création de Utilisateur qui écrasait la première
 
             return a;
