@@ -178,9 +178,8 @@ public class EncheresController {
 		model.addAttribute("montantEnchere", montantEnchere);
 //		model.addAttribute("utilisateurEnSession", utilisateurEnSession);
 //		
-
-//		Utilisateur utilisateur = utilisateurService
-//				.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
+			Utilisateur utilisateur = utilisateurService
+					.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
 
 		if (bindingResult.hasErrors()) {
 			
@@ -257,7 +256,7 @@ public class EncheresController {
 	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		}  
 
-
+	}
 
 
 	@GetMapping("/encheres/vente")
@@ -279,13 +278,7 @@ public class EncheresController {
         model.addAttribute("article", article);
         return "enchere-en-cours";
     }
-  
-    @ModelAttribute("categorieEnSession")
-    public List<Categorie> chargerCategoriesEnSession() {
-        return this.encheresService.consulterCategories();
-    }
 
-	
 
 
 	@PostMapping("/encheres/vente")

@@ -210,7 +210,7 @@ public class EncheresServiceImpl implements EncheresService{
 		return true;
 	}
 	
-<<<<<<< HEAD
+
 	@Override
 	public boolean isEnchereClosed (long idArticle) {
 		LocalDate today = LocalDate.now();
@@ -221,9 +221,7 @@ public class EncheresServiceImpl implements EncheresService{
 		return true;
 	}
 	
-=======
 
->>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 	private boolean isNotSameEncherisseurVendeur (long idArticle, long idUtilisateur, BusinessException be) {
 		if(this.enchereDAO.idUtilisateurVendeur(idArticle)==idUtilisateur) {
 			be.add("Vous ne pouvez pas encherir sur votre article...");
