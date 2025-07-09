@@ -52,38 +52,26 @@ public class EnchereDAOImpl implements EnchereDAO {
 		map.addValue("idArticle", idArticle);
 		return namedParameterJdbcTemplate.queryForObject(FIND_BY_ID, map, new BeanPropertyRowMapper<>(Enchere.class));
 	}
-
+	
 	@Override
-	public void encherir(int montantEnchere, long idUtilisateur, long idArticle) {
+	public String categorieArticle(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
-		LocalDate dateEnchere = LocalDate.now();
-		map.addValue("dateEnchere", dateEnchere);
-		map.addValue("montantEnchere", montantEnchere);
-		map.addValue("idUtilisateur", idUtilisateur);
 		map.addValue("idArticle", idArticle);
-		System.out.println("INSERT avec idUtilisateur = " + idUtilisateur);
-		this.namedParameterJdbcTemplate.update(INSERT_ENCHERE, map);
-
+		return this.namedParameterJdbcTemplate.queryForObject(FIND_CATEGORIE, map, String.class);
 	}
-
+	
 	@Override
 	public int montantEnchereMax(long idArticle) {
 		MapSqlParameterSource map= new MapSqlParameterSource();
 		map.addValue("idArticle", idArticle);
 		return this.namedParameterJdbcTemplate.queryForObject(FIND_MONTANT_MAX, map, Integer.class);
 	}
-
+	
 	@Override
 	public String utilisateurMontantMax(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idArticle", idArticle);
 		return this.namedParameterJdbcTemplate.queryForObject(FIND_UTILISATEUR_MAX, map, String.class);
-	}
-	
-	public int nbEnchere(long idArticle) {
-		MapSqlParameterSource map = new MapSqlParameterSource();
-		map.addValue("idArticle", idArticle);
-		return this.namedParameterJdbcTemplate.queryForObject(COUNT_ENCHERE, map, Integer.class);
 	}
 	
 	@Override
@@ -101,10 +89,16 @@ public class EnchereDAOImpl implements EnchereDAO {
 	}
 
 	@Override
-	public String categorieArticle(long idArticle) {
+	public void encherir(int montantEnchere, long idUtilisateur, long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
+		LocalDate dateEnchere = LocalDate.now();
+		map.addValue("dateEnchere", dateEnchere);
+		map.addValue("montantEnchere", montantEnchere);
+		map.addValue("idUtilisateur", idUtilisateur);
 		map.addValue("idArticle", idArticle);
-		return this.namedParameterJdbcTemplate.queryForObject(FIND_CATEGORIE, map, String.class);
+		System.out.println("INSERT avec idUtilisateur = " + idUtilisateur);
+		this.namedParameterJdbcTemplate.update(INSERT_ENCHERE, map);
+
 	}
 
 	@Override
@@ -114,6 +108,13 @@ public class EnchereDAOImpl implements EnchereDAO {
 		return this.namedParameterJdbcTemplate.queryForObject(FIND_MONTANT_SECOND, map, Integer.class);
 	}
 	
+	public int nbEnchere(long idArticle) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idArticle", idArticle);
+		return this.namedParameterJdbcTemplate.queryForObject(COUNT_ENCHERE, map, Integer.class);
+	}
+		
+	@Override
 	public long idUtilisateurVendeur(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idArticle", idArticle);

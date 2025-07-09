@@ -32,4 +32,5 @@ public interface ArticleDAO {
 	
 	List<Article> consulterArticleParMotCle(String motCle);
 
+
 }

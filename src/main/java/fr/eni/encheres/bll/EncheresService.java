@@ -31,11 +31,9 @@ public interface EncheresService {
 
 	void annulerVente(Article article);
 	
-
 	int debiter(int montantEnchere, Utilisateur utilisateur);
 	
 	void encherir(int montantEnchere, long idUtilisateur, long idArticle ) throws BusinessException;
-
 	
 	int montantMax(long idArticle);
 	
@@ -62,6 +60,12 @@ public interface EncheresService {
 	List<Article> consulterArticleParIdCategorie(long idCategorie);
 	
 	List<Article> consulterArticleParMotCle(String motCle);
+	
+	public int nbEnchere(long idArticle);
+	
+	long idUtilisateurVendeur(long idArticle);
+	
+	boolean isEnchereClosed (long idArticle);
 	
 	
 	
