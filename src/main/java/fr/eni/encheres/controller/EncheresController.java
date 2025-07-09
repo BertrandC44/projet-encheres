@@ -1,7 +1,13 @@
 package fr.eni.encheres.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +17,11 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -184,6 +194,7 @@ public class EncheresController {
 		
       
 			}catch (BusinessException e) {
+
 				e.getErrors().forEach(message->{
 					   if (message.contains("idArticle")) {
 				            redirectAttrs.addAttribute("idArticle", idArticle);
@@ -228,6 +239,29 @@ public class EncheresController {
 					
 					
 					
+
+
+
+//					e.getErrors().forEach(message->{
+//						if(message.contains("Erreur_1")) {
+//		                    bindingResult.rejectValue("erreurId", "error.erreurId", message);
+//		                } else if(message.contains("Erreur_2")) {
+//		                    bindingResult.rejectValue("erreurCredit", "error.erreurCredit", message);
+//		                } else if(message.contains("Erreur_3")) {
+//		                    bindingResult.rejectValue("erreurOpen", "error.erreurOpen", message);
+//		                } else if(message.contains("Erreur_4")) {
+//		                    bindingResult.rejectValue("erreurClose", "erreurClose", message);  
+//		                } else if(message.contains("Erreur_5")) {
+//		                    bindingResult.rejectValue("erreurVendeur", "erreurVendeur", message);   
+//              		} else if(message.contains("Erreur_6")) {
+//              			bindingResult.rejectValue("erreurEnchere", "erreurEnchere", message);		                    
+//		                } else {
+//		                    bindingResult.addError(new ObjectError("globalError", message));
+//		                }
+//
+//					});
+ 
+
 				}
 			model.addAttribute("utilisateur", utilisateurEnSession);
 	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
@@ -238,11 +272,11 @@ public class EncheresController {
 
 
 	@GetMapping("/encheres/vente")
-	public String vente(@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, Model model) {
+	public String vente(@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,  Model model) {
 		List<Categorie> categories = encheresService.consulterCategories();
 		Article article = new Article();
 		article.setCategorie(new Categorie());
-
+		
 		model.addAttribute("utilisateur", utilisateurEnSession);
 		model.addAttribute("article", new Article());
 		model.addAttribute("categorie", categories);
@@ -274,14 +308,13 @@ public class EncheresController {
 		List<Categorie> categories = encheresService.consulterCategories();
 		model.addAttribute("categorie", categories);
 
-
 		Retrait retrait = new Retrait();
 		retrait.setRue(rue);
 		retrait.setVille(ville);
 		retrait.setCodePostal(codePostal);
 		article.setRetrait(retrait);
 		
-		/*if ("categorieChoisie".equals(action)) {
+		if ("categorieChoisie".equals(action)) {
 
 			if (article.getCategorie() != null && article.getCategorie().getIdCategorie() > 0) {
 
@@ -294,7 +327,7 @@ public class EncheresController {
 				return "vente";
 			}
 
-		}*/
+		}
 
 		if ("validerFormulaire".equals(action)) {
 			if (article.getCategorie() == null || article.getCategorie().getIdCategorie() == 0) {
@@ -333,6 +366,31 @@ public class EncheresController {
 	}
 
 
-	
+	@ModelAttribute("categorieEnSession")
+	public List<Categorie> chargerCategoriesEnSession() {
+		return this.encheresService.consulterCategories();	}
 
+
+//    @GetMapping("/encheres/acquisition")
+//    public String acquerir(@RequestParam(name="idArticle") long idArticle, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, Model model) {
+//
+//        Article article = encheresService.consulterArticleParId(idArticle);
+//       
+//        int montantMax = encheresService.montantMax(idArticle);
+//        
+//        string telephone = utilisateurEnSession.
+//
+//        String categorieArticle = encheresService.categorieArticle(idArticle);
+//        if (article != null) {
+//            model.addAttribute("article", article);
+//            model.addAttribute("montantMax", montantMax);
+//
+//            model.addAttribute("enchereMin", article.getMiseAPrix());
+//            model.addAttribute("categorieArticle", categorieArticle);
+//        }
+//        return "encherir";
+//    }
+	
+	
+	
 }

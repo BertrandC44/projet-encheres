@@ -22,7 +22,11 @@
 <main>
 
 	
-	<form class="login-form" th:action="@{/encheres/encherir(idArticle=${article.idArticle})}" th:object="${enchere}" method="post" >
+
+
+	<form class="object-form" th:action="@{/encheres/encherir(idArticle=${article.idArticle})}" method="post" th:object=${enchere}>
+
+
 		<h1>Détail de la vente</h1>
 		
 		  
@@ -40,6 +44,7 @@
 			<li>
 			<img class="img-enchere" th:src="@{${'/images/'+ article.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
 			</li>
+
 			
 			<li>
 			<p class="erreur" th:if="${param.errorIdArticle}" th:text="${param.errorIdArticle}"></p>
@@ -55,18 +60,21 @@
  		<p class="erreur" th:if="${#fields.hasErrors('error.erreur2')}" th:errors="*{error.erreur2}"></p> 
  		<p class="erreur" th:if="${#fields.hasErrors('error.erreur3')}" th:errors="*{error.erreur3}"></p> 
  		<p class="erreur" th:if="${#fields.hasErrors('error.erreur4')}" th:errors="*{error.erreur4}"></p>  -->
-			
-			<li class="">
+
+			<li>
+
 				<label for="description">Description : </label>
 			<textarea type="text" id="description" th:text="${article.description}" ></textarea> 
 			</li>
-			<li class="">
+			<li>
 				<label for="categorie">Catégorie : </label>
 			<span type="text" id="categorie" th:text="${categorieArticle}" ></span> 
 			</li>
 			<li>
 				<label for="mOffre">Meilleure offre : </label>
+
 				<span type="text" id="mOffre" th:text="${montantMax} + ' points (' +  ${utilisateurMontantMax} + ')'" ></span>
+
 
 			</li>
 			<li>
@@ -78,9 +86,13 @@
 				<label for="dateFinEncheres">Fin de l'enchère : </label>
 	<!-- 			<span id="dateFinEncheres" th:text="${#temporals.format(article.dateFinEncheres, 'dd/MM/yyyy')}"></span>   -->
 				<span th:text="${#temporals.format(article.dateFinEncheres,'dd-MM-yyyy HH:mm')}"></span>
+				</li>
+				<li>
+				<label></label>
 				<span class="compte-rebours"
             		  th:data-date-debut="${article.dateDebutEncheres}" 
             		  th:data-date-fin="${article.dateFinEncheres}"></span>
+            		</li>  
 				 <script>
  
 				 	function startChrono(element){
@@ -124,25 +136,36 @@
 				
 				 	
 				 </script>
-			</li>
+			
 			<li>
 				<label for="retrait">Retrait : </label>
 				<span type="text" id="retrait" th:text="${article.retrait.rue + '&nbsp;&nbsp; - &nbsp;&nbsp;' + article.retrait.codePostal + '&nbsp;&nbsp;' + article.retrait.ville}"></span>
 			</li>
 			<li>
 				<label for="vendeur">Vendeur : </label>
-				<a type="text" id="utilisateur" th:text="${article.utilisateur.pseudo}" href="encheres/profil?pseudo= + '${article.utilisateur.pseudo}' "></a>
+
+				<a id="utilisateur" th:text="${article.utilisateur.pseudo}"th:href="@{'/encheres/profil'(pseudo=${article.utilisateur.pseudo})}"></a>
 			</li>
+			<li >
+		<!--  		<div th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+				<p class="erreur" th:if="${#fields.hasErrors('erreurId')}" th:errors="*{erreurId}"></p> 
+ 				<p class="erreur" th:if="${#fields.hasErrors('erreurCredit')}" th:errors="*{erreurCredit}"></p> 
+ 				<p class="erreur" th:if="${#fields.hasErrors('erreurOpen')}" th:errors="*{erreurOpen}"></p> 
+ 				<p class="erreur" th:if="${#fields.hasErrors('erreurClose')}" th:errors="*{erreurClose}"></p>   -->
+
 
 			<li>
-	
 
-				
+
+				<li>
+
 				<label for="montantEnchere">Ma proposition : </label>
 				<input type="number" id="montantEnchere"  name="montantEnchere" th:attr="min=${enchereMin}" th:value="${montantEnchere}" required>
 			</li>
-			<li>
-				<button type="submit" class="form-button" name="encherir">Enchérir</button>
+
+			<li >
+				<button type="submit" class="form-button" name="encherir" >Enchérir</button>
+
 			</li>	
 		</ul>
 	</form>
