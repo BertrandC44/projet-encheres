@@ -150,24 +150,32 @@ public class EncheresServiceImpl implements EncheresService{
 		boolean isValid = isNotSameEncherisseur(idArticle, idUtilisateur, be);
 		isValid &=isNotEnoughCredit(montantEnchere, idUtilisateur, be);
 		isValid &=isEnchereOpen(idArticle, be);
-		isValid &=isEnchereClose(idArticle, be);
-	
+		isValid &=isEnchereClosed2(idArticle, be);
+		isValid &=isNotSameEncherisseurVendeur(idArticle, idUtilisateur, be);
+		isValid &=enchereIsNotEnough(montantEnchere, idArticle, be);
+
 		if (isValid) {
 			Utilisateur utilisateurMax = utilisateurDAO.utilisateurparId(idUtilisateur);
 			int newCredit = debiter(montantEnchere, utilisateurMax);
 			enchereDAO.encherir(montantEnchere, idUtilisateur, idArticle);
 			utilisateurDAO.majCredit(newCredit, idUtilisateur);
+			if (enchereDAO.nbEnchere(idArticle)!=0) {
 			Utilisateur utilisateurSecond = utilisateurDAO.utilisateurparId(enchereDAO.idUtilisateurARecrediter(idArticle));
 			int credit = utilisateurSecond.getCredit() + enchereDAO.recrediter(idArticle);
 			utilisateurDAO.majCredit(credit, utilisateurSecond.getIdUtilisateur());
+			}
 		} else {
+			
+			be.addError("Vous n'avez pas assez de crédits.");
+			be.addError("L'enchère est déjà terminée.");
 			throw be;
+		
 		}
 	}
 	
 	private boolean isNotSameEncherisseur (long idArticle, long idUtilisateur, BusinessException be) {
 		if(this.enchereDAO.idUtilisateurMontantMax(idArticle)==idUtilisateur) {
-			be.add("Erreur_1 : Vous êtes pour le moment le meilleur enchérisseur");
+			be.add("Vous êtes pour le moment le meilleur enchérisseur");
 			return false;
 		}
 		return true;
@@ -175,7 +183,7 @@ public class EncheresServiceImpl implements EncheresService{
 	
 	private boolean isNotEnoughCredit (int montantEnchere, long idUtilisateur, BusinessException be) {
 		if (montantEnchere>=this.utilisateurDAO.utilisateurparId(idUtilisateur).getCredit()) {
-			be.add("Erreur_2 : Vous n'avez pas assez de crédit pour enchérir !");
+			be.add("Vous n'avez pas assez de crédit pour enchérir !");
 			return false;
 		}
 		return true;
@@ -185,13 +193,13 @@ public class EncheresServiceImpl implements EncheresService{
 		LocalDate today = LocalDate.now();
 		LocalDate debutEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
 		if (today.isAfter(debutEnchereDate)) {
-			be.add("Cet article n'est pas encore en mis en enchère.");
+			be.add("Cet article n'est pas encore mis en enchère.");
 			return false;
 		}
 		return true;
 	}
 	
-	private boolean isEnchereClose (long idArticle, BusinessException be) {
+	private boolean isEnchereClosed2 (long idArticle, BusinessException be) {
 		LocalDate today = LocalDate.now();
 		LocalDate finEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
 		if (today.isAfter(finEnchereDate)) {
@@ -201,6 +209,36 @@ public class EncheresServiceImpl implements EncheresService{
 		return true;
 	}
 	
+<<<<<<< HEAD
+	@Override
+	public boolean isEnchereClosed (long idArticle) {
+		LocalDate today = LocalDate.now();
+		LocalDate finEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
+		if (today.isAfter(finEnchereDate)) {
+			return false;
+		}
+		return true;
+	}
+	
+=======
+
+>>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
+	private boolean isNotSameEncherisseurVendeur (long idArticle, long idUtilisateur, BusinessException be) {
+		if(this.enchereDAO.idUtilisateurVendeur(idArticle)==idUtilisateur) {
+			be.add("Vous ne pouvez pas encherir sur votre article...");
+			return false;
+		}
+		return true;
+	}
+
+	
+	private boolean enchereIsNotEnough (int montantEnchere, long idArticle, BusinessException be) {
+		if(this.enchereDAO.montantEnchereMax(idArticle)>=montantEnchere) {
+			be.add("Vous n'avez pas assez enchéri pour cette article");
+			return false;
+		}
+		return true;
+	}
 
 	
 //	@Override
@@ -323,6 +361,16 @@ public class EncheresServiceImpl implements EncheresService{
 	        assignerImageCategorie(a.getCategorie());
 	    }
 	    return articles;
+	}
+
+	@Override
+	public int nbEnchere(long idArticle) {
+		return enchereDAO.nbEnchere(idArticle);
+	}
+
+	@Override
+	public long idUtilisateurVendeur(long idArticle) {
+		return enchereDAO.idUtilisateurVendeur(idArticle);
 	}
 
 }

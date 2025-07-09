@@ -14,6 +14,10 @@ public interface EnchereDAO {
 	
 	List<Enchere> consulterEncheres();	
 	
+	Enchere consulterEnchereParId(long idArticle);
+	
+	String categorieArticle(long idArticle);
+		
 	int montantEnchereMax(long idArticle);
 	
 	String utilisateurMontantMax(long idArticle);
@@ -25,10 +29,10 @@ public interface EnchereDAO {
 	void encherir(int montantEnchere, long idUtilisateur, long idArticle);
 	
 	int recrediter(long idArticle);
+		
+	public int nbEnchere(long idArticle);
 	
-	Enchere consulterEnchereParId(long idArticle);
-	
-	String categorieArticle(long idArticle);
+	long idUtilisateurVendeur(long idArticle);
 	
 
 }

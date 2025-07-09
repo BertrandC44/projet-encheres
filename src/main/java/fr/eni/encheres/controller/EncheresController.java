@@ -1,7 +1,13 @@
 package fr.eni.encheres.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,16 +17,16 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import fr.eni.encheres.bll.EncheresService;
-import fr.eni.encheres.bll.EncheresServiceImpl;
 import fr.eni.encheres.bll.UtilisateurService;
 
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
+import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Retrait;
 import fr.eni.encheres.bo.Utilisateur;
 
@@ -166,49 +172,49 @@ public class EncheresController {
 			return "encherir";
 			//return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		} else {
-			System.out.println("id utilisateur= " + utilisateur.getIdUtilisateur());
-			System.out.println("Solde utilisateur= " + utilisateur.getCredit());
-			System.out.println("id article= " + idArticle);
 			try {
 				encheresService.encherir(montantEnchere, utilisateur.getIdUtilisateur(), idArticle);
-
+			} catch (BusinessException e) {
+				    for (String message : e.getErrors()) {
+				        if (message.contains("meilleur enchérisseur")) {
+				        	bindingResult.rejectValue("montantEnchere", "error.meilleur", "Vous êtes pour le moment le meilleur enchérisseur");
+				        } else if (message.contains("crédit")) {
+				            bindingResult.rejectValue("montantEnchere", "error.credit", "Vous n'avez pas assez de crédit pour enchérir !");
+				        } else if (message.contains("pas encore mis en enchère") ){
+				            bindingResult.rejectValue("montantEnchere", "error.debut", "Cet article n'est pas encore mis en enchère.");
+				        } else if (message.contains("terminées")) {
+				            bindingResult.rejectValue("montantEnchere", "error.fin", "Les enchères sur cet article sont terminées.");
+				        } else if (message.contains("votre article")) {
+				            bindingResult.rejectValue("montantEnchere", "error.vendeur", "Vous ne pouvez pas encherir sur votre article...");
+				        } else if (message.contains("assez enchéri")) {
+				            bindingResult.rejectValue("montantEnchere", "error.montant", "Vous n'avez pas assez enchéri pour cette article");
+				        } else {
+				        	bindingResult.addError(new ObjectError("globalError", "Une erreur inconnue est survenue."));
+				        }
+				    }
+				    return "encherir";
 		
+<<<<<<< HEAD
+=======
       
 			}catch (BusinessException e) {
+>>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 
-					e.getErrors().forEach(message->{
-						if(message.contains("Erreur_1")) {
-		                    bindingResult.rejectValue("Erreur1", "error.erreur1", message);
-		                } else if(message.contains("Erreur_2")) {
-		                    bindingResult.rejectValue("Erreur2", "error.erreur2", message);
-		                } else if(message.contains("Erreur_3")) {
-		                    bindingResult.rejectValue("Erreur3", "error.erreur3", message);
-		                } else if(message.contains("Erreur_4")) {
-		                    bindingResult.rejectValue("Erreur2", "error.erreur4", message);
-		                
-		                
-		                
-		                } else {
-		                    bindingResult.addError(new ObjectError("globalError", message));
-		                }
+					}
+		}
 
-					});
-		
-				}
-	        
 	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		}  
 
 
-    }
 
 
 	@GetMapping("/encheres/vente")
-	public String vente(@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, Model model) {
+	public String vente(@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,  Model model) {
 		List<Categorie> categories = encheresService.consulterCategories();
 		Article article = new Article();
 		article.setCategorie(new Categorie());
-
+		
 		model.addAttribute("utilisateur", utilisateurEnSession);
 		model.addAttribute("article", new Article());
 		model.addAttribute("categorie", categories);
@@ -240,14 +246,13 @@ public class EncheresController {
 		List<Categorie> categories = encheresService.consulterCategories();
 		model.addAttribute("categorie", categories);
 
-
 		Retrait retrait = new Retrait();
 		retrait.setRue(rue);
 		retrait.setVille(ville);
 		retrait.setCodePostal(codePostal);
 		article.setRetrait(retrait);
 		
-		/*if ("categorieChoisie".equals(action)) {
+		if ("categorieChoisie".equals(action)) {
 
 			if (article.getCategorie() != null && article.getCategorie().getIdCategorie() > 0) {
 
@@ -260,7 +265,7 @@ public class EncheresController {
 				return "vente";
 			}
 
-		}*/
+		}
 
 		if ("validerFormulaire".equals(action)) {
 			if (article.getCategorie() == null || article.getCategorie().getIdCategorie() == 0) {
@@ -298,7 +303,38 @@ public class EncheresController {
 		return new Utilisateur();
 	}
 
+//
+//	@ModelAttribute("categorieEnSession")
+//	public List<Categorie> chargerCategoriesEnSession() {
+//		return this.encheresService.consulterCategories();	}
 
+
+	@GetMapping("/encheres/acquisition")
+	public String acquerir(@RequestParam(name = "idArticle") long idArticle, @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession, Model model) {
+
+		Article article = encheresService.consulterArticleParId(idArticle);
+		Utilisateur vendeur = utilisateurService.consulterUtilisateursParId(article.getUtilisateur().getIdUtilisateur());
+		System.out.println(article);
 	
-
+		if (encheresService.isEnchereClosed(idArticle)) {
+			if (utilisateurEnSession.getIdUtilisateur() != 0) {
+				if (article != null) {
+					model.addAttribute("article", article);
+					model.addAttribute("vendeur", vendeur);
+					model.addAttribute("montantMax", encheresService.montantMax(idArticle));
+					model.addAttribute("utilisateurMontantMax", encheresService.utilisateurMontantMax(idArticle));
+					if (utilisateurEnSession.getIdUtilisateur() == encheresService.idUtilisateurMontantMax(idArticle)) {
+						model.addAttribute("titreAcquereur", "Vous avez remporté l'enchère");
+					} else {
+						model.addAttribute("titre", "L'enchère a été remporté");
+					}
+					
+				}
+				return "acquisition";
+	
+			}
+		}
+		return "connexion";
+	}
+	
 }

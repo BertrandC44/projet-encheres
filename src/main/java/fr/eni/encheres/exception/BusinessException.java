@@ -21,9 +21,13 @@ public class BusinessException extends Exception{
 	public boolean hasError() {
 		return errors.isEmpty();
 	}
-	
 
-	
+<<<<<<< HEAD
+	public void addError(String message) {
+		errors.add(message);
+	}
+=======
+>>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 
 //	private List<String> messages;
 //
@@ -38,7 +42,6 @@ public class BusinessException extends Exception{
 //	public Iterable<String> getMessagesBE() {
 //		return messages;
 //	}
-
 
 
 }
