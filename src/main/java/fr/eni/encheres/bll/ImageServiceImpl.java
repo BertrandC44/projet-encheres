@@ -6,15 +6,17 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+@Service
 public class ImageServiceImpl implements ImageService {
 	
 	public ImageServiceImpl() {
 	}
  
 	@Override
-	public String saveImageToStorage(String uploadDirectory, MultipartFile image) throws IOException {
+	public String sauvegarderImage(String uploadDirectory, MultipartFile image) throws IOException {
 		String uniqueFileName = UUID.randomUUID().toString() + ".jpg";
  
 		Path uploadPath = Path.of(uploadDirectory);

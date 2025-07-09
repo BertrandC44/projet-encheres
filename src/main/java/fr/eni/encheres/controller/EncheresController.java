@@ -1,6 +1,7 @@
 package fr.eni.encheres.controller;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Controller;
@@ -278,7 +279,7 @@ public class EncheresController {
 			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
 			@RequestParam("action") String action, Model model, @RequestParam(name = "rue") String rue,
 			@RequestParam(name = "codePostal") String codePostal, @RequestParam(name = "ville") String ville,
-			@RequestParam("file") MultipartFile file) {
+			@RequestParam("fichier") MultipartFile file) {
 
 		List<Categorie> categories = encheresService.consulterCategories();
 		model.addAttribute("categorie", categories);
@@ -289,6 +290,17 @@ public class EncheresController {
 		retrait.setCodePostal(codePostal);
 		article.setRetrait(retrait);
 		
+		String imageNom = "";
+		 
+		if (!file.isEmpty()) {
+			String uploadDirectory = "src/main/resources/static/images";
+			try {
+				imageNom = imageService.sauvegarderImage(uploadDirectory, file);
+				article.setImage(imageNom);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		if ("categorieChoisie".equals(action)) {
 
@@ -321,6 +333,7 @@ public class EncheresController {
 				article.setUtilisateur(utilisateurEnSession);
 				article.setEtatVente(1);
 
+				
 				this.encheresService.creerVente(article);
 
 				return "redirect:/encheres";
