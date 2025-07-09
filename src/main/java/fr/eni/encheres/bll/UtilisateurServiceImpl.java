@@ -127,10 +127,8 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	public boolean isEmailModifierValide(String email, Utilisateur utilisateur, Utilisateur utilisateurEnSession, BusinessException be) {
 		Utilisateur Emailutilisateur = utilisateurDAO.utilisateurparEmail(email);
 	    if (Emailutilisateur == null || Emailutilisateur.getIdUtilisateur() == utilisateurEnSession.getIdUtilisateur()) {
-	    System.out.println("1");
 	    	return true; 
 	    }be.add("L'email est déjà utilisé");
-	      System.out.println("2");
 	    return false;
 	    
 	}
@@ -148,10 +146,8 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	public boolean isPseudoModifierValide(String pseudo, Utilisateur utilisateur, Utilisateur utilisateurEnSession, BusinessException be) {
 		Utilisateur Pseudoutilisateur = utilisateurDAO.utilisateurParPseudo(pseudo);
 	    if (Pseudoutilisateur == null || Pseudoutilisateur.getIdUtilisateur() == utilisateurEnSession.getIdUtilisateur()) {
-	      System.out.println("1");
 	    	return true;
 	    }be.add("Le pseudo est déjà utilisé");
-	    System.out.println("2");
 	    return false;
 	}
 	

@@ -17,7 +17,11 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import org.springframework.web.multipart.MultipartFile;
+
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -135,7 +139,12 @@ public class EncheresController {
 	@GetMapping("/encheres/encherir")
 	public String encherir(@RequestParam(name = "idArticle") long idArticle, Model model,
 			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) {
-
+		
+		//pour récupérer les erreurs ?
+		  Enchere enchere = new Enchere();
+		    model.addAttribute("enchere", enchere);
+		    
+		    
 		Article article = encheresService.consulterArticleParId(idArticle);
 		int montantMax = encheresService.montantMax(idArticle);
 		int enchereMin = montantMax + 1;
@@ -159,20 +168,27 @@ public class EncheresController {
 	@PostMapping("/encheres/encherir")
 	public String encherirPost(@RequestParam(name = "montantEnchere") int montantEnchere,
 			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
-			@RequestParam(name = "idArticle") long idArticle, Model model, BindingResult bindingResult) {
+			@ModelAttribute("enchere") Enchere enchere,
+			@RequestParam(name = "idArticle") long idArticle, BindingResult bindingResult, RedirectAttributes redirectAttrs,Model model) {
 		
+		System.out.println("id utilisateur= " + utilisateurEnSession.getIdUtilisateur());
+		System.out.println("Solde utilisateur= " + utilisateurEnSession.getCredit());
+		System.out.println("id article= " + idArticle);
+		model.addAttribute(enchere);
 		model.addAttribute("montantEnchere", montantEnchere);
-		model.addAttribute("utilisateurEnSession", utilisateurEnSession);
-//		model.addAttribute("idArticle", idArticle);
+//		model.addAttribute("utilisateurEnSession", utilisateurEnSession);
+//		
 
-		Utilisateur utilisateur = utilisateurService
-				.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
+//		Utilisateur utilisateur = utilisateurService
+//				.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
 
 		if (bindingResult.hasErrors()) {
+			
 			return "encherir";
 			//return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		} else {
 			try {
+
 				encheresService.encherir(montantEnchere, utilisateur.getIdUtilisateur(), idArticle);
 			} catch (BusinessException e) {
 				    for (String message : e.getErrors()) {
@@ -193,15 +209,50 @@ public class EncheresController {
 				        }
 				    }
 				    return "encherir";
-		
-<<<<<<< HEAD
-=======
-      
-			}catch (BusinessException e) {
->>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 
-					}
-		}
+					
+							
+//					@RequestMapping(value = "/accounts", method = RequestMethod.POST)
+//					 public String handle(Account account, BindingResult result, RedirectAttributes redirectAttrs) {
+//					   if (result.hasErrors()) {
+//					     return "accounts/new";
+//					   }
+//					   // Save account ...
+//					   redirectAttrs.addAttribute("id", account.getId()).addFlashAttribute("message", "Account created!");
+//					   return "redirect:/accounts/{id}";
+//					 }
+					
+					
+					
+					
+					
+					
+					
+
+
+
+//					e.getErrors().forEach(message->{
+//						if(message.contains("Erreur_1")) {
+//		                    bindingResult.rejectValue("erreurId", "error.erreurId", message);
+//		                } else if(message.contains("Erreur_2")) {
+//		                    bindingResult.rejectValue("erreurCredit", "error.erreurCredit", message);
+//		                } else if(message.contains("Erreur_3")) {
+//		                    bindingResult.rejectValue("erreurOpen", "error.erreurOpen", message);
+//		                } else if(message.contains("Erreur_4")) {
+//		                    bindingResult.rejectValue("erreurClose", "erreurClose", message);  
+//		                } else if(message.contains("Erreur_5")) {
+//		                    bindingResult.rejectValue("erreurVendeur", "erreurVendeur", message);   
+//              		} else if(message.contains("Erreur_6")) {
+//              			bindingResult.rejectValue("erreurEnchere", "erreurEnchere", message);		                    
+//		                } else {
+//		                    bindingResult.addError(new ObjectError("globalError", message));
+//		                }
+//
+//					});
+ 
+
+				}
+			model.addAttribute("utilisateur", utilisateurEnSession);
 
 	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		}  
@@ -303,10 +354,12 @@ public class EncheresController {
 		return new Utilisateur();
 	}
 
-//
-//	@ModelAttribute("categorieEnSession")
-//	public List<Categorie> chargerCategoriesEnSession() {
-//		return this.encheresService.consulterCategories();	}
+
+
+	@ModelAttribute("categorieEnSession")
+	public List<Categorie> chargerCategoriesEnSession() {
+		return this.encheresService.consulterCategories();	}
+
 
 
 	@GetMapping("/encheres/acquisition")
