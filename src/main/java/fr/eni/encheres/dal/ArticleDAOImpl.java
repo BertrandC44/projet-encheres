@@ -31,6 +31,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 	// a.idUtilisateur = u.idUtilisateur LEFT JOIN RETRAIT r ON r.idArticle =
 	// a.idArticle";
 
+
 	private static final String FIND_BY_ID_USER = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur WHERE u.idUtilisateur=:idUtilisateur";
 	private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle";
 	private static final String FIND_ENCHERES_EN_COURS = "SELECT * FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur WHERE dateDebutEncheres<=GETDATE() AND dateFinEncheres>GETDATE() AND a.idUtilisateur<>:idUtilisateur";

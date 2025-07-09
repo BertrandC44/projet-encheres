@@ -25,6 +25,12 @@
 	<form class="object-form" th:action="@{/encheres/encherir(idArticle=${article.idArticle})}" method="post" th:object="${enchere}">
 		<h1>Détail de la vente</h1>
 
+
+<!--		<input type="hidden" name="idArticle" th:value="${article.idArticle}" /> -->
+
+		
+
+		  
 		<input type="hidden" name="dateEnchere" th:value="${dateEnchere}" /> 
 
 		
@@ -42,6 +48,7 @@
 			</li>
 			
 			<li>
+
 
 				<div th:if="${#fields.hasErrors('global')}" class="erreur">
 
@@ -151,6 +158,7 @@
 				
 				 	
 				 </script>
+
 
 </body>
 </html>

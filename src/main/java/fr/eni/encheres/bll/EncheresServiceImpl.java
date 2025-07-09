@@ -270,9 +270,7 @@ public class EncheresServiceImpl implements EncheresService{
 	}
 	
 
-	/**
-	 *
-	 */
+
 	@Override
 	public boolean isEnchereClosed (long idArticle) {
 		LocalDate finEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();

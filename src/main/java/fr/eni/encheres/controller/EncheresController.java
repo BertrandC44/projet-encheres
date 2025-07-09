@@ -182,13 +182,13 @@ public class EncheresController {
 		String utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle) ;
 		model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);
 		
-
 		String categorieArticle = encheresService.categorieArticle(idArticle);
 		model.addAttribute("categorieArticle", categorieArticle);
 		
 		model.addAttribute("enchere",enchere);
 		model.addAttribute("montantEnchere", montantEnchere);
 //		model.addAttribute("idArticle", idArticle);
+
 
 		if (bindingResult.hasErrors()) {
 			
@@ -207,12 +207,9 @@ public class EncheresController {
 
 
 				}
-			model.addAttribute("utilisateur", utilisateurEnSession);
-
-	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
+			
 		}  
 
-	}
 	
 
 
@@ -242,6 +239,7 @@ public class EncheresController {
         model.addAttribute("article", article);
         return "enchere-en-cours";
     }
+
 
 	@PostMapping("/encheres/vente")
 	public String creerArticle(@ModelAttribute Article article,
