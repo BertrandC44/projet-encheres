@@ -43,6 +43,8 @@ public interface UtilisateurService {
 	boolean isPseudoModifierValide(String pseudo, Utilisateur utilisateurEnSessionUtilisateur, Utilisateur utilisateur,
 			BusinessException be);
 	
+	boolean isConfMdpValide (Utilisateur utilisateur, BusinessException be);
+	
 //	boolean isMdpValide (String mdp, BusinessException be);
 
 
