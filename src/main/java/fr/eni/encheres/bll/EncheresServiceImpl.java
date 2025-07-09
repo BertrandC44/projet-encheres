@@ -3,22 +3,15 @@ package fr.eni.encheres.bll;
 import java.time.LocalDate;
 import java.util.List;
 
-
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
-
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
-import fr.eni.encheres.Application;
+
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Retrait;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dal.ArticleDAO;
-import fr.eni.encheres.dal.CategorieDAO;
-
 import fr.eni.encheres.dal.CategorieDAO;
 import fr.eni.encheres.dal.EnchereDAO;
 import fr.eni.encheres.dal.RetraitDAO;
@@ -166,8 +159,8 @@ public class EncheresServiceImpl implements EncheresService{
 			}
 		} else {
 			
-			be.addError("Vous n'avez pas assez de crédits.");
-			be.addError("L'enchère est déjà terminée.");
+			be.add("Vous n'avez pas assez de crédits.");
+			be.add("L'enchère est déjà terminée.");
 			throw be;
 		
 		}
@@ -210,7 +203,7 @@ public class EncheresServiceImpl implements EncheresService{
 		return true;
 	}
 	
-<<<<<<< HEAD
+
 	@Override
 	public boolean isEnchereClosed (long idArticle) {
 		LocalDate today = LocalDate.now();
@@ -220,10 +213,7 @@ public class EncheresServiceImpl implements EncheresService{
 		}
 		return true;
 	}
-	
-=======
 
->>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 	private boolean isNotSameEncherisseurVendeur (long idArticle, long idUtilisateur, BusinessException be) {
 		if(this.enchereDAO.idUtilisateurVendeur(idArticle)==idUtilisateur) {
 			be.add("Vous ne pouvez pas encherir sur votre article...");
@@ -240,35 +230,6 @@ public class EncheresServiceImpl implements EncheresService{
 		}
 		return true;
 	}
-
-	
-//	@Override
-//	public void encherir(int montantEnchere, long idUtilisateur, long idArticle) throws BusinessException {
-//	    BusinessException be = new BusinessException();
-//	    Utilisateur utilisateur = utilisateurDAO.utilisateurparId(idUtilisateur);
-//
-//	    if (idUtilisateurMontantMax(idArticle) == idUtilisateur) {
-//	        be.add("Vous êtes déjà le meilleur enchérisseur.");
-//	    }
-//
-//	    if (utilisateur.getCredit() < montantEnchere) {
-//	        be.add("Vous n'avez pas assez de crédit pour enchérir !");
-//	    }
-//
-//
-//	    if (be.hasError()) {
-//	        throw be;
-//	    }
-//
-//	    try {
-//	        int nouveauSolde = debiter(montantEnchere, utilisateur);
-//	        enchereDAO.encherir(montantEnchere, idUtilisateur, idArticle);
-//	        utilisateurDAO.majCredit(nouveauSolde, idUtilisateur);
-//	    } catch (DataAccessException e) {
-//	        // Erreur technique → tu peux logger ici aussi
-//	        throw new BusinessException("Erreur lors du traitement. Veuillez recommencer.");
-//	    }
-//	}
 
 
 	@Override
@@ -372,6 +333,12 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public long idUtilisateurVendeur(long idArticle) {
 		return enchereDAO.idUtilisateurVendeur(idArticle);
+	}
+
+	@Override
+	public void majEtatVente(long idArticle) {
+		enchereDAO.majEtatVente(idArticle);
+		
 	}
 
 }

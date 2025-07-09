@@ -2,7 +2,6 @@ package fr.eni.encheres.dal;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
-import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Retrait;
 import fr.eni.encheres.bo.Utilisateur;
 
@@ -32,18 +30,13 @@ public class ArticleDAOImpl implements ArticleDAO {
 	// r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON
 	// a.idUtilisateur = u.idUtilisateur LEFT JOIN RETRAIT r ON r.idArticle =
 	// a.idArticle";
-<<<<<<< HEAD
+
 
 	private static final String FIND_BY_ID_USER = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE u.idUtilisateur=:idUtilisateur";
 	private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle";
 	private static final String FIND_ENCHERES_EN_COURS = "SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE dateDebutEncheres<=GETDATE() AND dateFinEncheres>GETDATE() AND a.idUtilisateur<>:idUtilisateur";
 	private static final String FIND_MES_ENCHERES_EN_COURS = "  SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN ENCHERE e ON a.idArticle = e.idArticle\r\n"
-=======
-	private static final String FIND_BY_ID_USER = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur LEFT JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE u.idUtilisateur=:idUtilisateur";
-	private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur LEFT JOIN RETRAIT r ON r.idArticle = a.idArticle";
-	private static final String FIND_ENCHERES_EN_COURS = "SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur LEFT JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE dateDebutEncheres<=GETDATE() AND dateFinEncheres>GETDATE() AND a.idUtilisateur<>:idUtilisateur";
-	private static final String FIND_MES_ENCHERES_EN_COURS = "  SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur LEFT JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN ENCHERE e ON a.idArticle = e.idArticle\r\n"
->>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
+
 			+ "  WHERE dateDebutEncheres<=GETDATE() AND dateFinEncheres>GETDATE() and e.idUtilisateur =:idUtilisateur";
 	private static final String FIND_MES_ENCHERES_REMPORTEES = " SELECT TOP 1 * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur LEFT JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN ENCHERE e ON a.idArticle = e.idArticle\r\n"
 			+ "  WHERE dateFinEncheres<=GETDATE() and e.idUtilisateur =:idUtilisateur";
@@ -52,7 +45,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 	private static final String FIND_MES_VENTES_TERMINEES = "SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE dateFinEncheres<=GETDATE() AND a.idUtilisateur=:idUtilisateur";
 	private static final String FIND_BY_IDCATEGORIE = "SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE idCategorie=:idCategorie";
 	private static final String FIND_BY_MOT_CLE = "SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE nomArticle LIKE :motCle";		
-	
+
 	//SELECT * FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle WHERE a.idArticle =6
 
 	
@@ -95,14 +88,11 @@ public class ArticleDAOImpl implements ArticleDAO {
         map.addValue("etatVente", article.getEtatVente());
         map.addValue("idCategorie", article.getCategorie().getIdCategorie());
         map.addValue("idUtilisateur", article.getUtilisateur().getIdUtilisateur());
-<<<<<<< HEAD
-//        map.addValue("montantEnchere", article.getEncheres());
-=======
+
 
 
 //        map.addValue("montantEnchere", article.getEncheres());
 
->>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
         this.jdbcTemplate.update(CREATE_ARTICLE, map,keyHolder);
        
 		
@@ -198,22 +188,14 @@ public class ArticleDAOImpl implements ArticleDAO {
             a.setPrixVente(rs.getInt("prixVente"));
             a.setEtatVente(rs.getInt("etatVente"));
 
-<<<<<<< HEAD
+
             //pour gérer la liste d'encheres
 //            if(a.getEncheres() == null) {
 //            	a.setEncheres(new ArrayList<Enchere>());
 //            }
-=======
 
 
-//            //pour gérer la liste d'encheres
-//            if(a.getEncheres() == null) {
-//            	a.setEncheres(new ArrayList<Enchere>());
-//            }
-
-
->>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
-            
+           
             Categorie categorie = new Categorie();
             categorie.setIdCategorie(rs.getInt("idCategorie"));
             a.setCategorie(categorie);
@@ -229,19 +211,12 @@ public class ArticleDAOImpl implements ArticleDAO {
             retrait.setCodePostal(rs.getString("codePostal"));
             a.setRetrait(retrait);
             
-<<<<<<< HEAD
-//            Enchere enchere = new Enchere();
-//            enchere.setMontantEnchere(rs.getInt("montantEnchere"));
-//            a.getEncheres().add(enchere);
-=======
-
 
 //            Enchere enchere = new Enchere();
 //            enchere.setMontantEnchere(rs.getInt("montantEnchere"));
 //            a.getEncheres().add(enchere);
 
 
->>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 
             // Supprimé la deuxième création de Utilisateur qui écrasait la première
 

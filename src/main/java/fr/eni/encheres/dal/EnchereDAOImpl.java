@@ -32,6 +32,8 @@ public class EnchereDAOImpl implements EnchereDAO {
 	
 	private static final String INSERT_ENCHERE = "INSERT INTO ENCHERE (dateEnchere, montantEnchere, idUtilisateur, idArticle) VALUES (:dateEnchere, :montantEnchere, :idUtilisateur, :idArticle)";
 	
+	private static final String UPDATE_ETAT_VENTE = "UPDATE ARTICLE SET etatVente = 2 WHERE idArticle = :idArticle";
+	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 	public EnchereDAOImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -56,10 +58,6 @@ public class EnchereDAOImpl implements EnchereDAO {
 		map.addValue("idArticle", idArticle);
 		return this.namedParameterJdbcTemplate.queryForObject(FIND_CATEGORIE, map, String.class);
 	}
-<<<<<<< HEAD
-=======
-
->>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 	
 	@Override
 	public int montantEnchereMax(long idArticle) {
@@ -69,11 +67,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 		//pour gérer s'il n'y a pas d'enchère (création de nouvel article)
 		return montant != null ? montant : 0;
 	}
-<<<<<<< HEAD
-	
-=======
- 
->>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
+
 	@Override
 	public String utilisateurMontantMax(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -87,17 +81,12 @@ public class EnchereDAOImpl implements EnchereDAO {
 
 	}
 
-	
-<<<<<<< HEAD
-=======
 	public int nbEnchere(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idArticle", idArticle);
 		return this.namedParameterJdbcTemplate.queryForObject(COUNT_ENCHERE, map, Integer.class);
 	}
-	
 
->>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 	@Override
 	public long idUtilisateurMontantMax(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -132,17 +121,19 @@ public class EnchereDAOImpl implements EnchereDAO {
 		return this.namedParameterJdbcTemplate.queryForObject(FIND_MONTANT_SECOND, map, Integer.class);
 	}
 	
-	public int nbEnchere(long idArticle) {
-		MapSqlParameterSource map = new MapSqlParameterSource();
-		map.addValue("idArticle", idArticle);
-		return this.namedParameterJdbcTemplate.queryForObject(COUNT_ENCHERE, map, Integer.class);
-	}
 		
 	@Override
 	public long idUtilisateurVendeur(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idArticle", idArticle);
 		return this.namedParameterJdbcTemplate.queryForObject(FIND_ID_VENDEUR, map, Integer.class);
+	}
+	
+	@Override
+	public void majEtatVente(long idArticle) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idArticle", idArticle);
+		this.namedParameterJdbcTemplate.update(UPDATE_ETAT_VENTE, map);
 	}
 
 }

@@ -20,137 +20,65 @@
 <header th:replace="~{fragments/entete::entete}"></header>
 
 <main>
-
+ 
 	
-
-
-	<form class="object-form" th:action="@{/encheres/encherir(idArticle=${article.idArticle})}" method="post" th:object=${enchere}>
-
-
+ 
+ 
+	<form class="object-form" th:action="@{/encheres/encherir(idArticle=${article.idArticle})}" method="post" th:object="${enchere}">
 		<h1>Détail de la vente</h1>
-<<<<<<< HEAD
-<!--		<input type="hidden" name="idArticle" th:value="${article.idArticle}" /> -->
-=======
-		
->>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
-		  
-		<input type="hidden" name="dateEnchere" th:value="${dateEnchere}" /> 
+ 
+		<input type="hidden" name="dateEnchere" th:value="${dateEnchere}" />
 		
 		  <input type="hidden" name="idArticle" th:value="${article.idArticle}" />
 		 <!--
-		<input type="hidden" name="utilisateurEnSession" th:value="${utilisateurEnSession}" /> 
+		<input type="hidden" name="utilisateurEnSession" th:value="${utilisateurEnSession}" />
 		 -->
-		<h2 th:text="${article.nomArticle}"></h2> 
-<!-- 			<div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
-			    <ul>
-			        <li th:each="err : ${#fields.globalErrors()}"
-			            th:text="${err.defaultMessage}">Erreur</li>
-			    </ul>  
-			</div>  -->
-
-
-
-			
-			
-
+		<h2 th:text="${article.nomArticle}"></h2>
+ 
 		<ul class="form-list">
-
-
+ 
 			<li>
 			<img class="img-enchere" th:src="@{${'/images/'+ article.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
 			</li>
-
 			
 			<li>
-			<p class="erreur" th:if="${param.errorIdArticle}" th:text="${param.errorIdArticle}"></p>
-			<p th:text="'Param reçu : ' + ${param.errorIdArticle}"></p>
-			<!-- 
-			<p class="erreur" th:if="${#fields.hasErrors('idArticle')}" th:errors="*{idArticle}">Erreur</p>
-			 
-			<p class="erreur" th:if="${param.errorIdArticle}" th:text="${param.errorIdArticle}">Erreur</p>
-			-->
-			</li>
-						
-				<!--  <p class="erreur" th:if="${#fields.hasErrors('Erreur1')}" th:errors="*{Erreur1}"></p> 
- 		<p class="erreur" th:if="${#fields.hasErrors('error.erreur2')}" th:errors="*{error.erreur2}"></p> 
- 		<p class="erreur" th:if="${#fields.hasErrors('error.erreur3')}" th:errors="*{error.erreur3}"></p> 
- 		<p class="erreur" th:if="${#fields.hasErrors('error.erreur4')}" th:errors="*{error.erreur4}"></p>  -->
-
+				<div th:if="${#fields.hasErrors('global')}" class="alert alert-danger">
+	        		<ul>
+	            		<li th:errors="*{global}"></li>
+	       			</ul>
+	    		</div>
 			<li>
-
+ 
 				<label for="description">Description : </label>
-			<textarea type="text" id="description" th:text="${article.description}" ></textarea> 
+			<textarea type="text" id="description" th:text="${article.description}" ></textarea>
 			</li>
 			<li>
 				<label for="categorie">Catégorie : </label>
-			<span type="text" id="categorie" th:text="${categorieArticle}" ></span> 
+			<span type="text" id="categorie" th:text="${categorieArticle}" ></span>
 			</li>
 			<li>
 				<label for="mOffre">Meilleure offre : </label>
-
+ 
 				<span type="text" id="mOffre" th:text="${montantMax} + ' points (' +  ${utilisateurMontantMax} + ')'" ></span>
-
-
+ 
+ 
 			</li>
 			<li>
 				<label for="miseAPrix">Mise à prix : </label>
 				<span type="text" id="miseAPrix" th:text="${article.miseAPrix} + ' points'" > </span>
-
+ 
 			</li>
 			<li>
 				<label for="dateFinEncheres">Fin de l'enchère : </label>
-	<!-- 			<span id="dateFinEncheres" th:text="${#temporals.format(article.dateFinEncheres, 'dd/MM/yyyy')}"></span>   -->
 				<span th:text="${#temporals.format(article.dateFinEncheres,'dd-MM-yyyy HH:mm')}"></span>
 				</li>
 				<li>
 				<label></label>
 				<span class="compte-rebours"
-            		  th:data-date-debut="${article.dateDebutEncheres}" 
+            		  th:data-date-debut="${article.dateDebutEncheres}"
             		  th:data-date-fin="${article.dateFinEncheres}"></span>
             		</li>  
-				 <script>
- 
-				 	function startChrono(element){
-						const dateFin = new Date(element.dataset.dateFin);
-						const dateDebut = new Date(element.dataset.dateDebut);
-						
-						
-				 			function updateChrono(){
-								const maintenant = new Date();
-								
-								
-								if(maintenant < dateDebut){
-									element.textContent = "Enchère non commencée";
-									return;
-									}
-								const diff = dateFin - maintenant;
-								
-									if(diff<= 0){
-										element.textContent = "Enchère terminée";
-										return;
-										}
-									 const jours = Math.floor(diff / (1000 * 60 * 60 * 24));
-									    const heures = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-									    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-									    const secondes = Math.floor((diff % (1000 * 60)) / 1000);
-							
-							element.textContent=
-								`${jours}j   ${heures.toString().padStart(2,'0')}h   `+
-								`${minutes.toString().padStart(2,'0')}m   `+
-								`${secondes.toString().padStart(2,'0')}s`;
-								
-								
-				 	}
-				 			updateChrono();
-							        setInterval(updateChrono,1000);
-				 	}
-				 	document.addEventListener('DOMContentLoaded', () => {
-						const elements=document.querySelectorAll(".compte-rebours");
-						elements.forEach(el => startChrono(el));
-				 	});
 				
-				 	
-				 </script>
 			
 			<li>
 				<label for="retrait">Retrait : </label>
@@ -158,68 +86,27 @@
 			</li>
 			<li>
 				<label for="vendeur">Vendeur : </label>
-<<<<<<< HEAD
+ 
 				<span>
-=======
-
->>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
+ 
 				<a id="utilisateur" th:text="${article.utilisateur.pseudo}"th:href="@{'/encheres/profil'(pseudo=${article.utilisateur.pseudo})}"></a>
 				</span>
 			</li>
 			<li >
-<!--  		    <div th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
-				<p class="erreur" th:if="${#fields.hasErrors('erreurId')}" th:errors="*{erreurId}"></p> 
- 				<p class="erreur" th:if="${#fields.hasErrors('erreurCredit')}" th:errors="*{erreurCredit}"></p> 
- 				<p class="erreur" th:if="${#fields.hasErrors('erreurOpen')}" th:errors="*{erreurOpen}"></p> 
- 				<p class="erreur" th:if="${#fields.hasErrors('erreurClose')}" th:errors="*{erreurClose}"></p>   -->
-<<<<<<< HEAD
-						
-<!--  			    
-			   
-			    <div th:if="${#fields.hasErrors('montantEnchere')}" class="erreur-champ">
-			        <p th:each="err : ${#fields.errors('error.meilleur')}" th:text="${err}"></p>
-			    </div>
-			    <div th:if="${#fields.hasErrors('montantEnchere')}" class="erreur-champ">
-			        <p th:each="err : ${#fields.errors('error.credit')}" th:text="${err}"></p>
-			    </div>
-			    			    <div th:if="${#fields.hasErrors('montantEnchere')}" class="erreur-champ">
-			        <p th:each="err : ${#fields.errors('error.debut')}" th:text="${err}"></p>
-			    </div>
-			    			    <div th:if="${#fields.hasErrors('montantEnchere')}" class="erreur-champ">
-			        <p th:each="err : ${#fields.errors('error.fin')}" th:text="${err}"></p>
-			    </div>
-			    			    <div th:if="${#fields.hasErrors('montantEnchere')}" class="erreur-champ">
-			        <p th:each="err : ${#fields.errors('error.vendeur')}" th:text="${err}"></p>
-			    </div>
-			    			    <div th:if="${#fields.hasErrors('montantEnchere')}" class="erreur-champ">
-			        <p th:each="err : ${#fields.errors('error.montant')}" th:text="${err}"></p>
-			    </div>
-			
--->
-=======
-
-
-			<li>
-
-
+			    
 				<li>
-
->>>>>>> bb94891f72ee3b8f4df5e682aaaa50292bc09f61
 				<label for="montantEnchere">Ma proposition : </label>
 				<input type="number" id="montantEnchere"  name="montantEnchere" th:attr="min=${enchereMin}" th:value="${montantEnchere}" required>
-				<form th:action="@{/encheres/encherir}" method="post" th:object="${enchereForm}">
-    <button type="submit">Enchérir</button>
-</form>
-				
-			</li>
-
+				</li>
+ 
 			<li >
 				<button type="submit" class="form-button" name="encherir" >Enchérir</button>
-
+ 
 			</li>	
 		</ul>
 	</form>
 </main>
+ 
 
 
 </body>
