@@ -182,7 +182,7 @@ public class EncheresController {
 			    if (dateFin != null && dateFin.isBefore(now)) {
 			        return "acquisition"; 
 			    }
-
+			    System.out.println("Image : " + article.getImage());
 			    return "encherir";
 				}
 			return "connexion";
