@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head th:insert="~{fragments/liens::liens}">
+<meta charset="UTF-8">
+
+
+<title>ENI-Enchères</title>
+
+
+</head>
+ 
+ 
+<body>
+<header th:replace="~{fragments/entete::entete}"></header>
+ 
+		
+	<main>
+ 
+
+		<form class="login-form" th:action="@{/encheres/mdpOublie}" method="post" th:object="${utilisateurEnSession}">
+		<h1>Mot de passe oublié</h1>
+		<p class="erreur" th:if="${#fields.hasErrors('email')}" th:errors="email"></p>
+		
+			<ul class= "form-list">
+				<li class="form-input">
+					<label for="pseudo">Adresse mail :</label>
+					
+					<input type="text" placeholder="email" id="email" name="email" class="form-control" autofocus>
+				</li>
+				
+				
+				<li>
+					<button type="submit" class="form-button">Valider</button>  
+				</li>
+			
+				
+				
+			</ul>	
+			
+			</form>
+	
+	</main>
+</body>
+</html>

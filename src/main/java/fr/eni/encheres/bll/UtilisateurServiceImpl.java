@@ -43,6 +43,11 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	}
 	
 	@Override
+	public Utilisateur consulterUtilisateurparEmail(String email) {
+		return this.utilisateurDAO.utilisateurparEmail(email);
+	}
+
+	@Override
 	public String consulterMdpParPseudo(String pseudo) {
 		return this.utilisateurDAO.consulterMdp(pseudo);
 	}
@@ -186,6 +191,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		return true;
 	}
 
+	
 //	@Override
 //	public boolean isMdpValide(String mdp, BusinessException be) {
 //		if (this.consulterMdpParPseudo(mdp).equals(mdp)) {

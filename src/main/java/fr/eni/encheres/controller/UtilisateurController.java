@@ -201,4 +201,19 @@ public class UtilisateurController {
 	        return new Utilisateur();
 	    }
 	
+	    @GetMapping("/encheres/mdpOublie")
+	    public String mdpOublie() {
+	    	System.out.println("Clic vers mdp oublie");
+	    	return "mdp-oublie";
+	    }
 }
+	  /*  @PostMapping("/encheres/mdpOublie")
+	    	public String mdpOubliePost(@RequestParam(name = "email") String email, @Valid @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
+                    BindingResult bindingResult, BusinessException be) {
+	    	if(utilisateurService.consulterUtilisateurparEmail(email).equals(email)) {	
+	    		Utilisateur utilisateur
+	    	}
+	    	}
+	    }*/
+
+
