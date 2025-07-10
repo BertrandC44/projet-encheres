@@ -17,7 +17,12 @@ public class ContexteServiceImpl implements ContexteService {
 		this.utilisateurDao = utilisateurDao;
 	}
 
-
+	/**
+     * Charge un utilisateur en fonction de son pseudo.
+     * 
+     * @param pseudo le nom d'utilisateur
+     * @return l'utilisateur correspondant, ou {@code null} si aucun n'est trouvé
+     */
 	@Override
 	public Utilisateur charger(String pseudo) {
 		return this.utilisateurDao.utilisateurParPseudo(pseudo);

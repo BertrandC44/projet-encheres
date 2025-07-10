@@ -10,12 +10,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import fr.eni.encheres.bll.EncheresService;
 import fr.eni.encheres.bll.ImageService;
@@ -31,17 +31,12 @@ import fr.eni.encheres.exception.BusinessException;
 @SessionAttributes({ "utilisateurEnSession", "categorieEnSession" })
 public class EncheresController {
 
-
 	private EncheresService encheresService;
-	private UtilisateurService utilisateurService;
 	private ImageService imageService;
 
-
-	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ImageService imageService) {
+	public EncheresController(EncheresService encheresService, ImageService imageService) {
 		this.encheresService = encheresService;
-		this.utilisateurService = utilisateurService;
 		this.imageService = imageService;
-
 	}
 
 	@GetMapping("/")
@@ -140,34 +135,43 @@ public class EncheresController {
 		    Utilisateur utilisateur = encheresService.consulterArticleParId(idArticle).getUtilisateur();
 		    System.out.println(utilisateur);
 		    model.addAttribute("utilisateur", utilisateur );
+
+		    
+		    int miseAPrix = encheresService.consulterArticleParId(idArticle).getMiseAPrix();
+		    int montantMax = encheresService.montantMax(idArticle);
+		    int enchereMin = 0;
+		    if (montantMax == 0) {
+		    	enchereMin = miseAPrix + 1;
+		    } else {
+		    	enchereMin = montantMax + 1;
+		    }
+		   
+		    String telephone = utilisateur.getTelephone();
+
+		    model.addAttribute("miseAPrix", miseAPrix);
 		    LocalDate now = LocalDate.now();
 		    LocalDate debut = article.getDateDebutEncheres();
 		    String categorieArticle = encheresService.categorieArticle(idArticle);
 		    model.addAttribute("categorieArticle", categorieArticle);
-		    int montantMax = encheresService.montantMax(idArticle);
 		    model.addAttribute("montantMax", montantMax);
 		    String utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle);
 		    model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);
-		    
-		    if(debut.isBefore(now)) {
-				    int enchereMin = montantMax + 1;
-				    long idUtilisateurMontantMax = encheresService.idUtilisateurMontantMax(idArticle);
-				   
-				    model.addAttribute("enchereMin", enchereMin);
-				    model.addAttribute("idUtilisateurMontantMax", idUtilisateurMontantMax);
-		    }
-		   
+		    model.addAttribute("enchereMin", enchereMin);
+		    long idUtilisateurMontantMax = encheresService.idUtilisateurMontantMax(idArticle);
+		    model.addAttribute("idUtilisateurMontantMax", idUtilisateurMontantMax); 
+		    		   
 		    
 			if (utilisateurEnSession.getIdUtilisateur() != 0) {
 			    if (article == null) {
 			        return "redirect:/encheres"; 
 			    }
-
 			    LocalDate dateFin = article.getDateFinEncheres();
 			    if (dateFin != null && dateFin.isBefore(now)) {
 			        return "acquisition"; 
 			    }
+
 			    System.out.println("Image : " + article.getImage());
+
 			    return "encherir";
 				}
 			return "connexion";
@@ -189,6 +193,7 @@ public class EncheresController {
 		String utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle) ;
 		model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);
 		
+
 		String categorieArticle = encheresService.categorieArticle(idArticle);
 		model.addAttribute("categorieArticle", categorieArticle);
 		
@@ -196,35 +201,27 @@ public class EncheresController {
 		model.addAttribute("montantEnchere", montantEnchere);
 //		model.addAttribute("idArticle", idArticle);
 
-
-		Utilisateur utilisateur = utilisateurService
-				.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
-
 		if (bindingResult.hasErrors()) {
 			return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		} else {
 			try {
-
 				encheresService.encherir(montantEnchere, utilisateurEnSession.getIdUtilisateur(), idArticle);
+	
 			} catch (BusinessException e) {
 				e.getErrors().forEach(message->{
 				    bindingResult.addError(new ObjectError("globalError", message));
 					});
-				
-				    return "encherir";
-				}
 
 			}
-	
-			model.addAttribute("utilisateur", utilisateurEnSession);
+			 	montantMax = encheresService.montantMax(idArticle);
+			 	utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle) ;
+				model.addAttribute("montantMax", montantMax);
+				model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);
 
-	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
-		
+				    return "encherir";
+			}
 
-}
-			
-		
-
+	}
 
 	
 
@@ -237,10 +234,43 @@ public class EncheresController {
 	
 	
 	@GetMapping("/encheres/modifier")
-	public String pageModifierEnchere(@RequestParam("idArticle") long idArticle, Model model) {
+	public String pageModifierVente(@RequestParam("idArticle") long idArticle, Model model) {
+		model.addAttribute("dateActuelle", LocalDate.now());
 	    Article article = encheresService.consulterArticleParId(idArticle);
 	    model.addAttribute("article", article);
+	    List<Categorie> categories = encheresService.consulterCategories();
+	    model.addAttribute("categorie", categories);
 	    return "enchere-modifier";
+	}
+	
+	@PostMapping("/encheres/modifier/ok")
+	public String modifierVente( @ModelAttribute("article") Article article,Model model) {
+		long idArticle = article.getIdArticle();
+		
+		Retrait retrait = new Retrait();
+		retrait.setRue(article.getRetrait().getRue());
+		retrait.setCodePostal(article.getRetrait().getCodePostal());
+		retrait.setVille(article.getRetrait().getVille());
+		
+		article.setCategorie(article.getCategorie());
+		article.setDateDebutEncheres(article.getDateDebutEncheres());
+		article.setDateFinEncheres(article.getDateFinEncheres());
+		article.setDescription(article.getDescription());
+		article.setMiseAPrix(article.getMiseAPrix());
+		article.setNomArticle(article.getNomArticle());
+		article.setRetrait(retrait);
+		
+		encheresService.modifierVente(article);
+		
+		
+		return "redirect:/encheres/encherir?idArticle=" + idArticle;
+	}
+	
+	@GetMapping("/encheres/supprimer")
+	public String supprimerVente(@ModelAttribute("article") Article article,Model model) {
+		
+		encheresService.annulerVente(article);
+		return "redirect:/encheres";
 	}
 
 	@GetMapping("/encheres/vente")
@@ -256,14 +286,7 @@ public class EncheresController {
 		return "vente";
 	}
 
-    @GetMapping("/encheres/detail")
-    public String afficherDetailEnchere(@RequestParam(name="id") long idArticle, Model model) {
-        Article article = encheresService.consulterArticleParId(idArticle);
-        model.addAttribute("article", article);
-        return "enchere-en-cours";
-    }
-
-
+   
 	@PostMapping("/encheres/vente")
 	public String creerArticle(@ModelAttribute Article article,
 			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,

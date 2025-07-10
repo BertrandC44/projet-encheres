@@ -136,6 +136,114 @@ display:inline-block;
 	margin: 5px 0 5px 0;
 	}
 	
+.cards{
+	display: flex;
+	flex-wrap: wrap;
+	list-style: none;
+	margin: 1rem auto;
+	padding: 0;
+	justify-content: center;
+	gap : 1rem;
+	}	
+	
+.cards_item{
+	display: flex;
+	width: 100%;
+	max-width: 300px;
+	}
+	
+.card{
+	
+	display:flex;
+	flex-direction: column;
+	overflow: hidden;
+	width: 100%;
+	
+}
+
+.card_image{
+	display:flex;
+	justify-content: center;	
+}
+	
+.card_image img{
+	width: auto;
+	height: 150px;
+	object-fit: contain;
+	max-width:12rem;
+	max-height: 12rem;
+	
+
+}
+
+.card_content{
+	padding: 1rem;
+	flex-grow: 1;
+	background-color: #81e3e3;
+	border-radius: 1rem;
+	
+	
+ }
+
+.card_title{
+	font-size: 1.1rem;
+	font-weight: bold;
+	margin-bottom: 0.5rem;
+	text-align: center;
+}
+
+.card_text p{
+	margin: 0.25rem 0;
+	font-size: 0.95rem;
+	color:  #333;
+}	
+
+
+.filters li {
+	padding: 0.5rem;
+	width: 100%;
+	
+}
+
+.filters label{
+	font-weight: bold;
+	
+}
+
+.filters input[type="text"], select{
+	width: 100%;
+	padding: 0.5rem;
+	font-size: 0.95rem;
+	border: 1px solid black;
+	border-radius: 4px;
+	max-width:18rem;
+
+}
+
+.filters button{
+	width: 100%;
+	padding:0.6rem;
+	font-weight: bold;
+	border-radius: 4px;
+	cursor: pointer;
+	max-width:19rem;
+}
+
+.filters input[type="checkbox"], input[type="radio"]{
+	margin: 0.4rem;
+}
+
+@media screen and (min-width: 600px) {
+  .cards_item {
+    width: 48%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .cards_item {
+    width: 30%;
+  }
+}
 	
 	
 @media screen and (max-width: 768px) {
@@ -172,8 +280,8 @@ ul.form-list, .table{
  li{
 	display: block;
 	margin-bottom: 1rem;
-	max-width:26rem;
-		width:100%;
+	max-width:20rem;
+	width:100%;
 	
 }
 table{
