@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 
 
-<title>Enchères en cours</title>
+<title>Modifier enchère</title>
 
 
 
@@ -25,10 +25,6 @@
 	<form class="object-form" th:action="@{/encheres/encherir(idArticle=${article.idArticle})}" method="post" th:object="${enchere}">
 		<h1>Détail de la vente</h1>
 
-
-<!--		<input type="hidden" name="idArticle" th:value="${article.idArticle}" /> -->
-
-		  
 		<input type="hidden" name="dateEnchere" th:value="${dateEnchere}" /> 
 
 		
@@ -42,52 +38,43 @@
 		<ul class="form-list">
 
 			<li>
-			<img class="img-enchere" th:src="@{'/images/' + ${article.image}}" alt="photo de l'article" width="100"/>
+			<img class="img-enchere" th:src="@{${'/images/'+ article.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
 			</li>
-			
+			<!-- 
 			<li>
-
 				<div th:if="${#fields.hasErrors('global')}" class="erreur">
+
 	        		<ul>
 	            		<li th:errors="*{global}"></li>
 	       			</ul>
 	    		</div>
-	    	</li>	
-	    		
+	    	</li>
+	    	 -->
+	    	
 			<li>
 				<label for="description">Description : </label>
-				<span type="text" id="description" th:text="${article.description}" ></span>
+				<input type="text" id="description" th:value="${article.description}">
 			</li>
 			
 			<li>
 				<label for="categorie">Catégorie : </label>
-				<span type="text" id="categorie" th:text="${categorieArticle}" ></span>
-			</li>
-			
-			<li>
-				<label for="mOffre">Meilleure offre : </label>
- 				<span type="text" id="mOffre" th:text="${montantMax} + ' points (' +  ${utilisateurMontantMax} + ')'" ></span>
+				<input type="text" id="categorie" th:value="${categorieArticle}" >
 			</li>
 			
 			<li>
 				<label for="miseAPrix">Mise à prix : </label>
-				<span type="text" id="miseAPrix" th:text="${article.miseAPrix} + ' points'" > </span>
+				<input type="text" id="miseAPrix" th:value="${article.miseAPrix}">
 			</li>
 			
 			<li>
 				<label for="dateFinEncheres">Fin de l'enchère : </label>
-				<span th:text="${#temporals.format(article.dateFinEncheres,'dd-MM-yyyy HH:mm')}"></span>
-				</li>
-				<li>
-				<label></label>
-				<span class="compte-rebours"
-            		  th:data-date-debut="${article.dateDebutEncheres}"
-            		  th:data-date-fin="${article.dateFinEncheres}"></span>
-            		</li>   
+				<input th:value="${#temporals.format(article.dateFinEncheres,'dd-MM-yyyy HH:mm')}">
+			</li>
+				  
 			
 			<li>
 				<label for="retrait">Retrait : </label>
-				<span type="text" id="retrait" th:text="${article.retrait.rue + '&nbsp;&nbsp; - &nbsp;&nbsp;' + article.retrait.codePostal + '&nbsp;&nbsp;' + article.retrait.ville}"></span>
+				<input type="text" id="retrait" th:value="${article.retrait.rue + '&nbsp;&nbsp; - &nbsp;&nbsp;' + article.retrait.codePostal + '&nbsp;&nbsp;' + article.retrait.ville}">
 			</li>
 			<li>
 				<label for="vendeur">Vendeur : </label>
@@ -97,18 +84,19 @@
 				<a id="utilisateur" th:text="${article.utilisateur.pseudo}"th:href="@{'/encheres/profil'(pseudo=${article.utilisateur.pseudo})}"></a>
 				</span>
 			</li>
-
+			<li >
+			    
 				<li th:if="${utilisateurEnSession.idUtilisateur != article.utilisateur.idUtilisateur}">
 				<label for="montantEnchere">Ma proposition : </label>
-				<input type="number" id="montantEnchere"  name="montantEnchere" th:min="${enchereMin}" th:value="${montantEnchere}" required>
+				<input type="number" id="montantEnchere"  name="montantEnchere" th:attr="min=${enchereMin}" th:value="${montantEnchere}" required>
 				</li>
 
 			<li th:if="${utilisateurEnSession.idUtilisateur != article.utilisateur.idUtilisateur}">
 				<button type="submit" class="form-button" name="encherir" >Enchérir</button>
 			</li>
 					
-			<li th:if="${utilisateurEnSession.idUtilisateur == article.utilisateur.idUtilisateur and article.dateDebutEncheres.isAfter(dateActuelle) }">
-				<a th:href="@{/encheres/modifier(idArticle=${article.idArticle})}">
+			<li >
+				<a th:href="@{/encheres/modifier}">
 				<button type="button" class="form-button" name="modifier" >Modifier</button>
 				</a>
 			</li>
@@ -161,6 +149,5 @@
 				 	
 				 </script>
 
-
 </body>
-</html>
+</html>>
