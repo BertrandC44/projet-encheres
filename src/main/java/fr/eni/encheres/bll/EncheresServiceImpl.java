@@ -41,26 +41,6 @@ public class EncheresServiceImpl implements EncheresService{
 		this.utilisateurDAO = utilisateurDAO;
 		this.retraitDAO = retraitDAO;
 	}
-
-	// méthode pour assigner l'image en fonction de l'id de la catégorie
-	
-    /**
-     * Assigne une image à une catégorie en fonction de son ID.
-     * 
-     * @param c La catégorie à laquelle assigner une image.
-     */
-	private void assignerImageCategorie(Categorie c) {
-	    if (c != null) {
-	        switch ((int) c.getIdCategorie()) {
-	            case 1 -> c.setImage("clavier.jpg");
-	            case 2 -> c.setImage("chaise-en-bois.jpg");
-	            case 3 -> c.setImage("tondeuse.png");
-	            case 4 -> c.setImage("tennis.png");
-	            default -> c.setImage("default.jpg");
-	        }
-	    }
-	}
-	
 	
 
 
@@ -97,9 +77,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Categorie> consulterCategories() {
 	    List<Categorie> categories = categorieDAO.consulterCategories();
-	    for (Categorie c : categories) {
-	        assignerImageCategorie(c);
-	    }
 	    return categories;
 	}
 
@@ -124,9 +101,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticles() {
 	    List<Article> articles = articleDAO.consulterArticles();
-	    for (Article article : articles) {
-	        assignerImageCategorie(article.getCategorie());
-	    }
 	    return articles;
 	}
 
@@ -140,7 +114,7 @@ public class EncheresServiceImpl implements EncheresService{
 	public List<Article> consulterArticlePseudo() {
 	    List<Article> articles = articleDAO.consulterArticlePseudo();
 	    for (Article article : articles) {
-	        assignerImageCategorie(article.getCategorie());
+	    	 article.getImage();
 	    }
 	    return articles;
 	}
@@ -158,7 +132,7 @@ public class EncheresServiceImpl implements EncheresService{
 		try {
 	    Article article = articleDAO.consulterArticleParId(idArticle);
 	    if(article != null) {
-	    assignerImageCategorie(article.getCategorie());
+	    article.getImage();
 	    }
 	    return article;
 	}catch (EmptyResultDataAccessException e) {
@@ -250,7 +224,7 @@ public class EncheresServiceImpl implements EncheresService{
 		boolean isValid = isNotSameEncherisseur(idArticle, idUtilisateur, be);
 		isValid &=isNotEnoughCredit(montantEnchere, idUtilisateur, be);
 		isValid &=isEnchereOpen(idArticle, be);
-		isValid &=isEnchereClosed2(idArticle, be);
+		isValid &=isEnchereClosed(idArticle, be);
 		isValid &=isNotSameEncherisseurVendeur(idArticle, idUtilisateur, be);
 		isValid &=enchereIsNotEnough(montantEnchere, idArticle, be);
 
@@ -261,9 +235,12 @@ public class EncheresServiceImpl implements EncheresService{
 			utilisateurDAO.majCredit(newCredit, idUtilisateur);
       
 				if (enchereDAO.nbEnchere(idArticle)!=0) {
-					Utilisateur utilisateurSecond = utilisateurDAO.utilisateurparId(enchereDAO.idUtilisateurARecrediter(idArticle));
-					int credit = utilisateurSecond.getCredit() + enchereDAO.recrediter(idArticle);
-					utilisateurDAO.majCredit(credit, utilisateurSecond.getIdUtilisateur());
+					long idUtilisateurSecond=enchereDAO.idUtilisateurARecrediter(idArticle);
+					if (idUtilisateurSecond != 0) {
+						Utilisateur utilisateurSecond = utilisateurDAO.utilisateurparId(enchereDAO.idUtilisateurARecrediter(idArticle));
+						int credit = utilisateurSecond.getCredit() + enchereDAO.recrediter(idArticle);
+						utilisateurDAO.majCredit(credit, utilisateurSecond.getIdUtilisateur());
+						}
 					}
 			} else {
 				throw be;
@@ -299,13 +276,13 @@ public class EncheresServiceImpl implements EncheresService{
      * @return true si le crédit est suffisant, false sinon.
      */
 	private boolean isNotEnoughCredit (int montantEnchere, long idUtilisateur, BusinessException be) {
-		if (montantEnchere>=this.utilisateurDAO.utilisateurparId(idUtilisateur).getCredit()) {
-			be.add("Vous n'avez pas assez de crédit pour enchérir !");
+		int solde=this.utilisateurDAO.utilisateurparId(idUtilisateur).getCredit();
+		if ((solde-montantEnchere)<0) {
+			be.add("Votre solde de crédit (" + solde + " pts) n'est pas assez important pour enchérir ce montant!");
 			return false;
 		}
 		return true;
 	} 
-	 
 
 	/**
 
@@ -332,7 +309,8 @@ public class EncheresServiceImpl implements EncheresService{
      * @param be Exception métier à enrichir.
      * @return true si l'enchère n'est pas terminée, false sinon.
      */
-	private boolean isEnchereClosed2 (long idArticle, BusinessException be) {
+	private boolean isEnchereClosed (long idArticle, BusinessException be) {
+
 		LocalDate finEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
 		if (today.isAfter(finEnchereDate)) {
 			be.add("Les enchères sur cet article sont terminées.");
@@ -341,22 +319,8 @@ public class EncheresServiceImpl implements EncheresService{
 		return true;
 	}
 	
-	 /**
-     * Vérifie de manière simplifiée si l'enchère est encore active.
-     * 
-     * @param idArticle ID de l'article.
-     * @return true si l'enchère est encore en cours, false sinon.
-     */
 
 
-	@Override
-	public boolean isEnchereClosed (long idArticle) {
-		LocalDate finEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
-		if (today.isAfter(finEnchereDate)) {
-			return false;
-		}
-		return true;
-	}
 
 	/**
      * Vérifie que l'utilisateur ne tente pas d'enchérir sur son propre article.
@@ -366,6 +330,7 @@ public class EncheresServiceImpl implements EncheresService{
      * @param be Exception métier à enrichir.
      * @return true si l'utilisateur est différent du vendeur, false sinon.
      */
+
 	private boolean isNotSameEncherisseurVendeur (long idArticle, long idUtilisateur, BusinessException be) {
 		if(this.enchereDAO.idUtilisateurVendeur(idArticle)==idUtilisateur) {
 			be.add("Vous ne pouvez pas encherir sur votre article...");
@@ -383,7 +348,7 @@ public class EncheresServiceImpl implements EncheresService{
      * @return true si le montant est suffisant, false sinon.
      */
 	private boolean enchereIsNotEnough (int montantEnchere, long idArticle, BusinessException be) {
-		if(this.enchereDAO.montantEnchereMax(idArticle)>=montantEnchere) {
+		if(this.enchereDAO.montantEnchereMax(idArticle)>=montantEnchere || this.articleDAO.consulterArticleParId(idArticle).getMiseAPrix()>=montantEnchere) {
 			be.add("Vous n'avez pas assez enchéri pour cette article");
 			return false;
 		}
@@ -443,9 +408,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticleEncheresEnCours(long idUtilisateur) {
 		List<Article> articles = articleDAO.consulterArticleEncheresEnCours(idUtilisateur);
-	    for (Article a : articles) {
-	        assignerImageCategorie(a.getCategorie());
-	    }
 	    return articles;
 	}
 
@@ -458,9 +420,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticleMesEncheresEnCours(long idUtilisateur) {
 		List<Article> articles = articleDAO.consulterArticleMesEncheresEnCours(idUtilisateur);
-	    for (Article a : articles) {
-	        assignerImageCategorie(a.getCategorie());
-	    }
 	    return articles;
 	}
 
@@ -473,9 +432,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticleMesEncheresRemportees(long idUtilisateur) {
 		List<Article> articles = articleDAO.consulterArticleMesEncheresRemportees(idUtilisateur);
-	    for (Article a : articles) {
-	        assignerImageCategorie(a.getCategorie());
-	    }
 	    return articles;
 	}
 
@@ -488,9 +444,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticleMesVentesEnCours(long idUtilisateur) {
 		List<Article> articles = articleDAO.consulterArticleMesVentesEnCours(idUtilisateur);
-	    for (Article a : articles) {
-	        assignerImageCategorie(a.getCategorie());
-	    }
 	    return articles;
 	}
 
@@ -503,9 +456,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticleMesVentesFutures(long idUtilisateur) {
 		List<Article> articles = articleDAO.consulterArticleMesVentesFutures(idUtilisateur);
-	    for (Article a : articles) {
-	        assignerImageCategorie(a.getCategorie());
-	    }
 	    return articles;
 	}
 
@@ -518,9 +468,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticleMesVentesTerminees(long idUtilisateur) {
 		List<Article> articles = articleDAO.consulterArticleMesVentesTerminees(idUtilisateur);
-	    for (Article a : articles) {
-	        assignerImageCategorie(a.getCategorie());
-	    }
 	    return articles;
 	}
 
@@ -533,9 +480,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticleParIdCategorie(long idCategorie) {
 		List<Article> articles = articleDAO.consulterArticleParCategorie(idCategorie);
-	    for (Article a : articles) {
-	        assignerImageCategorie(a.getCategorie());
-	    }
 	    return articles;
 	
 	}
@@ -549,9 +493,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticleParMotCle(String motCle) {
 		List<Article> articles = articleDAO.consulterArticleParMotCle(motCle);
-	    for (Article a : articles) {
-	        assignerImageCategorie(a.getCategorie());
-	    }
 	    return articles;
 	}
 

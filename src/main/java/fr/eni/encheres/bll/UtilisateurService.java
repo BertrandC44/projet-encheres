@@ -15,6 +15,8 @@ public interface UtilisateurService {
 	
 	String consulterMdpParPseudo(String pseudo);
 	
+	Utilisateur consulterUtilisateurparEmail(String email);
+	
 	int consulterCredit(Utilisateur utilisateur);
 	
 //	void debiter(int montantEnchere,Utilisateur utilisateur);

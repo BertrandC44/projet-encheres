@@ -2,9 +2,9 @@
 <html>
 <link rel="icon" data-th-href="@{/images/logoENI.png}" sizes="32x32">
 <link rel="stylesheet" th:href="@{/css/connexion.css}">
+
 <head th:insert="~{fragments/liens::liens}">
 
- <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta charset="UTF-8">
 <title>ENI-Enchères</title>
 
@@ -16,15 +16,17 @@
 
 <main>
 
-<div>
-	<ul>
 
-	<form th:action="@{/encheres}" method="post">
+<div >
+	<ul >
+
+	<form th:action="@{/encheres}" method="post" class="filters">
+
+
 	<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">
 
 		
 		<h2>Filtres :</h2>
-		
 		
 			<li >
 			<label for="achats">Achats :</label>
@@ -52,8 +54,11 @@
 			
 			<li>
 				<label for="idCategorie">Catégorie</label>
+  			</li>	
+  			<li>
   				<select id="idCategorie" name="categorie">
   					<option value ="0" > Choisir une catégorie</option>
+  					
     				<option th:each="c : ${categorie}" 
 	            	th:value="${c.idCategorie}" 
 	            	th:text="${c.libelle}" >
@@ -73,10 +78,9 @@
 
 			</ul>
 		
-		
+
 			</form>
-		
-		
+
 			
 			
 				<h1> Ventes en cours : </h1>
@@ -87,44 +91,44 @@
 			
 					<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">  -->
 					
-			
+
 		<div>
 					<table class="table">
-						<thead>
-							<tr>
-					<th> Photo </th>
-					<th>Nom</th>
-					<th>Prix de l'article</th>
-					<th>Fin de l'enchere</th>
-					<th>Temps restant </th>
-					<th>Retrait</th>
-					<th>Utilisateur </th>
-					
-					
-					
-				</tr>
-			</thead>	
-			<tbody>
-				<tr th:each="a : ${articles}">
-    <td>
-        <img th:src="@{${'/images/'+a.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
-    </td>
-    <td><a th:href="@{/encheres/encherir(idArticle=${a.idArticle})}" th:text="${a.nomArticle}">lien</a></td>
-    <td th:text="${a.miseAPrix}"></td>
-    <td th:text="${#temporals.format(a.dateFinEncheres,'dd-MM-yyyy HH:mm')}"></td>
-    <td>
-        <span class="compte-rebours"
-              th:data-date-debut="${a.dateDebutEncheres}" 
-              th:data-date-fin="${a.dateFinEncheres}"></span>
-    </td>
-    
-    <td th:text="${a.retrait?.rue + ' ' + a.retrait?.codePostal + ' ' + a.retrait?.ville}"></td>
+					<ul class="cards">
+  <li class="cards_item" th:each="a : ${articles}">
+    <div class="card">
+      <div class="card_image">
+        <img th:src="@{'/images/' + ${a.categorie.image}}" th:alt="${a.nomArticle}" />
+        </div>
+        <div class="card_price" th:text="${a.miseAPrix + ' points'}"></div>
+       
+      <div class="card_content">
+        <h2 class="card_title">
+          <a th:href="@{/encheres/encherir(idArticle=${a.idArticle})}" th:text="${a.nomArticle}"></a>
+        </h2>
+        <div class="card_text">
+          <p>
+            Fin : <span th:text="${#temporals.format(a.dateFinEncheres,'dd-MM-yyyy HH:mm')}"></span>
+          </p>
+          <p>
+            Temps restant :
+            <span class="compte-rebours"
+                  th:data-date-debut="${a.dateDebutEncheres}" 
+                  th:data-date-fin="${a.dateFinEncheres}"></span>
+          </p>
+          <p th:text="'Retrait : ' + ${a.retrait?.rue} + ' ' + ${a.retrait?.codePostal} + ' ' + ${a.retrait?.ville}"></p>
+          <p>
+            Vendeur : <a th:href="@{/encheres/profil(pseudo=${a.utilisateur.pseudo})}"
+                         th:text="${a.utilisateur.pseudo}"></a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </li>
+</ul>
 
-    <td><a th:href="@{/encheres/profil(pseudo=${a.utilisateur.pseudo})}" th:text="${a.utilisateur.pseudo}"></a></td>
-</tr>
-					</tbody>
+
 </table>
-</div>
 		<!--  </th:block>-->
 			
 				
@@ -207,6 +211,7 @@
 
  	
  </script>
+ 
 
 </body>
 </html>

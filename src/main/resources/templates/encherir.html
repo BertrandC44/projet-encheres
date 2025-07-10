@@ -28,8 +28,6 @@
 
 <!--		<input type="hidden" name="idArticle" th:value="${article.idArticle}" /> -->
 
-		
-
 		  
 		<input type="hidden" name="dateEnchere" th:value="${dateEnchere}" /> 
 
@@ -44,7 +42,7 @@
 		<ul class="form-list">
 
 			<li>
-			<img class="img-enchere" th:src="@{${'/images/'+ article.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
+			<img class="img-enchere" th:src="@{'/images/' + ${article.image}}" alt="photo de l'article" width="100"/>
 			</li>
 			
 			<li>
@@ -102,7 +100,7 @@
 
 				<li th:if="${utilisateurEnSession.idUtilisateur != article.utilisateur.idUtilisateur and article.dateDebutEncheres.isBefore(dateActuelle)}">
 				<label for="montantEnchere">Ma proposition : </label>
-				<input type="number" id="montantEnchere"  name="montantEnchere" th:attr="min=${enchereMin}" th:value="${montantEnchere}" required>
+				<input type="number" id="montantEnchere"  name="montantEnchere" th:min="${enchereMin}" th:value="${montantEnchere}" required>
 				</li>
 
 			<li th:if="${utilisateurEnSession.idUtilisateur != article.utilisateur.idUtilisateur and article.dateDebutEncheres.isBefore(dateActuelle) }">

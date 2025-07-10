@@ -27,8 +27,8 @@ public class ArticleDAOImpl implements ArticleDAO {
 
 	private static final String FIND_ALL = "SELECT * FROM ARTICLE";
 	private static final String FIND_BY_ID = "SELECT * FROM ARTICLE a JOIN RETRAIT r ON a.idArticle = r.idArticle JOIN CATEGORIE c ON a.idCategorie = c.idCategorie JOIN UTILISATEUR u ON a.idUtilisateur=u.idUtilisateur WHERE a.idArticle = :idArticle";
-	private static final String CREATE_ARTICLE = "INSERT INTO ARTICLE (nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, idCategorie, idUtilisateur) VALUES "
-			+ "(:nomArticle, :description, :dateDebutEncheres, :dateFinEncheres, :miseAPrix, :prixVente, :etatVente, :idCategorie, :idUtilisateur)";
+	private static final String CREATE_ARTICLE = "INSERT INTO ARTICLE (nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, idCategorie, idUtilisateur, imageArticle) VALUES "
+			+ "(:nomArticle, :description, :dateDebutEncheres, :dateFinEncheres, :miseAPrix, :prixVente, :etatVente, :idCategorie, :idUtilisateur, :imageArticle)";
 	private static final String DELETE_ARTICLE = "DELETE FROM ARTICLE WHERE idArticle = :idArticle";
 	// private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo,
 	// r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON
@@ -38,11 +38,11 @@ public class ArticleDAOImpl implements ArticleDAO {
 			+ "idCategorie = :idCategorie WHERE idArticle = :idArticle";
 	/*imageArticle = :imageArticle,*/
 	
+
 	private static final String FIND_BY_ID_USER = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur WHERE u.idUtilisateur=:idUtilisateur";
 	private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle";
 	private static final String FIND_ENCHERES_EN_COURS = "SELECT * FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur WHERE dateDebutEncheres<=GETDATE() AND dateFinEncheres>GETDATE() AND a.idUtilisateur<>:idUtilisateur";
 	private static final String FIND_MES_ENCHERES_EN_COURS = "  SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN ENCHERE e ON a.idArticle = e.idArticle\r\n"
-
 			+ "  WHERE dateDebutEncheres<=GETDATE() AND dateFinEncheres>GETDATE() and e.idUtilisateur =:idUtilisateur";
 	private static final String FIND_MES_ENCHERES_REMPORTEES = " SELECT TOP 1 * FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN ENCHERE e ON a.idArticle = e.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur \r\n"
 			+ "  WHERE dateFinEncheres<=GETDATE() and e.idUtilisateur =:idUtilisateur";
@@ -118,6 +118,7 @@ public class ArticleDAOImpl implements ArticleDAO {
         map.addValue("etatVente", article.getEtatVente());
         map.addValue("idCategorie", article.getCategorie().getIdCategorie());
         map.addValue("idUtilisateur", article.getUtilisateur().getIdUtilisateur());
+        map.addValue("imageArticle", article.getImage());
 
         this.jdbcTemplate.update(CREATE_ARTICLE, map,keyHolder);
        
@@ -286,6 +287,7 @@ public class ArticleDAOImpl implements ArticleDAO {
             a.setMiseAPrix(rs.getInt("miseAPrix"));
             a.setPrixVente(rs.getInt("prixVente"));
             a.setEtatVente(rs.getInt("etatVente"));
+            a.setImage(rs.getString("imageArticle"));
 
             Categorie categorie = new Categorie();
             categorie.setIdCategorie(rs.getInt("idCategorie"));
@@ -322,6 +324,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     		a.setMiseAPrix(rs.getInt("miseAPrix"));
     		a.setPrixVente(rs.getInt("prixVente"));
     		a.setEtatVente(rs.getInt("etatVente"));
+    		a.setImage(rs.getString("imageArticle"));
     		
     		Categorie categorie = new Categorie();
     		categorie.setIdCategorie(rs.getInt("idCategorie"));

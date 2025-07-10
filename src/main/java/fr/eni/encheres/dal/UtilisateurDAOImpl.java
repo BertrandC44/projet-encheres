@@ -279,29 +279,4 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 	}
 
 
-
-	
-	/*class UtilisateurRowMapper implements RowMapper<Utilisateur>{
-
-		@SuppressWarnings("unchecked")
-		@Override
-		public Utilisateur mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Utilisateur u = new Utilisateur();
-			u.setPseudo(rs.getString("pseudo"));
-			u.setNom(rs.getString("nom"));
-			u.setPrenom(rs.getString("prenom"));
-			u.setEmail(rs.getString("email"));
-			
-			Article article = new Article();
-			article.setIdArticle(rs.getLong("idArticle"));
-			
-			u.setArticles((List<Article>) article);
-			return u;
-		}
-		
-	}*/
-	
-	
-
-
 }
