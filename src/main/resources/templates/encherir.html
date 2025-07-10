@@ -28,8 +28,6 @@
 
 <!--		<input type="hidden" name="idArticle" th:value="${article.idArticle}" /> -->
 
-		
-
 		  
 		<input type="hidden" name="dateEnchere" th:value="${dateEnchere}" /> 
 
@@ -44,39 +42,38 @@
 		<ul class="form-list">
 
 			<li>
-			<img class="img-enchere" th:src="@{${'/images/'+ article.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
+			<img class="img-enchere" th:src="@{'/images/' + ${article.image}}" alt="photo de l'article" width="100"/>
 			</li>
 			
 			<li>
 
-
 				<div th:if="${#fields.hasErrors('global')}" class="erreur">
-
 	        		<ul>
 	            		<li th:errors="*{global}"></li>
 	       			</ul>
 	    		</div>
+	    	</li>	
+	    		
 			<li>
- 
 				<label for="description">Description : </label>
-			<textarea type="text" id="description" th:text="${article.description}" ></textarea>
+				<span type="text" id="description" th:text="${article.description}" ></span>
 			</li>
+			
 			<li>
 				<label for="categorie">Catégorie : </label>
-			<span type="text" id="categorie" th:text="${categorieArticle}" ></span>
+				<span type="text" id="categorie" th:text="${categorieArticle}" ></span>
 			</li>
+			
 			<li>
 				<label for="mOffre">Meilleure offre : </label>
- 
-				<span type="text" id="mOffre" th:text="${montantMax} + ' points (' +  ${utilisateurMontantMax} + ')'" ></span>
- 
- 
+ 				<span type="text" id="mOffre" th:text="${montantMax} + ' points (' +  ${utilisateurMontantMax} + ')'" ></span>
 			</li>
+			
 			<li>
 				<label for="miseAPrix">Mise à prix : </label>
 				<span type="text" id="miseAPrix" th:text="${article.miseAPrix} + ' points'" > </span>
- 
 			</li>
+			
 			<li>
 				<label for="dateFinEncheres">Fin de l'enchère : </label>
 				<span th:text="${#temporals.format(article.dateFinEncheres,'dd-MM-yyyy HH:mm')}"></span>
@@ -100,17 +97,22 @@
 				<a id="utilisateur" th:text="${article.utilisateur.pseudo}"th:href="@{'/encheres/profil'(pseudo=${article.utilisateur.pseudo})}"></a>
 				</span>
 			</li>
-			<li >
-			    
-				<li>
+
+				<li th:if="${utilisateurEnSession.idUtilisateur != article.utilisateur.idUtilisateur and article.dateDebutEncheres.isBefore(dateActuelle)}">
 				<label for="montantEnchere">Ma proposition : </label>
-				<input type="number" id="montantEnchere"  name="montantEnchere" th:attr="min=${enchereMin}" th:value="${montantEnchere}" required>
+				<input type="number" id="montantEnchere"  name="montantEnchere" th:min="${enchereMin}" th:value="${montantEnchere}" required>
 				</li>
 
-			<li >
+			<li th:if="${utilisateurEnSession.idUtilisateur != article.utilisateur.idUtilisateur and article.dateDebutEncheres.isBefore(dateActuelle) }">
 				<button type="submit" class="form-button" name="encherir" >Enchérir</button>
-
-			</li>	
+			</li>
+					
+			<li th:if="${utilisateurEnSession.idUtilisateur == article.utilisateur.idUtilisateur and article.dateDebutEncheres.isAfter(dateActuelle) }">
+				<a th:href="@{/encheres/modifier(idArticle=${article.idArticle})}">
+				<button type="button" class="form-button" name="modifier" >Modifier</button>
+				</a>
+			</li>
+			
 		</ul>
 	</form>
 </main>

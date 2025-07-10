@@ -5,7 +5,6 @@
 
 <head th:insert="~{fragments/liens::liens}">
 
- <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta charset="UTF-8">
 <title>ENI-Enchères</title>
 
@@ -17,15 +16,17 @@
 
 <main>
 
+
 <div >
 	<ul >
 
 	<form th:action="@{/encheres}" method="post" class="filters">
+
+
 	<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">
 
 		
 		<h2>Filtres :</h2>
-		
 		
 			<li >
 			<label for="achats">Achats :</label>
@@ -77,10 +78,9 @@
 
 			</ul>
 		
-		
+
 			</form>
-		
-		
+
 			
 			
 				<h1> Ventes en cours : </h1>
@@ -91,7 +91,7 @@
 			
 					<th:block data-th-if="${utilisateurEnSession != null and utilisateurEnSession.idUtilisateur > 0}">  -->
 					
-			
+
 		<div>
 					<table class="table">
 					<ul class="cards">
@@ -127,8 +127,8 @@
   </li>
 </ul>
 
+
 </table>
-</div>
 		<!--  </th:block>-->
 			
 				
@@ -211,6 +211,7 @@
 
  	
  </script>
+ 
 
 </body>
 </html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<link rel="icon" data-th-href="@{/images/logoENI.png}" sizes="32x32">
+<link rel="stylesheet" th:href="@{/css/connexion.css}">
+<head th:insert="~{fragments/liens::liens}">
+<meta charset="UTF-8">
+
+
+<title>Modifier enchère</title>
+
+
+
+<link rel="stylesheet" href=
+"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+
+<body>
+<header th:replace="~{fragments/entete::entete}"></header>
+
+<main>
+ 
+
+	<form class="object-form" th:action="@{/encheres/modifier/ok}" method="post" th:object="${article}">
+		<h1>Détail de la vente</h1>
+
+		<input type="hidden" name="dateEnchere" th:value="${dateEnchere}" /> 
+
+		
+		  <input type="hidden" name="idArticle" th:value="*{idArticle}" />
+		 <!--
+		<input type="hidden" name="utilisateurEnSession" th:value="${utilisateurEnSession}" />
+		 -->
+
+		<h2 th:text="*{nomArticle}"></h2> 
+
+		<ul class="form-list">
+
+			<li>
+			<img class="img-enchere" th:src="@{${'/images/'+ article.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
+			</li>
+			<!-- 
+			<li>
+				<div th:if="${#fields.hasErrors('global')}" class="erreur">
+
+	        		<ul>
+	            		<li th:errors="*{global}"></li>
+	       			</ul>
+	    		</div>
+	    	</li>
+	    	 -->
+	    	 <li>
+    			<label for="nomArticle">Article : </label>
+    			<input type="text" id="article" name="nomArticle" th:field="*{nomArticle}">
+    		</li>
+	    	 
+	    	
+			<li>
+				<label for="description">Description : </label>
+				<input type="text" id="description" th:field="*{description}">
+			</li>
+		
+			
+			<li>
+		  		<label for="idCategorie">Catégorie</label>
+		  		<select id="idCategorie" name="idCategorie" th:field="*{categorie.idCategorie}">
+		    	  	<option value =0 disabled> Choisir une catégorie</option>
+		    		<option th:each="c : ${categorie}" 
+		            	th:value="${c.idCategorie}" 
+		            	th:text="${c.libelle}" >
+		    		</option>
+  				</select>
+  			</li>
+			
+			
+			
+			<li>
+				<label for="miseAPrix">Mise à prix : </label>
+				<input type="text" id="miseAPrix" th:field="*{miseAPrix}">
+			</li>
+			
+			<li>
+    			<label for="debutEnchere">Début de l'enchère :</label>
+    			<input type="date" id="debutEnchere" name="dateDebutEncheres" th:field="*{dateDebutEncheres}">
+    		</li>
+
+			<li>
+	    		<label for="dateFinEncheres">Fin de l'enchère :</label>
+	    		<input type="date" id="finEnchere" name="dateFinEncheres"  th:value="*{#temporals.format(dateFinEncheres,'dd-MM-yyyy')}">
+	    	</li>
+			
+						
+				<h2>Retrait :</h2><br>
+
+			<li>
+	    		<label for="rue">Rue :</label>
+	    		<input type="text" id="rue"  th:field="*{retrait.rue}">
+	    	</li>
+	
+			<li>
+	    		<label for="codePostal">Code Postal :</label>
+	    		<input type="text" id="codePostal"  th:field="*{retrait.codePostal}">
+	    	</li>
+	
+			<li>
+	    		<label for="ville">Ville :</label>
+	    		<input type="text" id="ville"  th:field="*{retrait.ville}">
+	    	</li>  
+			
+			
+			<li>
+				<label for="vendeur">Vendeur : </label>
+
+				<span>
+
+				<a id="utilisateur" th:text="*{utilisateur.pseudo}"th:href="@{'/encheres/profil'(pseudo=${article.utilisateur.pseudo})}"></a>
+				</span>
+			</li>
+			
+			    
+			<li th:if="${utilisateurEnSession.idUtilisateur != article.utilisateur.idUtilisateur}">
+				<label for="montantEnchere">Ma proposition : </label>
+				<input type="number" id="montantEnchere"  name="montantEnchere" th:attr="min=${enchereMin}" th:value="${montantEnchere}" required>
+			</li>
+					
+			<li th:if="${utilisateurEnSession.idUtilisateur == article.utilisateur.idUtilisateur && article.dateDebutEncheres.isAfter(dateActuelle)}">>
+				<button type="submit" class="form-button" name="valider" >Valider</button>
+			</li>
+			
+		</form>
+			
+			
+			<form th:action="@{/encheres/supprimer}" method="get" th:object=${article}>
+			
+				<li th:if="${utilisateurEnSession.idUtilisateur == article.utilisateur.idUtilisateur && article.dateDebutEncheres.isAfter(dateActuelle)}">
+					<input type="hidden" th:field="*{idArticle}" id="idArticle" />
+					<button class="form-button" type="submit">Supprimer</button>
+				</li>
+			</form>
+			
+			</ul>	
+			
+		
+	
+</main>
+
+<script>
+ 
+				 	function startChrono(element){
+						const dateFin = new Date(element.dataset.dateFin);
+						const dateDebut = new Date(element.dataset.dateDebut);
+						
+						
+				 			function updateChrono(){
+								const maintenant = new Date();
+								
+								
+								if(maintenant < dateDebut){
+									element.textContent = "Enchère non commencée";
+									return;
+									}
+								const diff = dateFin - maintenant;
+								
+									if(diff<= 0){
+										element.textContent = "Enchère terminée";
+										return;
+										}
+									 const jours = Math.floor(diff / (1000 * 60 * 60 * 24));
+									    const heures = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+									    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+									    const secondes = Math.floor((diff % (1000 * 60)) / 1000);
+							
+							element.textContent=
+								`${jours}j   ${heures.toString().padStart(2,'0')}h   `+
+								`${minutes.toString().padStart(2,'0')}m   `+
+								`${secondes.toString().padStart(2,'0')}s`;
+								
+								
+				 	}
+				 			updateChrono();
+							        setInterval(updateChrono,1000);
+				 	}
+				 	document.addEventListener('DOMContentLoaded', () => {
+						const elements=document.querySelectorAll(".compte-rebours");
+						elements.forEach(el => startChrono(el));
+				 	});
+				
+				 	
+				 </script>
+
+</body>
+</html>>
