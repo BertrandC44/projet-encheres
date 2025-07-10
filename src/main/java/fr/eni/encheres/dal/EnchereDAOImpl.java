@@ -40,11 +40,22 @@ public class EnchereDAOImpl implements EnchereDAO {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
 
+	/**
+     * Retourne toutes les enchères enregistrées.
+     * 
+     * @return une liste d'enchères
+     */
 	@Override
 	public List<Enchere> consulterEncheres() {
 		return namedParameterJdbcTemplate.query(FIND_ALL, new BeanPropertyRowMapper<>(Enchere.class));
 	}
 	
+	/**
+     * Récupère une enchère liée à un article spécifique.
+     * 
+     * @param idArticle identifiant de l'article
+     * @return l'enchère correspondante
+     */
 	@Override
 	public Enchere consulterEnchereParId(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -52,6 +63,12 @@ public class EnchereDAOImpl implements EnchereDAO {
 		return namedParameterJdbcTemplate.queryForObject(FIND_BY_ID, map, new BeanPropertyRowMapper<>(Enchere.class));
 	}
 	
+	/**
+     * Retourne le libellé de la catégorie de l’article.
+     * 
+     * @param idArticle identifiant de l'article
+     * @return libellé de la catégorie
+     */
 	@Override
 	public String categorieArticle(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -59,6 +76,12 @@ public class EnchereDAOImpl implements EnchereDAO {
 		return this.namedParameterJdbcTemplate.queryForObject(FIND_CATEGORIE, map, String.class);
 	}
 	
+	/**
+     * Récupère le montant le plus élevé pour un article.
+     * 
+     * @param idArticle identifiant de l'article
+     * @return montant maximum ou 0 si aucune enchère
+     */
 	@Override
 	public int montantEnchereMax(long idArticle) {
 		MapSqlParameterSource map= new MapSqlParameterSource();
@@ -68,6 +91,12 @@ public class EnchereDAOImpl implements EnchereDAO {
 		return montant != null ? montant : 0;
 	}
 
+	/**
+     * Récupère le pseudo de l'utilisateur ayant fait l'enchère la plus haute.
+     * 
+     * @param idArticle identifiant de l'article
+     * @return pseudo ou message par défaut si aucun enchérisseur
+     */
 	@Override
 	public String utilisateurMontantMax(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -81,27 +110,61 @@ public class EnchereDAOImpl implements EnchereDAO {
 
 	}
 
+	/**
+     * Compte le nombre total d'enchères sur un article.
+     * 
+     * @param idArticle identifiant de l'article
+     * @return nombre d'enchères
+     */
 	public int nbEnchere(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idArticle", idArticle);
 		return this.namedParameterJdbcTemplate.queryForObject(COUNT_ENCHERE, map, Integer.class);
 	}
 
-
+	/**
+     * Retourne l'ID de l'utilisateur ayant mis l'enchère la plus haute.
+     * 
+     * @param idArticle identifiant de l'article
+     * @return ID utilisateur
+     */
 	@Override
 	public long idUtilisateurMontantMax(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idArticle", idArticle);
-		return (long)this.namedParameterJdbcTemplate.queryForObject(FIND_IDUTILISATEUR_MAX, map, Integer.class);
+ 
+		try {
+		    return namedParameterJdbcTemplate.queryForObject(FIND_IDUTILISATEUR_MAX, map, Integer.class);
+		} catch (EmptyResultDataAccessException e) {
+		    return 0;  
+		}
 	}
+ 
 	
+	 /**
+     * Retourne l'ID de l'utilisateur ayant mis la deuxième meilleure enchère.
+     * 
+     * @param idArticle identifiant de l'article
+     * @return ID utilisateur
+     */
 	@Override
 	public long idUtilisateurARecrediter(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idArticle", idArticle);
-		return (long)this.namedParameterJdbcTemplate.queryForObject(FIND_IDUTILISATEUR_SECOND, map, Integer.class);
+		try {
+		    return namedParameterJdbcTemplate.queryForObject(FIND_IDUTILISATEUR_SECOND, map, Integer.class);
+		} catch (EmptyResultDataAccessException e) {
+		    return 0;  
+		}
 	}
 
+	/**
+     * Ajoute une enchère dans la base de données.
+     * 
+     * @param montantEnchere montant proposé
+     * @param idUtilisateur ID de l'utilisateur enchérisseur
+     * @param idArticle ID de l'article concerné
+     */
 	@Override
 	public void encherir(int montantEnchere, long idUtilisateur, long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -115,6 +178,12 @@ public class EnchereDAOImpl implements EnchereDAO {
 
 	}
 
+	/**
+     * Retourne le montant de la deuxième meilleure enchère.
+     * 
+     * @param idArticle identifiant de l'article
+     * @return montant de l'enchère à recréditer
+     */
 	@Override
 	public int recrediter(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -122,6 +191,12 @@ public class EnchereDAOImpl implements EnchereDAO {
 		return this.namedParameterJdbcTemplate.queryForObject(FIND_MONTANT_SECOND, map, Integer.class);
 	}
 	
+	/**
+     * Retourne l'ID du vendeur de l'article.
+     * 
+     * @param idArticle identifiant de l'article
+     * @return ID du vendeur
+     */
 	@Override
 	public long idUtilisateurVendeur(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -129,6 +204,11 @@ public class EnchereDAOImpl implements EnchereDAO {
 		return this.namedParameterJdbcTemplate.queryForObject(FIND_ID_VENDEUR, map, Integer.class);
 	}
 	
+	/**
+     * Met à jour l'état de vente d'un article (passage à l'état "vendu").
+     * 
+     * @param idArticle identifiant de l'article
+     */
 	@Override
 	public void majEtatVente(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();

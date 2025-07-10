@@ -285,13 +285,6 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		return false;
 	}
 
-//	@Override
-//	public boolean isMdpValide(String mdp, BusinessException be) {
-//		if (this.consulterMdpParPseudo(mdp).equals(mdp)) {
-//			return true;
-//		}be.add("Mot de passe incorrect");
-//		return false;
-//	}
 
 	
 

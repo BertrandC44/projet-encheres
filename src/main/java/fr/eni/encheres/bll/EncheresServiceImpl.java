@@ -216,7 +216,7 @@ public class EncheresServiceImpl implements EncheresService{
 		boolean isValid = isNotSameEncherisseur(idArticle, idUtilisateur, be);
 		isValid &=isNotEnoughCredit(montantEnchere, idUtilisateur, be);
 		isValid &=isEnchereOpen(idArticle, be);
-		isValid &=isEnchereClosed2(idArticle, be);
+		isValid &=isEnchereClosed(idArticle, be);
 		isValid &=isNotSameEncherisseurVendeur(idArticle, idUtilisateur, be);
 		isValid &=enchereIsNotEnough(montantEnchere, idArticle, be);
 
@@ -227,9 +227,12 @@ public class EncheresServiceImpl implements EncheresService{
 			utilisateurDAO.majCredit(newCredit, idUtilisateur);
       
 				if (enchereDAO.nbEnchere(idArticle)!=0) {
-					Utilisateur utilisateurSecond = utilisateurDAO.utilisateurparId(enchereDAO.idUtilisateurARecrediter(idArticle));
-					int credit = utilisateurSecond.getCredit() + enchereDAO.recrediter(idArticle);
-					utilisateurDAO.majCredit(credit, utilisateurSecond.getIdUtilisateur());
+					long idUtilisateurSecond=enchereDAO.idUtilisateurARecrediter(idArticle);
+					if (idUtilisateurSecond != 0) {
+						Utilisateur utilisateurSecond = utilisateurDAO.utilisateurparId(enchereDAO.idUtilisateurARecrediter(idArticle));
+						int credit = utilisateurSecond.getCredit() + enchereDAO.recrediter(idArticle);
+						utilisateurDAO.majCredit(credit, utilisateurSecond.getIdUtilisateur());
+						}
 					}
 			} else {
 				throw be;
@@ -261,13 +264,14 @@ public class EncheresServiceImpl implements EncheresService{
      * @return true si le crédit est suffisant, false sinon.
      */
 	private boolean isNotEnoughCredit (int montantEnchere, long idUtilisateur, BusinessException be) {
-		if (montantEnchere>=this.utilisateurDAO.utilisateurparId(idUtilisateur).getCredit()) {
-			be.add("Vous n'avez pas assez de crédit pour enchérir !");
+		int solde=this.utilisateurDAO.utilisateurparId(idUtilisateur).getCredit();
+		if ((solde-montantEnchere)<0) {
+			be.add("Votre solde de crédit (" + solde + " pts) n'est pas assez important pour enchérir ce montant!");
 			return false;
 		}
 		return true;
 	} 
-	 
+		 
 	/**
      * Vérifie si l'enchère est ouverte pour l'article donné.
      * 
@@ -292,25 +296,10 @@ public class EncheresServiceImpl implements EncheresService{
      * @param be Exception métier à enrichir.
      * @return true si l'enchère n'est pas terminée, false sinon.
      */
-	private boolean isEnchereClosed2 (long idArticle, BusinessException be) {
+	private boolean isEnchereClosed (long idArticle, BusinessException be) {
 		LocalDate finEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
 		if (today.isAfter(finEnchereDate)) {
 			be.add("Les enchères sur cet article sont terminées.");
-			return false;
-		}
-		return true;
-	}
-	
-	 /**
-     * Vérifie de manière simplifiée si l'enchère est encore active.
-     * 
-     * @param idArticle ID de l'article.
-     * @return true si l'enchère est encore en cours, false sinon.
-     */
-	@Override
-	public boolean isEnchereClosed (long idArticle) {
-		LocalDate finEnchereDate = this.articleDAO.consulterArticleParId(idArticle).getDateFinEncheres();
-		if (today.isAfter(finEnchereDate)) {
 			return false;
 		}
 		return true;
