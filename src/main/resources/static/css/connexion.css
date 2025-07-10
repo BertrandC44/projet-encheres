@@ -233,6 +233,7 @@ display:inline-block;
 	margin: 0.4rem;
 }
 
+
 @media screen and (min-width: 600px) {
   .cards_item {
     width: 48%;

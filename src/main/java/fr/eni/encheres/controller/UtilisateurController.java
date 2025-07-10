@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exception.BusinessException;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -201,19 +203,28 @@ public class UtilisateurController {
 	        return new Utilisateur();
 	    }
 	
-	    @GetMapping("/encheres/mdpOublie")
-	    public String mdpOublie() {
+	    @GetMapping("/encheres/mdp-oublie")
+	    public String mdpOublie(Model model, @ModelAttribute("error") String error, @ModelAttribute("success") String success) {
 	    	System.out.println("Clic vers mdp oublie");
 	    	return "mdp-oublie";
 	    }
+
+	  @PostMapping("/encheres/mdp-oublie")
+	    	public String mdpOubliePost(@RequestParam(name = "email") String email, @RequestParam(name="motDePasse")String motDePasse, RedirectAttributes redirectAttributes) {
+	    
+		  Utilisateur utilisateur = utilisateurService.consulterUtilisateurparEmail(email);
+	    		if(utilisateur == null) {
+	    			redirectAttributes.addFlashAttribute("error", "aucun compte lié à ce mail");	    		
+	    			
+	    		return "redirect:/encheres/mdp-oublie";
+	    		}
+	    		{
+	    	utilisateurService.mettreAJourMdp(utilisateur.getIdUtilisateur(), motDePasse);
+	    	redirectAttributes.addFlashAttribute("success", "mot de passe modifié");
+	    	return "redirect:/encheres/mdp-oublie";
+	    
+	  }
+
+	  }
+	
 }
-	  /*  @PostMapping("/encheres/mdpOublie")
-	    	public String mdpOubliePost(@RequestParam(name = "email") String email, @Valid @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
-                    BindingResult bindingResult, BusinessException be) {
-	    	if(utilisateurService.consulterUtilisateurparEmail(email).equals(email)) {	
-	    		Utilisateur utilisateur
-	    	}
-	    	}
-	    }*/
-
-
