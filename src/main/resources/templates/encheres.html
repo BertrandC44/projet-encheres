@@ -98,7 +98,7 @@
   <li class="cards_item" th:each="a : ${articles}">
     <div class="card">
       <div class="card_image">
-        <img th:src="@{'/images/' + ${a.categorie.image}}" th:alt="${a.nomArticle}" />
+        <img th:src="@{'/images/' + ${a.image}}" th:alt="${a.nomArticle}" />
         </div>
         <div class="card_price" th:text="${a.miseAPrix + ' points'}"></div>
        

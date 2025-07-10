@@ -170,7 +170,6 @@ public class EncheresServiceImpl implements EncheresService{
 		Retrait retrait = article.getRetrait();
 		retraitDAO.supprimerRetrait(retrait, article.getIdArticle());
 		articleDAO.annulerVente(article);
-		
 	}
 	
 	/**

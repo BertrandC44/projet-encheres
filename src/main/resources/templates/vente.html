@@ -103,23 +103,24 @@
 
 <script>
 
-var input = document.querySelector("input");
-var preview = document.querySelector(".preview");
+input = document.querySelector("input");
+preview = document.querySelector(".preview");
 
 input.addEventListener("change", viderAppercu);
 
 function viderAppercu() {
   preview.innerHTML = "";
 
-  var fichierSelection = input.files;
+  fichierSelection = input.files;
   if (fichierSelection.length === 0) {
 	return
   }
   
-  var fichier = fichierSelection[0];
+  fichier = fichierSelection[0];
 
 
-    var image = document.createElement("img");
+    image = document.createElement("img");
+    image.width = 150;
     image.src = window.URL.createObjectURL(fichier);
     preview.appendChild(image);
 }
