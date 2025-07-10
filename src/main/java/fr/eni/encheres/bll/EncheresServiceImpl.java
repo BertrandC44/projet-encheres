@@ -357,7 +357,7 @@ public class EncheresServiceImpl implements EncheresService{
      * @return true si le montant est suffisant, false sinon.
      */
 	private boolean enchereIsNotEnough (int montantEnchere, long idArticle, BusinessException be) {
-		if(this.enchereDAO.montantEnchereMax(idArticle)>=montantEnchere) {
+		if(this.enchereDAO.montantEnchereMax(idArticle)>=montantEnchere || this.articleDAO.consulterArticleParId(idArticle).getMiseAPrix()>=montantEnchere) {
 			be.add("Vous n'avez pas assez enchéri pour cette article");
 			return false;
 		}
