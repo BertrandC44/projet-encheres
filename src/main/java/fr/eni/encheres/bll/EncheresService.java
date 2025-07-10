@@ -65,7 +65,5 @@ public interface EncheresService {
 	
 	void majEtatVente(long idArticle);
 
-
-
-
 }
+

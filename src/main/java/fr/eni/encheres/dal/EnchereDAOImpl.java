@@ -111,6 +111,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 
 	}
 
+
 	/**
      * Compte le nombre total d'enchères sur un article.
      * 

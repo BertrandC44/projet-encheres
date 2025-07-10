@@ -26,21 +26,18 @@ public class ArticleDAOImpl implements ArticleDAO {
 
 
 	private static final String FIND_ALL = "SELECT * FROM ARTICLE";
+	private static final String CREATE_ARTICLE = "INSERT INTO ARTICLE (nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, idCategorie, idUtilisateur, imageArticle) VALUES "
+			+ "(:nomArticle, :description, :dateDebutEncheres, :dateFinEncheres, :miseAPrix, :prixVente, :etatVente, :idCategorie, :idUtilisateur, :imageArticle)";
 	private static final String FIND_BY_ID = "SELECT * FROM ARTICLE a JOIN RETRAIT r ON a.idArticle = r.idArticle JOIN UTILISATEUR u ON a.idUtilisateur=u.idUtilisateur WHERE a.idArticle = :idArticle";
-	private static final String CREATE_ARTICLE = "INSERT INTO ARTICLE (nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, idCategorie, idUtilisateur) VALUES "
-			+ "(:nomArticle, :description, :dateDebutEncheres, :dateFinEncheres, :miseAPrix, :prixVente, :etatVente, :idCategorie, :idUtilisateur)";
 	private static final String DELETE_ARTICLE = "DELETE FROM ARTICLE WHERE idArticle = :idArticle";
 	// private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo,
 	// r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON
 	// a.idUtilisateur = u.idUtilisateur LEFT JOIN RETRAIT r ON r.idArticle =
 	// a.idArticle";
-
-
 	private static final String FIND_BY_ID_USER = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur WHERE u.idUtilisateur=:idUtilisateur";
 	private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle";
 	private static final String FIND_ENCHERES_EN_COURS = "SELECT * FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur WHERE dateDebutEncheres<=GETDATE() AND dateFinEncheres>GETDATE() AND a.idUtilisateur<>:idUtilisateur";
 	private static final String FIND_MES_ENCHERES_EN_COURS = "  SELECT * FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN ENCHERE e ON a.idArticle = e.idArticle\r\n"
-
 			+ "  WHERE dateDebutEncheres<=GETDATE() AND dateFinEncheres>GETDATE() and e.idUtilisateur =:idUtilisateur";
 	private static final String FIND_MES_ENCHERES_REMPORTEES = " SELECT TOP 1 * FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN ENCHERE e ON a.idArticle = e.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur \r\n"
 			+ "  WHERE dateFinEncheres<=GETDATE() and e.idUtilisateur =:idUtilisateur";
@@ -94,7 +91,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 	public Article consulterArticleParId(long id) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idArticle", id);
-		return this.jdbcTemplate.queryForObject(FIND_BY_ID, map, new ArticleRowMapper());
+		return this.jdbcTemplate.queryForObject(FIND_BY_ID, map, new ArticleTelRowMapper());
 	}
 
 	/**
@@ -116,6 +113,7 @@ public class ArticleDAOImpl implements ArticleDAO {
         map.addValue("etatVente", article.getEtatVente());
         map.addValue("idCategorie", article.getCategorie().getIdCategorie());
         map.addValue("idUtilisateur", article.getUtilisateur().getIdUtilisateur());
+        map.addValue("imageArticle", article.getImage());
 
         this.jdbcTemplate.update(CREATE_ARTICLE, map,keyHolder);
        
@@ -265,6 +263,7 @@ public class ArticleDAOImpl implements ArticleDAO {
             a.setMiseAPrix(rs.getInt("miseAPrix"));
             a.setPrixVente(rs.getInt("prixVente"));
             a.setEtatVente(rs.getInt("etatVente"));
+            a.setImage(rs.getString("imageArticle"));
 
             Categorie categorie = new Categorie();
             categorie.setIdCategorie(rs.getInt("idCategorie"));
@@ -285,6 +284,43 @@ public class ArticleDAOImpl implements ArticleDAO {
 
             return a;
         }
+    }
+    
+    // Garde une seule classe ArticleRowMapper corrigée
+    class ArticleTelRowMapper implements RowMapper<Article> {
+    	
+    	@Override
+    	public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
+    		Article a = new Article();
+    		a.setIdArticle(rs.getLong("idArticle"));
+    		a.setNomArticle(rs.getString("nomArticle"));
+    		a.setDescription(rs.getString("description"));
+    		a.setDateDebutEncheres(rs.getDate("dateDebutEncheres").toLocalDate());
+    		a.setDateFinEncheres(rs.getDate("dateFinEncheres").toLocalDate());
+    		a.setMiseAPrix(rs.getInt("miseAPrix"));
+    		a.setPrixVente(rs.getInt("prixVente"));
+    		a.setEtatVente(rs.getInt("etatVente"));
+    		
+    		Categorie categorie = new Categorie();
+    		categorie.setIdCategorie(rs.getInt("idCategorie"));
+    		a.setCategorie(categorie);
+    		
+    		Utilisateur utilisateur = new Utilisateur();
+    		utilisateur.setIdUtilisateur(rs.getInt("idUtilisateur"));
+    		utilisateur.setPseudo(rs.getString("pseudo"));
+    		utilisateur.setTelephone(rs.getString("telephone"));
+    		a.setUtilisateur(utilisateur);
+    		
+    		Retrait retrait = new Retrait();
+    		retrait.setRue(rs.getString("rue"));
+    		retrait.setVille(rs.getString("ville"));
+    		retrait.setCodePostal(rs.getString("codePostal"));
+    		a.setRetrait(retrait);
+    		
+    		// Supprimé la deuxième création de Utilisateur qui écrasait la première
+    		
+    		return a;
+    	}
     }
 
 

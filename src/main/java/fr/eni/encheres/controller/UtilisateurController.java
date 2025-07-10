@@ -151,7 +151,7 @@ public class UtilisateurController {
 	        return "connexion";
 	    }
 	    
-	    @PostMapping("/encheres/connexion")
+	   @PostMapping("/encheres/connexion")
 	    public String connexion(@RequestParam(name = "pseudo") String pseudo,
 	                            @RequestParam(name="motDePasse") String mdp,
 	                            @Valid @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,

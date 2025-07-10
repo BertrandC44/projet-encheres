@@ -65,9 +65,9 @@
  
 			</li>
 
+			<li>
 				<label for="retrait">Retrait : </label>
-				<span type="text" id="retrait" th:text="${article.retrait.rue}"></span>
-				<span type="text" id="retrait" th:text="${article.retrait.codePostal + '&nbsp;&nbsp;' + article.retrait.ville}"></span>
+				<span type="text" id="retrait" th:text="${article.retrait.rue + '&nbsp;&nbsp; - &nbsp;&nbsp;' + article.retrait.codePostal + '&nbsp;&nbsp;' + article.retrait.ville}"></span>
 			</li>
 			<li>
 				<label for="vendeur">Vendeur : </label>
