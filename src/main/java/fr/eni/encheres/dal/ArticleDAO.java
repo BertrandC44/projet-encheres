@@ -13,6 +13,8 @@ public interface ArticleDAO {
 	void creerVente(Article article);
 	
 	void annulerVente(Article article);
+	
+	void modifierVente(Article article);
 
 	List<Article> consulterArticlePseudo();
 	

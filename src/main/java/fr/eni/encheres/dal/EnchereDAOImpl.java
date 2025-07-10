@@ -85,7 +85,12 @@ public class EnchereDAOImpl implements EnchereDAO {
 	public long idUtilisateurMontantMax(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idArticle", idArticle);
-		return (long)this.namedParameterJdbcTemplate.queryForObject(FIND_IDUTILISATEUR_MAX, map, Integer.class);
+
+		try {
+		    return namedParameterJdbcTemplate.queryForObject(FIND_IDUTILISATEUR_MAX, map, Integer.class);
+		} catch (EmptyResultDataAccessException e) {
+		    return 0;  
+		}
 	}
 	
 	@Override
