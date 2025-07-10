@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import fr.eni.encheres.bll.EncheresService;
 import fr.eni.encheres.bll.ImageService;
@@ -33,14 +30,17 @@ public class EncheresController {
 
 
 	private EncheresService encheresService;
+
 	private UtilisateurService utilisateurService;
 	private ImageService imageService;
+
 
 
 	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ImageService imageService) {
 		this.encheresService = encheresService;
 		this.utilisateurService = utilisateurService;
 		this.imageService = imageService;
+
 
 	}
 
@@ -140,11 +140,26 @@ public class EncheresController {
 		    Utilisateur utilisateur = encheresService.consulterArticleParId(idArticle).getUtilisateur();
 		    System.out.println(utilisateur);
 		    model.addAttribute("utilisateur", utilisateur );
+
+		    
+		    int miseAPrix = encheresService.consulterArticleParId(idArticle).getMiseAPrix();
+		    int montantMax = encheresService.montantMax(idArticle);
+		    int enchereMin = 0;
+		    if (montantMax == 0) {
+		    	enchereMin = miseAPrix + 1;
+		    } else {
+		    	enchereMin = montantMax + 1;
+		    }
+		    long idUtilisateurMontantMax = encheresService.idUtilisateurMontantMax(idArticle);
+		    String utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle);
+		    String categorieArticle = encheresService.categorieArticle(idArticle);
+		    String telephone = utilisateur.getTelephone();
+
+		    model.addAttribute("miseAPrix", miseAPrix);
 		    LocalDate now = LocalDate.now();
 		    LocalDate debut = article.getDateDebutEncheres();
 		    String categorieArticle = encheresService.categorieArticle(idArticle);
 		    model.addAttribute("categorieArticle", categorieArticle);
-		    int montantMax = encheresService.montantMax(idArticle);
 		    model.addAttribute("montantMax", montantMax);
 		    String utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle);
 		    model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);
@@ -189,16 +204,13 @@ public class EncheresController {
 		String utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle) ;
 		model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);
 		
+
 		String categorieArticle = encheresService.categorieArticle(idArticle);
 		model.addAttribute("categorieArticle", categorieArticle);
 		
 		model.addAttribute("enchere",enchere);
 		model.addAttribute("montantEnchere", montantEnchere);
 //		model.addAttribute("idArticle", idArticle);
-
-
-		Utilisateur utilisateur = utilisateurService
-				.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
 
 		if (bindingResult.hasErrors()) {
 			return "redirect:/encheres/encherir?idArticle=" + idArticle;
@@ -215,16 +227,8 @@ public class EncheresController {
 				}
 
 			}
-	
-			model.addAttribute("utilisateur", utilisateurEnSession);
 
-	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
-		
-
-}
-			
-		
-
+	}
 
 	
 
@@ -262,7 +266,6 @@ public class EncheresController {
         model.addAttribute("article", article);
         return "enchere-en-cours";
     }
-
 
 	@PostMapping("/encheres/vente")
 	public String creerArticle(@ModelAttribute Article article,

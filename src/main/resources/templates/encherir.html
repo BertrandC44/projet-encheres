@@ -103,7 +103,7 @@
 
 				<li th:if="${utilisateurEnSession.idUtilisateur != article.utilisateur.idUtilisateur}">
 				<label for="montantEnchere">Ma proposition : </label>
-				<input type="number" id="montantEnchere"  name="montantEnchere" th:attr="min=${enchereMin}" th:value="${montantEnchere}" required>
+				<input type="number" id="montantEnchere"  name="montantEnchere" th:min="${enchereMin}" th:value="${montantEnchere}" required>
 				</li>
 
 			<li th:if="${utilisateurEnSession.idUtilisateur != article.utilisateur.idUtilisateur}">
