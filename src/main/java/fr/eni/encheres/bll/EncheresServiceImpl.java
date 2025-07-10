@@ -41,26 +41,6 @@ public class EncheresServiceImpl implements EncheresService{
 		this.utilisateurDAO = utilisateurDAO;
 		this.retraitDAO = retraitDAO;
 	}
-
-	// méthode pour assigner l'image en fonction de l'id de la catégorie
-	
-    /**
-     * Assigne une image à une catégorie en fonction de son ID.
-     * 
-     * @param c La catégorie à laquelle assigner une image.
-     */
-	private void assignerImageCategorie(Categorie c) {
-	    if (c != null) {
-	        switch ((int) c.getIdCategorie()) {
-	            case 1 -> c.setImage("clavier.jpg");
-	            case 2 -> c.setImage("chaise-en-bois.jpg");
-	            case 3 -> c.setImage("tondeuse.png");
-	            case 4 -> c.setImage("tennis.png");
-	            default -> c.setImage("default.jpg");
-	        }
-	    }
-	}
-	
 	
 
 
@@ -97,9 +77,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Categorie> consulterCategories() {
 	    List<Categorie> categories = categorieDAO.consulterCategories();
-	    for (Categorie c : categories) {
-	        assignerImageCategorie(c);
-	    }
 	    return categories;
 	}
 
@@ -124,9 +101,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticles() {
 	    List<Article> articles = articleDAO.consulterArticles();
-	    for (Article article : articles) {
-	        assignerImageCategorie(article.getCategorie());
-	    }
 	    return articles;
 	}
 
@@ -140,7 +114,7 @@ public class EncheresServiceImpl implements EncheresService{
 	public List<Article> consulterArticlePseudo() {
 	    List<Article> articles = articleDAO.consulterArticlePseudo();
 	    for (Article article : articles) {
-	        assignerImageCategorie(article.getCategorie());
+	    	 article.getImage();
 	    }
 	    return articles;
 	}
@@ -158,7 +132,7 @@ public class EncheresServiceImpl implements EncheresService{
 		try {
 	    Article article = articleDAO.consulterArticleParId(idArticle);
 	    if(article != null) {
-	    assignerImageCategorie(article.getCategorie());
+	    article.getImage();
 	    }
 	    return article;
 	}catch (EmptyResultDataAccessException e) {
@@ -428,9 +402,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticleEncheresEnCours(long idUtilisateur) {
 		List<Article> articles = articleDAO.consulterArticleEncheresEnCours(idUtilisateur);
-	    for (Article a : articles) {
-	        assignerImageCategorie(a.getCategorie());
-	    }
 	    return articles;
 	}
 
@@ -443,9 +414,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticleMesEncheresEnCours(long idUtilisateur) {
 		List<Article> articles = articleDAO.consulterArticleMesEncheresEnCours(idUtilisateur);
-	    for (Article a : articles) {
-	        assignerImageCategorie(a.getCategorie());
-	    }
 	    return articles;
 	}
 
@@ -458,9 +426,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticleMesEncheresRemportees(long idUtilisateur) {
 		List<Article> articles = articleDAO.consulterArticleMesEncheresRemportees(idUtilisateur);
-	    for (Article a : articles) {
-	        assignerImageCategorie(a.getCategorie());
-	    }
 	    return articles;
 	}
 
@@ -473,9 +438,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticleMesVentesEnCours(long idUtilisateur) {
 		List<Article> articles = articleDAO.consulterArticleMesVentesEnCours(idUtilisateur);
-	    for (Article a : articles) {
-	        assignerImageCategorie(a.getCategorie());
-	    }
 	    return articles;
 	}
 
@@ -488,9 +450,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticleMesVentesFutures(long idUtilisateur) {
 		List<Article> articles = articleDAO.consulterArticleMesVentesFutures(idUtilisateur);
-	    for (Article a : articles) {
-	        assignerImageCategorie(a.getCategorie());
-	    }
 	    return articles;
 	}
 
@@ -503,9 +462,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticleMesVentesTerminees(long idUtilisateur) {
 		List<Article> articles = articleDAO.consulterArticleMesVentesTerminees(idUtilisateur);
-	    for (Article a : articles) {
-	        assignerImageCategorie(a.getCategorie());
-	    }
 	    return articles;
 	}
 
@@ -518,9 +474,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticleParIdCategorie(long idCategorie) {
 		List<Article> articles = articleDAO.consulterArticleParCategorie(idCategorie);
-	    for (Article a : articles) {
-	        assignerImageCategorie(a.getCategorie());
-	    }
 	    return articles;
 	
 	}
@@ -534,9 +487,6 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public List<Article> consulterArticleParMotCle(String motCle) {
 		List<Article> articles = articleDAO.consulterArticleParMotCle(motCle);
-	    for (Article a : articles) {
-	        assignerImageCategorie(a.getCategorie());
-	    }
 	    return articles;
 	}
 

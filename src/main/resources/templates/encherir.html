@@ -26,9 +26,6 @@
 		<h1>Détail de la vente</h1>
 
 
-
-		<h1>Détail de la vente</h1>
-
 <!--		<input type="hidden" name="idArticle" th:value="${article.idArticle}" /> -->
 
 		  
@@ -45,7 +42,7 @@
 		<ul class="form-list">
 
 			<li>
-			<img class="img-enchere" th:src="@{${'/images/'+ article.image}}" alt="photo de la catégorie de l'article" width="100"/>
+			<img class="img-enchere" th:src="@{'/images/' + ${article.image}}" alt="photo de l'article" width="100"/>
 			</li>
 			
 			<li>

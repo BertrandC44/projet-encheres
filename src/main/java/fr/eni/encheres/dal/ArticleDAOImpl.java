@@ -300,6 +300,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     		a.setMiseAPrix(rs.getInt("miseAPrix"));
     		a.setPrixVente(rs.getInt("prixVente"));
     		a.setEtatVente(rs.getInt("etatVente"));
+    		a.setImage(rs.getString("imageArticle"));
     		
     		Categorie categorie = new Categorie();
     		categorie.setIdCategorie(rs.getInt("idCategorie"));
