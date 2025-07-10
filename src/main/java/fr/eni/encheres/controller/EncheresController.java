@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,8 +16,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import fr.eni.encheres.bll.EncheresService;
 import fr.eni.encheres.bll.ImageService;
@@ -214,19 +210,20 @@ public class EncheresController {
 				e.getErrors().forEach(message->{
 				    bindingResult.addError(new ObjectError("globalError", message));
 					});
-				}
+				
 				    return "encherir";
-
-
 				}
 
+			}
+	
 			model.addAttribute("utilisateur", utilisateurEnSession);
 
 	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
-		} 
-	}
+		
+
+}
 			
-		}  
+		
 
 
 	
