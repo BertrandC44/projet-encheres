@@ -166,7 +166,26 @@ public class EncheresServiceImpl implements EncheresService{
      */
 	@Override
 	public void annulerVente(Article article) {
-		// TODO Auto-generated method stub
+		article = consulterArticleParId(article.getIdArticle());
+		Retrait retrait = article.getRetrait();
+		retraitDAO.supprimerRetrait(retrait, article.getIdArticle());
+		articleDAO.annulerVente(article);
+		
+	}
+	
+	/**
+	 *Modifier une vente
+	 * @param article L'article dont la vente doit être annulée.
+	 */
+	@Override
+	public void modifierVente(Article article) {
+		Categorie categorie= article.getCategorie();
+		
+		articleDAO.modifierVente(article);
+		Retrait retrait = article.getRetrait();	
+		retrait.setArticle(article);
+		categorieDAO.consulterCategorieParId(categorie.getIdCategorie());
+		retraitDAO.modifierRetrait(retrait, article.getIdArticle());
 		
 	}
 

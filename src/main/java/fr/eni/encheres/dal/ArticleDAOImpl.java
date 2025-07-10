@@ -26,14 +26,19 @@ public class ArticleDAOImpl implements ArticleDAO {
 
 
 	private static final String FIND_ALL = "SELECT * FROM ARTICLE";
+	private static final String FIND_BY_ID = "SELECT * FROM ARTICLE a JOIN RETRAIT r ON a.idArticle = r.idArticle JOIN CATEGORIE c ON a.idCategorie = c.idCategorie JOIN UTILISATEUR u ON a.idUtilisateur=u.idUtilisateur WHERE a.idArticle = :idArticle";
 	private static final String CREATE_ARTICLE = "INSERT INTO ARTICLE (nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, idCategorie, idUtilisateur, imageArticle) VALUES "
 			+ "(:nomArticle, :description, :dateDebutEncheres, :dateFinEncheres, :miseAPrix, :prixVente, :etatVente, :idCategorie, :idUtilisateur, :imageArticle)";
-	private static final String FIND_BY_ID = "SELECT * FROM ARTICLE a JOIN RETRAIT r ON a.idArticle = r.idArticle JOIN UTILISATEUR u ON a.idUtilisateur=u.idUtilisateur WHERE a.idArticle = :idArticle";
 	private static final String DELETE_ARTICLE = "DELETE FROM ARTICLE WHERE idArticle = :idArticle";
 	// private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo,
 	// r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON
 	// a.idUtilisateur = u.idUtilisateur LEFT JOIN RETRAIT r ON r.idArticle =
 	// a.idArticle";
+	private static final String UPDATE_ARTICLE = "UPDATE ARTICLE SET  nomArticle = :nomArticle, description = :description, dateDebutEncheres = :dateDebutEncheres, dateFinEncheres = :dateFinEncheres, miseAPrix = :miseAPrix,"
+			+ "idCategorie = :idCategorie WHERE idArticle = :idArticle";
+	/*imageArticle = :imageArticle,*/
+	
+
 	private static final String FIND_BY_ID_USER = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur WHERE u.idUtilisateur=:idUtilisateur";
 	private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle";
 	private static final String FIND_ENCHERES_EN_COURS = "SELECT * FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur WHERE dateDebutEncheres<=GETDATE() AND dateFinEncheres>GETDATE() AND a.idUtilisateur<>:idUtilisateur";
@@ -136,6 +141,25 @@ public class ArticleDAOImpl implements ArticleDAO {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idArticle", article.getIdArticle());
 		this.jdbcTemplate.update(DELETE_ARTICLE, map);
+	}
+	
+	
+	/**
+	 *Modifier un article mis en vente
+	 *@param article Article à modifier
+	 */
+	@Override
+	public void modifierVente(Article article) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idArticle", article.getIdArticle());
+		map.addValue("nomArticle", article.getNomArticle());
+        map.addValue("description", article.getDescription());
+        map.addValue("dateDebutEncheres", article.getDateDebutEncheres());
+        map.addValue("dateFinEncheres", article.getDateFinEncheres());
+        map.addValue("miseAPrix", article.getMiseAPrix());
+        map.addValue("idCategorie", article.getCategorie().getIdCategorie());
+		
+		this.jdbcTemplate.update(UPDATE_ARTICLE, map);
 	}
 
 	 /**
@@ -304,6 +328,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     		
     		Categorie categorie = new Categorie();
     		categorie.setIdCategorie(rs.getInt("idCategorie"));
+    		categorie.setLibelle(rs.getString("libelle"));
     		a.setCategorie(categorie);
     		
     		Utilisateur utilisateur = new Utilisateur();
