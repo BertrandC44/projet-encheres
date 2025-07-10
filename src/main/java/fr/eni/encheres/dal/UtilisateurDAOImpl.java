@@ -30,7 +30,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 	private static final String COUNT_ID = "SELECT COUNT(*) FROM UTILISATEUR WHERE idUtilisateur =:idUtilisateur";
 	private static final String IS_ADMIN = "SELECT administrateur FROM UTILISATEUR WHERE idUtilisateur =:idUtilisateur";
 	private static final String FIND_MDP_BY_PSEUDO = "SELECT motDePasse FROM UTILISATEUR WHERE pseudo=:pseudo";
-	
+	private static final String UPDATE_MDP ="UPDATE UTILISATEUR SET motDePasse = :motDePasse WHERE idUtilisateur = :idUtilisateur";
 	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -190,6 +190,15 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		map.addValue("pseudo", pseudo);
 		
 		return namedParameterJdbcTemplate.queryForObject(FIND_MDP_BY_PSEUDO, map, String.class);
+	}
+
+	@Override
+	public void mettreAJourMdp(Long idUtilisateur, String motDePasse) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("motDePasse", motDePasse);
+		map.addValue("idUtilisateur", idUtilisateur);
+		namedParameterJdbcTemplate.update(UPDATE_MDP, map);
+
 	}
 
 

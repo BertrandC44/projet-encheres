@@ -146,7 +146,10 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 			return true;
 		}be.add("L'email \"" + email + "\" a déjà un compte associé");
 		return false;
-	}
+
+		}
+	
+
 	
 	@Override
 	public boolean isPseudoModifierValide(String pseudo, Utilisateur utilisateur, Utilisateur utilisateurEnSession, BusinessException be) {
@@ -191,6 +194,14 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		return true;
 	}
 
+	@Override
+	public void mettreAJourMdp(Long idUtilisateur, String motDePasse) {
+		utilisateurDAO.mettreAJourMdp(idUtilisateur, motDePasse);
+		/*if{(!utilisateurDAO.isEmailValide(email)) {
+			be.add("L'email \"" + email + "\" n'existe pas");*/
+	}
+
+		
 	
 //	@Override
 //	public boolean isMdpValide(String mdp, BusinessException be) {
