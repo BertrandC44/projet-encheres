@@ -75,6 +75,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 		map.addValue("idArticle", idArticle);
 		return this.namedParameterJdbcTemplate.queryForObject(FIND_CATEGORIE, map, String.class);
 	}
+
 	
 	/**
      * Récupère le montant le plus élevé pour un article.
@@ -190,13 +191,8 @@ public class EnchereDAOImpl implements EnchereDAO {
 		map.addValue("idArticle", idArticle);
 		return this.namedParameterJdbcTemplate.queryForObject(FIND_MONTANT_SECOND, map, Integer.class);
 	}
-	
-	/**
-     * Retourne l'ID du vendeur de l'article.
-     * 
-     * @param idArticle identifiant de l'article
-     * @return ID du vendeur
-     */
+
+
 	@Override
 	public long idUtilisateurVendeur(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();

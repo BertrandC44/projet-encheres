@@ -21,7 +21,6 @@ public class BusinessException extends Exception{
 	public boolean hasError() {
 		return errors.isEmpty();
 	}
-
 }
 
 
