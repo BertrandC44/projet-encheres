@@ -12,7 +12,10 @@ import org.springframework.stereotype.Repository;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Retrait;
 
-
+/**
+ * Implémentation du DAO pour les opérations liées aux retraits d'articles.
+ * Utilise NamedParameterJdbcTemplate pour interagir avec la base de données.
+ */
 @Repository
 public class RetraitDAOImpl implements RetraitDAO {
 
@@ -22,11 +25,23 @@ public class RetraitDAOImpl implements RetraitDAO {
 		
 		private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+		
+	    /**
+	     * Constructeur avec injection du NamedParameterJdbcTemplate.
+	     * 
+	     * @param namedParameterJdbcTemplate template JDBC à utiliser.
+	     */
 		public RetraitDAOImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 
 			this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 		}
 
+		 /**
+	     * Récupère la liste des retraits liés à un article donné.
+	     * 
+	     * @param idArticle identifiant de l'article.
+	     * @return liste des retraits associés.
+	     */
 		@Override
 		public List<Retrait> consulterRetrait(long idArticle) {
 			MapSqlParameterSource map = new MapSqlParameterSource();
@@ -35,7 +50,9 @@ public class RetraitDAOImpl implements RetraitDAO {
 			return namedParameterJdbcTemplate.query(FIND_BY_ID, map, new RetraitRowMapper());
 		}
 		
-		
+		 /**
+	     * Mapper personnalisé pour transformer une ligne SQL en objet Retrait.
+	     */
 		class RetraitRowMapper implements RowMapper<Retrait>{
 			@Override
 			public Retrait mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -54,6 +71,12 @@ public class RetraitDAOImpl implements RetraitDAO {
 			}
 		}
 		
+		/**
+	     * Crée une entrée de retrait pour un article dans la base de données.
+	     * 
+	     * @param retrait objet Retrait contenant les informations.
+	     * @param idArticle identifiant de l'article concerné.
+	     */
 			@Override
 			public void creer(Retrait retrait, long idArticle) {
 				MapSqlParameterSource map = new MapSqlParameterSource();			

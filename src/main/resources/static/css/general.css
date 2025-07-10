@@ -2,8 +2,10 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:400,300,100,700,900);
 @import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700;900&display=swap');
 
+	
 *{
 	margin: 0;
+	font-family: 'Lato';
 }
 .entete a{
 	text-decoration:none;
@@ -17,14 +19,16 @@ a{
 
 }
 
+form a{
+	color:white;
+}
+
 h1,h2{
 	 font-family: "Passion One";
 }
-p, a, label, span, input, textarea, td, th{
-	font-family: 'Lato';
-}
 
-p.erreur{
+
+.erreur{
   color:red;
   white-space: pre-line;
 }
@@ -35,6 +39,10 @@ table, th, td {
   text-align:center;
   padding:1em;
 }
+
+
+
+
 
 
 /*@font-face {
