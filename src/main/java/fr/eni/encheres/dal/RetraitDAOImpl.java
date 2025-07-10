@@ -20,8 +20,9 @@ import fr.eni.encheres.bo.Retrait;
 public class RetraitDAOImpl implements RetraitDAO {
 
 		private static final String FIND_BY_ID = "SELECT * FROM ARTICLE WHERE idArticle= :idArticle";
- 
-		private final String INSERT = "INSERT INTO RETRAIT(idArticle, rue, codePostal, ville) VALUES (:idArticle, :rue, :codePostal, :ville)";
+		private static final String INSERT = "INSERT INTO RETRAIT(idArticle, rue, codePostal, ville) VALUES (:idArticle, :rue, :codePostal, :ville)";
+		private static final String UPDATE = "UPDATE RETRAIT SET rue = :rue, codePostal = :codePostal, ville = :ville WHERE idArticle = :idArticle";
+ 		private static final String DELETE = "DELETE FROM RETRAIT WHERE idArticle = :idArticle";
 		
 		private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -50,26 +51,7 @@ public class RetraitDAOImpl implements RetraitDAO {
 			return namedParameterJdbcTemplate.query(FIND_BY_ID, map, new RetraitRowMapper());
 		}
 		
-		 /**
-	     * Mapper personnalisé pour transformer une ligne SQL en objet Retrait.
-	     */
-		class RetraitRowMapper implements RowMapper<Retrait>{
-			@Override
-			public Retrait mapRow(ResultSet rs, int rowNum) throws SQLException {
-				Retrait r = new Retrait();
-				r.setRue(rs.getString("rue"));
-				r.setCodePostal(rs.getString("codePostal"));
-				r.setVille(rs.getString("ville"));
-		
-				// Association pour l'article
-				Article article = new Article();
-				article.setIdArticle(rs.getLong("idArticle"));
-				
-				r.setArticle(article);
-				
-				return r;
-			}
-		}
+	
 		
 		/**
 	     * Crée une entrée de retrait pour un article dans la base de données.
@@ -88,7 +70,55 @@ public class RetraitDAOImpl implements RetraitDAO {
 				namedParameterJdbcTemplate.update(INSERT, map);
 
 			}
+			
+			/**
+			 *Modifier le retrait pour un article donné
+			 *
+			 *@param retrait objet Retrait contenant les informations.
+			 * @param idArticle identifiant de l'article concerné.
+			 */
+			@Override
+			public void modifierRetrait(Retrait retrait, long idArticle) {
+				MapSqlParameterSource map = new MapSqlParameterSource();			
+				map.addValue("idArticle", idArticle);
+				map.addValue("rue", retrait.getRue());
+				map.addValue("codePostal", retrait.getCodePostal());
+				map.addValue("ville", retrait.getVille());
+				namedParameterJdbcTemplate.update(UPDATE, map);
+				
+			}
+			
+			@Override
+			public void supprimerRetrait(Retrait retrait, long idArticle) {
+				MapSqlParameterSource map = new MapSqlParameterSource();			
+				map.addValue("idArticle", idArticle);
+				map.addValue("rue", retrait.getRue());
+				map.addValue("codePostal", retrait.getCodePostal());
+				map.addValue("ville", retrait.getVille());
+				namedParameterJdbcTemplate.update(DELETE, map);
+			}
 
+			
+			 /**
+		     * Mapper personnalisé pour transformer une ligne SQL en objet Retrait.
+		     */
+			class RetraitRowMapper implements RowMapper<Retrait>{
+				@Override
+				public Retrait mapRow(ResultSet rs, int rowNum) throws SQLException {
+					Retrait r = new Retrait();
+					r.setRue(rs.getString("rue"));
+					r.setCodePostal(rs.getString("codePostal"));
+					r.setVille(rs.getString("ville"));
+			
+					// Association pour l'article
+					Article article = new Article();
+					article.setIdArticle(rs.getLong("idArticle"));
+					
+					r.setArticle(article);
+					
+					return r;
+				}
+			}
 		
 }
 

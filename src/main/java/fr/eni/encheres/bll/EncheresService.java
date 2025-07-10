@@ -29,6 +29,8 @@ public interface EncheresService {
 
 	void annulerVente(Article article);
 	
+	void modifierVente(Article article);
+	
 	int debiter(int montantEnchere, Utilisateur utilisateur);
 	
 	void encherir(int montantEnchere, long idUtilisateur, long idArticle ) throws BusinessException;
@@ -64,8 +66,12 @@ public interface EncheresService {
 	long idUtilisateurVendeur(long idArticle);
 	
 	void majEtatVente(long idArticle);
-
-
-
+	
+	void creditervendeur(int montantEnchere,long idArticle);
+	
+	int creditUtilisateurVendeur(long idUtilisateur);
+	
+	void deleteEnchere(long idArticle);
 
 }
+

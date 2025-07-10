@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-
+import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Enchere;
 
 
@@ -20,6 +20,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 	private static final String FIND_ALL = "SELECT * FROM ENCHERE";
 	private static final String FIND_BY_ID = "SELECT * FROM ENCHERE WHERE idArticle = :idArticle";
 	private static final String FIND_ID_VENDEUR = "SELECT idUtilisateur FROM ARTICLE WHERE idArticle = :idArticle";
+	private static final String FIND_CREDIT_VENDEUR = "SELECT U.credit FROM UTILISATEUR U JOIN ARTICLE A ON A.idUtilisateur = U.idUtilisateur WHERE A.idUtilisateur = :idUtilisateur";
 
 	private static final String FIND_MONTANT_MAX = "SELECT MAX(montantEnchere) from ENCHERE WHERE idArticle=:idArticle";
 	private static final String FIND_MONTANT_SECOND = "SELECT montantEnchere FROM ENCHERE WHERE idArticle = :idArticle ORDER BY montantEnchere DESC OFFSET 1 ROW FETCH NEXT 1 ROWS ONLY";
@@ -33,6 +34,8 @@ public class EnchereDAOImpl implements EnchereDAO {
 	private static final String INSERT_ENCHERE = "INSERT INTO ENCHERE (dateEnchere, montantEnchere, idUtilisateur, idArticle) VALUES (:dateEnchere, :montantEnchere, :idUtilisateur, :idArticle)";
 	
 	private static final String UPDATE_ETAT_VENTE = "UPDATE ARTICLE SET etatVente = 2 WHERE idArticle = :idArticle";
+	
+	private static final String DELETE_ENCHERE = "DELETE FROM ENCHERE WHERE idArticle = :idArticle";
 	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -111,6 +114,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 
 	}
 
+
 	/**
      * Compte le nombre total d'enchères sur un article.
      * 
@@ -133,7 +137,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 	public long idUtilisateurMontantMax(long idArticle) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
 		map.addValue("idArticle", idArticle);
- 
+
 		try {
 		    return namedParameterJdbcTemplate.queryForObject(FIND_IDUTILISATEUR_MAX, map, Integer.class);
 		} catch (EmptyResultDataAccessException e) {
@@ -200,6 +204,14 @@ public class EnchereDAOImpl implements EnchereDAO {
 		return this.namedParameterJdbcTemplate.queryForObject(FIND_ID_VENDEUR, map, Integer.class);
 	}
 	
+	
+	@Override
+	public int creditUtilisateurVendeur(long idUtilisateur) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idUtilisateur", idUtilisateur);
+		return this.namedParameterJdbcTemplate.queryForObject(FIND_CREDIT_VENDEUR, map, Integer.class);
+	}
+	
 	/**
      * Met à jour l'état de vente d'un article (passage à l'état "vendu").
      * 
@@ -212,5 +224,19 @@ public class EnchereDAOImpl implements EnchereDAO {
 		this.namedParameterJdbcTemplate.update(UPDATE_ETAT_VENTE, map);
 	}
 
+	
+    /**
+     * Supprime Toutes les encheres de la base selon l'idArticle.
+     * 
+     * @param Enchères à supprimer.
+     */
+	@Override
+	public void deleteEnchere(long idArticle) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("idArticle", idArticle);
+		this.namedParameterJdbcTemplate.update(DELETE_ENCHERE, map);
+		
+	}
+  
 }
 

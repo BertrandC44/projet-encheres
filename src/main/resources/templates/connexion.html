@@ -6,10 +6,6 @@
 
 <title>ENI-Enchères</title>
 
-
-<!-- icon pour le formulaire oui -->
-<link rel="stylesheet" href=
-"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
  
 </head>
  
@@ -28,13 +24,11 @@
 			<ul class= "form-list">
 				<li class="form-input">
 					<label for="pseudo">Identifiant :</label>
-					<i class="fa fa-user icon"></i>
 					<input type="text" placeholder="Pseudo" id="pseudo" name="pseudo" class="form-control" autofocus>
 				</li>
 				
 				<li class="form-input">
 					<label for="motDePasse">Mot de passe :</label>
-					<i class="fa fa-lock icon"></i>
 					<input type="password"  placeholder="Mot de passe" id="motDePasse" name="motDePasse" class="form-control" >
 				</li>
 			
@@ -43,12 +37,16 @@
 				</li>
 			
 				<li>
-					<input type="checkbox" id="sesouvenirdemoi" name="sesouvenirdemoi"  >
+					<input type="checkbox" id="sesouvenirdemoi" name="remember-me"  >
 					<label for="sesouvenirdemoi" id="memoire" >Se souvenir de moi</label>
 				</li>
+				<li>
+				<a href="/encheres/mdpOublie">Mot de passe oublié</a>
+				</li>
 				
+				<li>
 					<a href="/encheres/inscription">Créer un compte</a>
-				
+				</li>
 				
 			</ul>	
 			

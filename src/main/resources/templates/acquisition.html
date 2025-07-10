@@ -41,7 +41,7 @@
 		<ul class="form-list">
  
 			<li>
-			<img class="img-enchere" th:src="@{${'/images/'+ article.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
+			<img class="img-enchere" th:src="@{${'/images/'+ article.image}}" alt="photo de l'article" width="100"/>
 			</li>
 			
 			<li>
@@ -65,9 +65,9 @@
  
 			</li>
 
+			<li>
 				<label for="retrait">Retrait : </label>
-				<span type="text" id="retrait" th:text="${article.retrait.rue}"></span>
-				<span type="text" id="retrait" th:text="${article.retrait.codePostal + '&nbsp;&nbsp;' + article.retrait.ville}"></span>
+				<span type="text" id="retrait" th:text="${article.retrait.rue + '&nbsp;&nbsp; - &nbsp;&nbsp;' + article.retrait.codePostal + '&nbsp;&nbsp;' + article.retrait.ville}"></span>
 			</li>
 			<li>
 				<label for="vendeur">Vendeur : </label>
