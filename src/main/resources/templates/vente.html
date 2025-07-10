@@ -14,7 +14,7 @@
   
   
   <!-- Formulaire 1 : choix de catégorie -->
- <form th:action="@{/encheres/vente}" method="post" th:object="${article}" class="login-form">
+ <form th:action="@{/encheres/vente}" method="post" th:object="${article}" class="login-form" enctype="multipart/form-data">
   <h2>Nouvelle vente</h2>
   <br>
  <ul class="form-list">
@@ -36,11 +36,11 @@
   	</li>-->
   	
   	
-  	<!--  <li>
-	<label for="fichier">Fichier</label>
-   		<input type="file" id="fichier" name="fichier" th:field="*{image}>"
+  	<li>
+	 <label for="fichier">Fichier</label>
+   		<input type="file" id="fichier" name="fichier">
    		<div class="preview"></div>
-   	</li> -->
+   	</li>
     	
     	
     	
@@ -122,7 +122,7 @@
 </main>
 
 
-<!--  <script>
+<script>
 
 var input = document.querySelector("input");
 var preview = document.querySelector(".preview");
@@ -145,7 +145,7 @@ function viderAppercu() {
     preview.appendChild(image);
 }
 
-</script>-->
+</script>
 
 
 </body>

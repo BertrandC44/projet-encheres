@@ -1,5 +1,8 @@
 package fr.eni.encheres.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,12 +12,17 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import fr.eni.encheres.bll.EncheresService;
+import fr.eni.encheres.bll.ImageService;
 import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
@@ -30,11 +38,13 @@ public class EncheresController {
 
 	private EncheresService encheresService;
 	private UtilisateurService utilisateurService;
+	private ImageService imageService;
 
 
-	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService) {
+	public EncheresController(EncheresService encheresService, UtilisateurService utilisateurService, ImageService imageService) {
 		this.encheresService = encheresService;
 		this.utilisateurService = utilisateurService;
+		this.imageService = imageService;
 
 	}
 
@@ -191,6 +201,9 @@ public class EncheresController {
 //		model.addAttribute("idArticle", idArticle);
 
 
+		Utilisateur utilisateur = utilisateurService
+				.consulterUtilisateursParId(utilisateurEnSession.getIdUtilisateur());
+
 		if (bindingResult.hasErrors()) {
 			return "redirect:/encheres/encherir?idArticle=" + idArticle;
 		} else {
@@ -206,8 +219,15 @@ public class EncheresController {
 
 
 				}
+
+			model.addAttribute("utilisateur", utilisateurEnSession);
+
+	        return "redirect:/encheres/encherir?idArticle=" + idArticle;
+		} 
+	}
 			
 		}  
+
 
 	
 
@@ -251,7 +271,8 @@ public class EncheresController {
 	public String creerArticle(@ModelAttribute Article article,
 			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
 			@RequestParam("action") String action, Model model, @RequestParam(name = "rue") String rue,
-			@RequestParam(name = "codePostal") String codePostal, @RequestParam(name = "ville") String ville) {
+			@RequestParam(name = "codePostal") String codePostal, @RequestParam(name = "ville") String ville,
+			@RequestParam("fichier") MultipartFile file) {
 
 		List<Categorie> categories = encheresService.consulterCategories();
 		model.addAttribute("categorie", categories);
@@ -261,6 +282,18 @@ public class EncheresController {
 		retrait.setVille(ville);
 		retrait.setCodePostal(codePostal);
 		article.setRetrait(retrait);
+		
+		String imageNom = "";
+		 
+		if (!file.isEmpty()) {
+			String uploadDirectory = "src/main/resources/static/images";
+			try {
+				imageNom = imageService.sauvegarderImage(uploadDirectory, file);
+				article.setImage(imageNom);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		if ("categorieChoisie".equals(action)) {
 
@@ -293,6 +326,7 @@ public class EncheresController {
 				article.setUtilisateur(utilisateurEnSession);
 				article.setEtatVente(1);
 
+				
 				this.encheresService.creerVente(article);
 
 				return "redirect:/encheres";

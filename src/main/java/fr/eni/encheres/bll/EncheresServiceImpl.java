@@ -322,12 +322,14 @@ public class EncheresServiceImpl implements EncheresService{
 		return true;
 	}
 	
+
 	 /**
      * Vérifie de manière simplifiée si l'enchère est encore active.
      * 
      * @param idArticle ID de l'article.
      * @return true si l'enchère est encore en cours, false sinon.
      */
+
 
 
 	@Override
@@ -339,6 +341,7 @@ public class EncheresServiceImpl implements EncheresService{
 		return true;
 	}
 
+
 	/**
      * Vérifie que l'utilisateur ne tente pas d'enchérir sur son propre article.
      * 
@@ -347,6 +350,7 @@ public class EncheresServiceImpl implements EncheresService{
      * @param be Exception métier à enrichir.
      * @return true si l'utilisateur est différent du vendeur, false sinon.
      */
+
 	private boolean isNotSameEncherisseurVendeur (long idArticle, long idUtilisateur, BusinessException be) {
 		if(this.enchereDAO.idUtilisateurVendeur(idArticle)==idUtilisateur) {
 			be.add("Vous ne pouvez pas encherir sur votre article...");
