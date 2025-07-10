@@ -167,8 +167,8 @@ display:inline-block;
 }
 	
 .card_image img{
-	width: 100%;
-	height: auto;
+	width: auto;
+	height: 150px;
 	object-fit: contain;
 	max-width:12rem;
 	max-height: 12rem;

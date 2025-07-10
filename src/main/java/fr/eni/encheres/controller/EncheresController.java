@@ -10,8 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import fr.eni.encheres.bll.EncheresService;
@@ -142,9 +145,7 @@ public class EncheresController {
 		    } else {
 		    	enchereMin = montantMax + 1;
 		    }
-		    long idUtilisateurMontantMax = encheresService.idUtilisateurMontantMax(idArticle);
-		    String utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle);
-		    String categorieArticle = encheresService.categorieArticle(idArticle);
+		   
 		    String telephone = utilisateur.getTelephone();
 
 		    model.addAttribute("miseAPrix", miseAPrix);
@@ -155,7 +156,6 @@ public class EncheresController {
 		    model.addAttribute("montantMax", montantMax);
 		    String utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle);
 		    model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);
-		    int enchereMin = montantMax + 1;   
 		    model.addAttribute("enchereMin", enchereMin);
 		    long idUtilisateurMontantMax = encheresService.idUtilisateurMontantMax(idArticle);
 		    model.addAttribute("idUtilisateurMontantMax", idUtilisateurMontantMax); 
@@ -212,15 +212,13 @@ public class EncheresController {
 				    bindingResult.addError(new ObjectError("globalError", message));
 					});
 
-				}
+			}
 			 	montantMax = encheresService.montantMax(idArticle);
 			 	utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle) ;
 				model.addAttribute("montantMax", montantMax);
 				model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);
 
 				    return "encherir";
-				}
-
 			}
 
 	}
@@ -288,13 +286,7 @@ public class EncheresController {
 		return "vente";
 	}
 
-    @GetMapping("/encheres/detail")
-    public String afficherDetailEnchere(@RequestParam(name="id") long idArticle, Model model) {
-        Article article = encheresService.consulterArticleParId(idArticle);
-        model.addAttribute("article", article);
-        return "enchere-en-cours";
-    }
-
+   
 	@PostMapping("/encheres/vente")
 	public String creerArticle(@ModelAttribute Article article,
 			@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,

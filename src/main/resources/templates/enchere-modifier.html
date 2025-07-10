@@ -38,7 +38,7 @@
 		<ul class="form-list">
 
 			<li>
-			<img class="img-enchere" th:src="@{${'/images/'+ article.categorie.image}}" alt="photo de la catégorie de l'article" width="100"/>
+			<img class="img-enchere" th:src="@{${'/images/'+ article.image}}" alt="photo de l'article" width="100"/>
 			</li>
 			<!-- 
 			<li>
@@ -124,7 +124,7 @@
 				<input type="number" id="montantEnchere"  name="montantEnchere" th:attr="min=${enchereMin}" th:value="${montantEnchere}" required>
 			</li>
 					
-			<li th:if="${utilisateurEnSession.idUtilisateur == article.utilisateur.idUtilisateur && article.dateDebutEncheres.isAfter(dateActuelle)}">>
+			<li th:if="${utilisateurEnSession.idUtilisateur == article.utilisateur.idUtilisateur && article.dateDebutEncheres.isAfter(dateActuelle)}">
 				<button type="submit" class="form-button" name="valider" >Valider</button>
 			</li>
 			
