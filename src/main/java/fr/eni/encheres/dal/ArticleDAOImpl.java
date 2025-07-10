@@ -26,18 +26,22 @@ public class ArticleDAOImpl implements ArticleDAO {
 
 
 	private static final String FIND_ALL = "SELECT * FROM ARTICLE";
+
 	private static final String FIND_BY_ID = "SELECT * FROM ARTICLE a JOIN RETRAIT r ON a.idArticle = r.idArticle JOIN CATEGORIE c ON a.idCategorie = c.idCategorie JOIN UTILISATEUR u ON a.idUtilisateur=u.idUtilisateur WHERE a.idArticle = :idArticle";
 	private static final String CREATE_ARTICLE = "INSERT INTO ARTICLE (nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, idCategorie, idUtilisateur, imageArticle) VALUES "
 			+ "(:nomArticle, :description, :dateDebutEncheres, :dateFinEncheres, :miseAPrix, :prixVente, :etatVente, :idCategorie, :idUtilisateur, :imageArticle)";
+
 	private static final String DELETE_ARTICLE = "DELETE FROM ARTICLE WHERE idArticle = :idArticle";
 	// private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo,
 	// r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON
 	// a.idUtilisateur = u.idUtilisateur LEFT JOIN RETRAIT r ON r.idArticle =
 	// a.idArticle";
+
 	private static final String UPDATE_ARTICLE = "UPDATE ARTICLE SET  nomArticle = :nomArticle, description = :description, dateDebutEncheres = :dateDebutEncheres, dateFinEncheres = :dateFinEncheres, miseAPrix = :miseAPrix,"
 			+ "idCategorie = :idCategorie WHERE idArticle = :idArticle";
 	/*imageArticle = :imageArticle,*/
 	
+
 
 	private static final String FIND_BY_ID_USER = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur WHERE u.idUtilisateur=:idUtilisateur";
 	private static final String RETRAIT_UTILISATEUR = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur JOIN RETRAIT r ON r.idArticle = a.idArticle";
@@ -325,11 +329,10 @@ public class ArticleDAOImpl implements ArticleDAO {
     		a.setPrixVente(rs.getInt("prixVente"));
     		a.setEtatVente(rs.getInt("etatVente"));
     		a.setImage(rs.getString("imageArticle"));
-    		
     		Categorie categorie = new Categorie();
     		categorie.setIdCategorie(rs.getInt("idCategorie"));
     		categorie.setLibelle(rs.getString("libelle"));
-    		a.setCategorie(categorie);
+
     		
     		Utilisateur utilisateur = new Utilisateur();
     		utilisateur.setIdUtilisateur(rs.getInt("idUtilisateur"));

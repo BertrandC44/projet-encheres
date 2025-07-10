@@ -26,8 +26,14 @@
 		<h1>Détail de la vente</h1>
 
 
+
+<<<<<<< HEAD
+=======
+		<h1>Détail de la vente</h1>
+
 <!--		<input type="hidden" name="idArticle" th:value="${article.idArticle}" /> -->
 
+>>>>>>> b5df0ade690d028ea7fc81600bfb648f02434b8b
 		  
 		<input type="hidden" name="dateEnchere" th:value="${dateEnchere}" /> 
 
@@ -42,7 +48,9 @@
 		<ul class="form-list">
 
 			<li>
+
 			<img class="img-enchere" th:src="@{'/images/' + ${article.image}}" alt="photo de l'article" width="100"/>
+
 			</li>
 			
 			<li>
@@ -98,7 +106,11 @@
 				</span>
 			</li>
 
+
 				<li th:if="${utilisateurEnSession.idUtilisateur != article.utilisateur.idUtilisateur and article.dateDebutEncheres.isBefore(dateActuelle)}">
+
+				<!--  <li th:if="${utilisateurEnSession.idUtilisateur != article.utilisateur.idUtilisateur}">  -->
+
 				<label for="montantEnchere">Ma proposition : </label>
 				<input type="number" id="montantEnchere"  name="montantEnchere" th:min="${enchereMin}" th:value="${montantEnchere}" required>
 				</li>
