@@ -34,9 +34,9 @@ public class ArticleDAOImpl implements ArticleDAO {
 	// r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN UTILISATEUR u ON
 	// a.idUtilisateur = u.idUtilisateur LEFT JOIN RETRAIT r ON r.idArticle =
 	// a.idArticle";
-	private static final String UPDATE_ARTICLE = "UPDATE ARTICLE SET  nomArticle = :nomArticle, description = :description, dateDebutEncheres = :dateDebutEncheres, dateFinEncheres = :dateFinEncheres, miseAPrix = :miseAPrix,"
+	private static final String UPDATE_ARTICLE = "UPDATE ARTICLE SET imageArticle = :imageArticle, nomArticle = :nomArticle, description = :description, dateDebutEncheres = :dateDebutEncheres, dateFinEncheres = :dateFinEncheres, miseAPrix = :miseAPrix,"
 			+ "idCategorie = :idCategorie WHERE idArticle = :idArticle";
-	/*imageArticle = :imageArticle,*/
+	
 	
 
 	private static final String FIND_BY_ID_USER = "SELECT a.*, u.pseudo, r.rue, r.ville, r.codePostal FROM ARTICLE a JOIN RETRAIT r ON r.idArticle = a.idArticle JOIN UTILISATEUR u ON a.idUtilisateur = u.idUtilisateur WHERE u.idUtilisateur=:idUtilisateur";
@@ -158,6 +158,7 @@ public class ArticleDAOImpl implements ArticleDAO {
         map.addValue("dateFinEncheres", article.getDateFinEncheres());
         map.addValue("miseAPrix", article.getMiseAPrix());
         map.addValue("idCategorie", article.getCategorie().getIdCategorie());
+        map.addValue("imageArticle", article.getImage());
 		
 		this.jdbcTemplate.update(UPDATE_ARTICLE, map);
 	}
