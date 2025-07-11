@@ -34,6 +34,7 @@ public interface UtilisateurDAO {
 
 	String consulterMdp(String pseudo);
 
+	void mettreAJourMdp(Long idUtilisateur, String motDePasse);
 
 
 

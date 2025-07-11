@@ -226,7 +226,10 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 			return true;
 		}be.add("L'email \"" + email + "\" a déjà un compte associé");
 		return false;
-	}
+
+		}
+	
+
 	
 	/**
      * Valide le pseudonyme modifié.
@@ -301,7 +304,11 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		return true;
 	}
 
+	@Override
+	public void mettreAJourMdp(Long idUtilisateur, String motDePasse) {
+		utilisateurDAO.mettreAJourMdp(idUtilisateur, motDePasse);
 
+	}
 	
 //	@Override
 //	public boolean isMdpValide(String mdp, BusinessException be) {

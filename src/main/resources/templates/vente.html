@@ -13,7 +13,6 @@
 <main>
   
   
-  <!-- Formulaire 1 : choix de catégorie -->
  <form th:action="@{/encheres/vente}" method="post" th:object="${article}" class="login-form" enctype="multipart/form-data">
   <h2>Nouvelle vente</h2>
   <br>
@@ -36,9 +35,9 @@
    		<input type="file" id="fichier" name="fichier">
    		<div class="preview"></div>
    	</li>
-    	
-  
+
   <br><br>
+
   		<li>
     		<label for="article">Article : </label>
     		<input type="text" id="article" name="nomArticle" th:field="*{nomArticle}">

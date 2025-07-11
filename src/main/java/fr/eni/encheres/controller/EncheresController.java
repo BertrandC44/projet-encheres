@@ -145,7 +145,7 @@ public class EncheresController {
 		    } else {
 		    	enchereMin = montantMax + 1;
 		    }
-		
+
 		    String telephone = utilisateur.getTelephone();
 
 		    model.addAttribute("miseAPrix", miseAPrix);
@@ -156,6 +156,7 @@ public class EncheresController {
 		    model.addAttribute("montantMax", montantMax);
 		    String utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle);
 		    model.addAttribute("utilisateurMontantMax", utilisateurMontantMax); 
+
 		    model.addAttribute("enchereMin", enchereMin);
 		    long idUtilisateurMontantMax = encheresService.idUtilisateurMontantMax(idArticle);
 		    model.addAttribute("idUtilisateurMontantMax", idUtilisateurMontantMax); 
@@ -212,13 +213,14 @@ public class EncheresController {
 				    bindingResult.addError(new ObjectError("globalError", message));
 					});
 
-				}
+			}
 			 	montantMax = encheresService.montantMax(idArticle);
 			 	utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle) ;
 				model.addAttribute("montantMax", montantMax);
 				model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);
 				    return "encherir";
 				}
+
 	}
 
 	@PostMapping("/encheres/acquisition")
