@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
-
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
@@ -161,8 +160,8 @@ public class EncheresController {
 		    model.addAttribute("montantMax", montantMax);
 		    String utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle);
 
-
-		    model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);  
+		    model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);
+		    enchereMin = montantMax + 1;   
 
 		    model.addAttribute("enchereMin", enchereMin);
 		    long idUtilisateurMontantMax = encheresService.idUtilisateurMontantMax(idArticle);
@@ -230,6 +229,8 @@ public class EncheresController {
 				model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);
 				    return "encherir";
 				}
+
+			}
 
 
 	@PostMapping("/encheres/acquisition")
