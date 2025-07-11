@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5229f7ba2d7e4226f7ddc79820cf8410b7911012
 /*CREATE DATABASE [Encheres];*/
 DROP TABLE [ENCHERE];
 DROP TABLE [RETRAIT];

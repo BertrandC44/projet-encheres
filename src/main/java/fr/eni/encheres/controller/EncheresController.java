@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
-
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
@@ -153,8 +152,6 @@ public class EncheresController {
 		    } else {
 		    	enchereMin = montantMax + 1;
 		    }
-
-		   
 
 		    String telephone = utilisateur.getTelephone();
 		    model.addAttribute("miseAPrix", miseAPrix);
