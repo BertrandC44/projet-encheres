@@ -47,6 +47,9 @@ public interface UtilisateurService {
 	
 	boolean isConfMdpValide (Utilisateur utilisateur, BusinessException be);
 	
+	void mettreAJourMdp(Long idUtilisateur, String motDePasse);
+	
+	
 //	boolean isMdpValide (String mdp, BusinessException be);
 
 
