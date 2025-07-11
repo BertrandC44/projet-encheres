@@ -13,6 +13,8 @@ public interface ArticleDAO {
 	void creerVente(Article article);
 	
 	void annulerVente(Article article);
+	
+	void modifierVente(Article article);
 
 	List<Article> consulterArticlePseudo();
 	
@@ -31,6 +33,5 @@ public interface ArticleDAO {
 	List<Article> consulterArticleParCategorie(long idCategorie);
 	
 	List<Article> consulterArticleParMotCle(String motCle);
-
 
 }

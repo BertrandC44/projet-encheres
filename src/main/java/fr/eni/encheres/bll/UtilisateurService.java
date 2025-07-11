@@ -15,6 +15,8 @@ public interface UtilisateurService {
 	
 	String consulterMdpParPseudo(String pseudo);
 	
+	Utilisateur consulterUtilisateurparEmail(String email);
+	
 	int consulterCredit(Utilisateur utilisateur);
 	
 //	void debiter(int montantEnchere,Utilisateur utilisateur);
@@ -42,6 +44,8 @@ public interface UtilisateurService {
 
 	boolean isPseudoModifierValide(String pseudo, Utilisateur utilisateurEnSessionUtilisateur, Utilisateur utilisateur,
 			BusinessException be);
+	
+	boolean isConfMdpValide (Utilisateur utilisateur, BusinessException be);
 	
 //	boolean isMdpValide (String mdp, BusinessException be);
 

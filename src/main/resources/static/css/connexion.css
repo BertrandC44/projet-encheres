@@ -1,7 +1,7 @@
 @charset "UTF-8";
+ 
 
-
-
+ 
 main {
   display: flex;
   justify-content: center;
@@ -11,7 +11,7 @@ main {
   
   
 }
-
+ 
 .form-button {
   padding: 8px 20px;
   border-radius: 0;
@@ -24,8 +24,8 @@ main {
   cursor: pointer;
   margin-right: 10px;
   }
-
-
+ 
+ 
 .login-form, .object-form{
 	justify-content: center;
   display: flex;
@@ -41,67 +41,65 @@ main {
     0 4.4px 4.4px rgba(128, 128, 128, 0.241),
     0 12px 12px rgba(128, 128, 128, 0.35);
 }
-
-
+ 
+ 
 .form-input {
     margin: 12px 0;
- }
-
-
-
+}
+ 
+ 
+ 
 .form-button:hover{
 	
 	background-color: white;
 	color:#33cccc;
 }
-
-
+ 
+ 
 .form-list{
 	list-style-type: none;
 	padding: 0 ;
 }	
-
-/*ul.form-list{
-	width: 130%;
-	
-}*/
-
-
+ 
+ul.form-list{
+	width: 100%;
+	max-width:100%;
+	box-sizing:border-box;
+	padding : 0 1rem;
+}
+ 
+ 
 li{
 	display: flex;
 	justify-content: center;
 	margin-bottom: 10px;
 	
 }
-
+ 
 .form-list input, span, textarea{
 	width: 60%;
 	
 }
 
-
-
 span{
 	margin-left: 1.20 rem;
 	
 }
-
-
-
+ 
 .form-list label{
 	width: 45%;
 }
-
+ 
 label#memoire{
 	width: 80%;	
 }
-
+ 
 input#sesouvenirdemoi{
 	width: 8%;
 	margin-right: 5px;
 }
-
-
+ 
+ 
 .img-enchere {
   display: block;
   margin-left: auto;
@@ -109,32 +107,193 @@ input#sesouvenirdemoi{
   width: 10%
 }
 	
-
+ 
 .object-form label, span, textarea, button, input, a{	
 	display:inline-block;
 	max-width:15rem;
 	margin: 5px 0 5px 0;
 	
 }	
-
+ 
 .login-form label{	
 	display:inline-block;
 	min-width:8rem;
 	margin: 5px 0 5px 0;
 	
 }	
-
+ 
 .object-form li {
 	max-width:20rem;
 }
-
+ 
 .object-form img {
 	min-width:10rem;
 }
-
+ 
 .compte-rebours{
 display:inline-block;
 	max-width:15rem;
-	margin: 5px 0 5px 0;}
+	margin: 5px 0 5px 0;
+	}
 	
+.cards{
+	display: flex;
+	flex-wrap: wrap;
+	list-style: none;
+	margin: 1rem auto;
+	padding: 0;
+	justify-content: center;
+	gap : 1rem;
+	}	
+	
+.cards_item{
+	display: flex;
+	width: 100%;
+	max-width: 300px;
+	}
+	
+.card{
+	
+	display:flex;
+	flex-direction: column;
+	overflow: hidden;
+	width: 100%;
+	
+}
+
+.card_image{
+	display:flex;
+	justify-content: center;	
+}
+	
+.card_image img{
+	width: 100%;
+	height: auto;
+	object-fit: contain;
+	max-width:12rem;
+	max-height: 12rem;
+	
+
+}
+
+.card_content{
+	padding: 1rem;
+	flex-grow: 1;
+	background-color: #81e3e3;
+	border-radius: 1rem;
+	
+	
+ }
+
+.card_title{
+	font-size: 1.1rem;
+	font-weight: bold;
+	margin-bottom: 0.5rem;
+	text-align: center;
+}
+
+.card_text p{
+	margin: 0.25rem 0;
+	font-size: 0.95rem;
+	color:  #333;
+}	
+
+
+.filters li {
+	padding: 0.5rem;
+	width: 100%;
+	
+}
+
+.filters label{
+	font-weight: bold;
+	
+}
+
+.filters input[type="text"], select{
+	width: 100%;
+	padding: 0.5rem;
+	font-size: 0.95rem;
+	border: 1px solid black;
+	border-radius: 4px;
+	max-width:18rem;
+
+}
+
+.filters button{
+	width: 100%;
+	padding:0.6rem;
+	font-weight: bold;
+	border-radius: 4px;
+	cursor: pointer;
+	max-width:19rem;
+}
+
+.filters input[type="checkbox"], input[type="radio"]{
+	margin: 0.4rem;
+}
+
+@media screen and (min-width: 600px) {
+  .cards_item {
+    width: 48%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .cards_item {
+    width: 30%;
+  }
+}
+	
+	
+@media screen and (max-width: 768px) {
+	
+form{
+	
+	justify-content: center;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+
+	
+}	
+
+	
+ul.form-list, .table{
+	max-width: 100%;
+	padding:0 1rem;
+	
+}	
+	
+.form-list input, span, textarea{
+	display:block;
+	width:100%;
+	max-width:26rem;	
+	margin: 5px auto;
+}	
+.form-list label{
+	display:inline-block;
+	min-width:15rem;
+	margin: 5px 5px;
+}
+ 
+ li{
+	display: block;
+	margin-bottom: 1rem;
+	max-width:20rem;
+	width:100%;
+	
+}
+table{
+	width:100%;
+	border-collapse:collapse;
+	table-layout: auto;
+	min-width: 300px;
+	font-size:0.9rem;
+}
+th, td{
+	padding: 0.5rem;
+}
+
+}
 	

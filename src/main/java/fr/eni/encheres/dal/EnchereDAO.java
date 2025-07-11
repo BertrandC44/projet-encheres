@@ -29,7 +29,10 @@ public interface EnchereDAO {
 	
 	long idUtilisateurVendeur(long idArticle);
 	
-
+	void majEtatVente(long idArticle);
 	
+	int creditUtilisateurVendeur(long idArticle);
+	
+	void deleteEnchere(long idArticle);
 
 }

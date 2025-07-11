@@ -14,7 +14,7 @@
   
   
   <!-- Formulaire 1 : choix de catégorie -->
- <form th:action="@{/encheres/vente}" method="post" th:object="${article}" class="login-form">
+ <form th:action="@{/encheres/vente}" method="post" th:object="${article}" class="login-form" enctype="multipart/form-data">
   <h2>Nouvelle vente</h2>
   <br>
  <ul class="form-list">
@@ -31,35 +31,22 @@
   		</select>
   	</li>
 
+<<<<<<< HEAD
+=======
   	<!-- <li th:if="${article.categorie != null}">
    		<img th:src="@{'/images/' + ${article.categorie.image}}" alt="Image catégorie" width="150" /> 
   	</li>-->
   	
   	
-  	<!--  <li>
-	<label for="fichier">Fichier</label>
-   		<input type="file" id="fichier" name="fichier" th:field="*{image}>"
+>>>>>>> b5df0ade690d028ea7fc81600bfb648f02434b8b
+  	<li>
+	 <label for="fichier">Fichier</label>
+   		<input type="file" id="fichier" name="fichier">
    		<div class="preview"></div>
-   	</li> -->
+   	</li>
     	
-    	
-    	
-    	
-    	
-<!-- 
-	<li>
-  		<button class="form-button" type="submit" name="action" value="categorieChoisie">Valider la catégorie</button>
-  	</li>
-  	 
   
-</form>
-  -->
   <br><br>
-  
-  <!-- Formulaire 2 : reste des infos 
-  <form th:action="@{/encheres/vente}"  method="post" th:object="${article}">
--->
-  	
   		<li>
     		<label for="article">Article : </label>
     		<input type="text" id="article" name="nomArticle" th:field="*{nomArticle}">
@@ -122,7 +109,7 @@
 </main>
 
 
-<!--  <script>
+<script>
 
 var input = document.querySelector("input");
 var preview = document.querySelector(".preview");
@@ -145,7 +132,7 @@ function viderAppercu() {
     preview.appendChild(image);
 }
 
-</script>-->
+</script>
 
 
 </body>

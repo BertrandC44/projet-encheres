@@ -11,8 +11,12 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import fr.eni.encheres.bo.Utilisateur;
-import fr.eni.encheres.exception.BusinessException;
 
+/**
+ * Implémentation du DAO pour la gestion des utilisateurs.
+ * Fournit des opérations CRUD, ainsi que des vérifications métier spécifiques
+ * telles que la validation du pseudo, de l’email ou du statut administrateur.
+ */
 @Repository
 public class UtilisateurDAOImpl implements UtilisateurDAO{
 
@@ -35,15 +39,31 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+	/**
+     * Constructeur avec injection du NamedParameterJdbcTemplate.
+     *
+     * @param namedParameterJdbcTemplate template JDBC à utiliser.
+     */
 	public UtilisateurDAOImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
 
+	/**
+     * Récupère tous les utilisateurs de la base.
+     *
+     * @return liste complète des utilisateurs.
+     */
 	@Override
 	public List<Utilisateur> consulterUtilisateurs() {
 		return namedParameterJdbcTemplate.query(FIND_ALL, new BeanPropertyRowMapper<>(Utilisateur.class));
 	}
 
+	/**
+     * Récupère un utilisateur via son identifiant.
+     *
+     * @param idUtilisateur identifiant unique.
+     * @return utilisateur correspondant.
+     */
 	@Override
 	public Utilisateur utilisateurparId(long idUtilisateur) {
 
@@ -53,6 +73,12 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		return namedParameterJdbcTemplate.queryForObject(FIND_BY_ID, map, new BeanPropertyRowMapper<>(Utilisateur.class));
 	}
 	
+	/**
+     * Récupère un utilisateur via son email.
+     * 
+     * @param email adresse e-mail.
+     * @return utilisateur ou null si non trouvé.
+     */
 	@Override
 	public Utilisateur utilisateurparEmail(String email) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -64,7 +90,12 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 	    }
 	}
 	
-	
+	/**
+     * Récupère un utilisateur via son pseudo.
+     *
+     * @param pseudo identifiant public.
+     * @return utilisateur ou null si non trouvé.
+     */
 	@Override
 	public Utilisateur utilisateurParPseudo(String pseudo) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -76,6 +107,11 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 	    }
 	}
 	
+	/**
+     * Modifie les informations d’un utilisateur existant.
+     *
+     * @param utilisateur instance à mettre à jour.
+     */
 	@Override
 	public void modifierUtilisateur(Utilisateur utilisateur) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -92,6 +128,11 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		this.namedParameterJdbcTemplate.update(UPDATE_UTILISATEUR, map);
 	}
 
+	/**
+     * Crée un nouvel utilisateur en base avec crédit initial et statut non administrateur.
+     *
+     * @param utilisateur utilisateur à insérer.
+     */
 	@Override
 	public void creerUtilisateur(Utilisateur utilisateur) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -118,6 +159,11 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		
 	}
 
+	/**
+     * Supprime un utilisateur selon son identifiant.
+     *
+     * @param utilisateur utilisateur à supprimer.
+     */
 	@Override
 	public void supprimerUtilisateur(Utilisateur utilisateur) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -126,6 +172,12 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		namedParameterJdbcTemplate.update(DELETE_BY_ID, map);
 	}
 
+	/**
+     * Récupère le crédit actuel d’un utilisateur.
+     *
+     * @param utilisateur utilisateur concerné.
+     * @return montant du crédit.
+     */
 	@Override
 	public int consulterCredit(Utilisateur utilisateur) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -135,9 +187,12 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 
 	}
 	
-
-
-
+	/**
+     * Met à jour le crédit d’un utilisateur.
+     *
+     * @param credit nouveau solde.
+     * @param idUtilisateur identifiant du bénéficiaire.
+     */
 	@Override
 	public void majCredit(int credit, long idUtilisateur) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -148,6 +203,12 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		
 	}
 
+	/**
+     * Vérifie si un email est disponible (non utilisé).
+     *
+     * @param email adresse à vérifier.
+     * @return true si libre, false sinon.
+     */
 	@Override
 	public boolean isEmailValide(String email) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -157,6 +218,12 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		return nbEmail ==0 ;
 	}
 	
+	 /**
+     * Vérifie si un pseudo est disponible (non utilisé).
+     *
+     * @param pseudo nom à vérifier.
+     * @return true si libre, false sinon.
+     */
 	@Override
 	public boolean isPseudoValide(String pseudo) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -166,6 +233,12 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		return nbPseudo == 0 ;
 	}
 
+	 /**
+     * Vérifie si un compte existe pour un pseudo donné.
+     *
+     * @param pseudo identifiant à tester.
+     * @return true si existant, false sinon.
+     */
 	@Override
 	public boolean isExist(String pseudo) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -175,6 +248,12 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		return nbCompte ==1;
 	}
 
+	/**
+     * Vérifie si un utilisateur est administrateur du site.
+     *
+     * @param idUtilisateur identifiant à tester.
+     * @return true si administrateur, false sinon.
+     */
 	@Override
 	public boolean isAdmin(long idUtilisateur) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -185,6 +264,12 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		return isAdmin == 1;
 	}
 
+	/**
+     * Récupère le mot de passe associé à un pseudo.
+     *
+     * @param pseudo identifiant utilisateur.
+     * @return mot de passe en clair.
+     */
 	@Override
 	public String consulterMdp(String pseudo) {
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -192,31 +277,6 @@ public class UtilisateurDAOImpl implements UtilisateurDAO{
 		
 		return namedParameterJdbcTemplate.queryForObject(FIND_MDP_BY_PSEUDO, map, String.class);
 	}
-
-
-
-	
-	/*class UtilisateurRowMapper implements RowMapper<Utilisateur>{
-
-		@SuppressWarnings("unchecked")
-		@Override
-		public Utilisateur mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Utilisateur u = new Utilisateur();
-			u.setPseudo(rs.getString("pseudo"));
-			u.setNom(rs.getString("nom"));
-			u.setPrenom(rs.getString("prenom"));
-			u.setEmail(rs.getString("email"));
-			
-			Article article = new Article();
-			article.setIdArticle(rs.getLong("idArticle"));
-			
-			u.setArticles((List<Article>) article);
-			return u;
-		}
-		
-	}*/
-	
-	
 
 
 }
