@@ -228,3 +228,14 @@ public class UtilisateurController {
 	  }
 	
 }
+	  /*  @PostMapping("/encheres/mdpOublie")
+	    	public String mdpOubliePost(@RequestParam(name = "email") String email, @Valid @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
+                    BindingResult bindingResult, BusinessException be) {
+	    	if(utilisateurService.consulterUtilisateurparEmail(email).equals(email)) {	
+	    		Utilisateur utilisateur
+	    	}
+	    	}
+	    }*/
+
+
+
