@@ -43,6 +43,7 @@ public class EncheresServiceImpl implements EncheresService{
 	}
 
 
+
 	// méthode pour assigner l'image en fonction de l'id de la catégorie
 	
     /**
@@ -62,6 +63,7 @@ public class EncheresServiceImpl implements EncheresService{
 	    }
 	}
 	
+
 	
 
 
@@ -192,7 +194,7 @@ public class EncheresServiceImpl implements EncheresService{
 		Retrait retrait = article.getRetrait();
 		retraitDAO.supprimerRetrait(retrait, article.getIdArticle());
 		articleDAO.annulerVente(article);
-		
+
 	}
 	
 	/**

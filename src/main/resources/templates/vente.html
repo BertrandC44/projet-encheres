@@ -13,7 +13,6 @@
 <main>
   
   
-  <!-- Formulaire 1 : choix de catégorie -->
  <form th:action="@{/encheres/vente}" method="post" th:object="${article}" class="login-form" enctype="multipart/form-data">
   <h2>Nouvelle vente</h2>
   <br>
@@ -31,22 +30,18 @@
   		</select>
   	</li>
 
-<<<<<<< HEAD
-=======
   	<!-- <li th:if="${article.categorie != null}">
    		<img th:src="@{'/images/' + ${article.categorie.image}}" alt="Image catégorie" width="150" /> 
   	</li>-->
-  	
-  	
->>>>>>> b5df0ade690d028ea7fc81600bfb648f02434b8b
+
   	<li>
 	 <label for="fichier">Fichier</label>
    		<input type="file" id="fichier" name="fichier">
    		<div class="preview"></div>
    	</li>
-    	
-  
+
   <br><br>
+
   		<li>
     		<label for="article">Article : </label>
     		<input type="text" id="article" name="nomArticle" th:field="*{nomArticle}">
@@ -111,23 +106,24 @@
 
 <script>
 
-var input = document.querySelector("input");
-var preview = document.querySelector(".preview");
+input = document.querySelector("input");
+preview = document.querySelector(".preview");
 
 input.addEventListener("change", viderAppercu);
 
 function viderAppercu() {
   preview.innerHTML = "";
 
-  var fichierSelection = input.files;
+  fichierSelection = input.files;
   if (fichierSelection.length === 0) {
 	return
   }
   
-  var fichier = fichierSelection[0];
+  fichier = fichierSelection[0];
 
 
-    var image = document.createElement("img");
+    image = document.createElement("img");
+    image.width = 150;
     image.src = window.URL.createObjectURL(fichier);
     preview.appendChild(image);
 }

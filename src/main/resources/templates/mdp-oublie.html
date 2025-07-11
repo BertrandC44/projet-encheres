@@ -17,8 +17,15 @@
 	<main>
  
 
-		<form class="login-form" th:action="@{/encheres/mdpOublie}" method="post" th:object="${utilisateurEnSession}">
+
+		<form class="login-form" th:action="@{/encheres/mdp-oublie}" method="post" th:object="${utilisateurEnSession}">
+		
 		<h1>Mot de passe oublié</h1>
+		<div th:if="${error}"  th:text="${error}"></div>
+		<div th:if="${success}"  th:text="${success}"></div>
+            		<p th:errors="*{global}"></p>
+    		</div>
+
 		<p class="erreur" th:if="${#fields.hasErrors('email')}" th:errors="email"></p>
 		
 			<ul class= "form-list">
@@ -28,7 +35,11 @@
 					<input type="text" placeholder="email" id="email" name="email" class="form-control" autofocus>
 				</li>
 				
-				
+				<li class="form-input">
+            <label for="motDePasse">Nouveau mot de passe :</label>
+            <input type="password" placeholder="mot de passe" id="motDePasse" name="motDePasse" class="form-control" required>
+        </li>
+
 				<li>
 					<button type="submit" class="form-button">Valider</button>  
 				</li>

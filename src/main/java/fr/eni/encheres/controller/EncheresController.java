@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+
 import fr.eni.encheres.bll.EncheresService;
 
 import fr.eni.encheres.bll.ImageService;
@@ -34,12 +37,9 @@ public class EncheresController {
 	private EncheresService encheresService;
 	private ImageService imageService;
 
-
 	public EncheresController(EncheresService encheresService, ImageService imageService) {
 		this.encheresService = encheresService;
 		this.imageService = imageService;
-
-
 	}
 
 	@GetMapping("/")
@@ -150,6 +150,9 @@ public class EncheresController {
 		    }
 
 		    String telephone = utilisateur.getTelephone();
+
+
+		    String telephone = utilisateur.getTelephone();
 		    model.addAttribute("miseAPrix", miseAPrix);
 		    LocalDate now = LocalDate.now();
 		    LocalDate debut = article.getDateDebutEncheres();
@@ -158,7 +161,9 @@ public class EncheresController {
 		    model.addAttribute("montantMax", montantMax);
 		    String utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle);
 
+
 		    model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);  
+
 		    model.addAttribute("enchereMin", enchereMin);
 		    long idUtilisateurMontantMax = encheresService.idUtilisateurMontantMax(idArticle);
 		    model.addAttribute("idUtilisateurMontantMax", idUtilisateurMontantMax); 
@@ -172,6 +177,7 @@ public class EncheresController {
 			    LocalDate dateFin = article.getDateFinEncheres();
 
 			    if (dateFin != null && (dateFin.isBefore(now) || dateFin.isEqual(now))) {
+
 
 			        return "acquisition"; 
 			    }
@@ -217,20 +223,13 @@ public class EncheresController {
 				    bindingResult.addError(new ObjectError("globalError", message));
 					});
 
-
-				}
+			}
 			 	montantMax = encheresService.montantMax(idArticle);
 			 	utilisateurMontantMax = encheresService.utilisateurMontantMax(idArticle) ;
 				model.addAttribute("montantMax", montantMax);
 				model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);
-
 				    return "encherir";
 				}
-
-			}
-
-
-	
 
 
 	@PostMapping("/encheres/acquisition")
@@ -244,11 +243,11 @@ public class EncheresController {
 	    encheresService.annulerVente(article);
 		return "redirect:/encheres";
 	}
-	
-	
+
 	@GetMapping("/encheres/modifier")
 	public String pageModifierVente(@RequestParam("idArticle") long idArticle, Model model) {
 		model.addAttribute("dateActuelle", LocalDate.now());
+
 	    Article article = encheresService.consulterArticleParId(idArticle);
 	    model.addAttribute("article", article);
 	    List<Categorie> categories = encheresService.consulterCategories();
@@ -257,9 +256,21 @@ public class EncheresController {
 	}
 	
 	@PostMapping("/encheres/modifier/ok")
-	public String modifierVente( @ModelAttribute("article") Article article,Model model) {
+	public String modifierVente( @ModelAttribute("article") Article article,Model model,@RequestParam("fichier") MultipartFile file) {
 		long idArticle = article.getIdArticle();
 		
+		String imageNom = "";
+		 
+		if (!file.isEmpty()) {
+			String uploadDirectory = "src/main/resources/static/images";
+			try {
+				imageNom = imageService.sauvegarderImage(uploadDirectory, file);
+				article.setImage(imageNom);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 		Retrait retrait = new Retrait();
 		retrait.setRue(article.getRetrait().getRue());
 		retrait.setCodePostal(article.getRetrait().getCodePostal());
@@ -286,15 +297,6 @@ public class EncheresController {
 		return "redirect:/encheres";
 	}
 
-	
-	
-	@GetMapping("/encheres/modifier")
-	public String pageModifierEnchere(@RequestParam("idArticle") long idArticle, Model model) {
-	    Article article = encheresService.consulterArticleParId(idArticle);
-	    model.addAttribute("article", article);
-	    return "enchere-modifier";
-	}
-
 
 	@GetMapping("/encheres/vente")
 	public String vente(@ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,  Model model) {
@@ -309,12 +311,6 @@ public class EncheresController {
 		return "vente";
 	}
 
-    @GetMapping("/encheres/detail")
-    public String afficherDetailEnchere(@RequestParam(name="id") long idArticle, Model model) {
-        Article article = encheresService.consulterArticleParId(idArticle);
-        model.addAttribute("article", article);
-        return "enchere-en-cours";
-    }
 
 	@PostMapping("/encheres/vente")
 	public String creerArticle(@ModelAttribute Article article,

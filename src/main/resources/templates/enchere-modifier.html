@@ -23,7 +23,7 @@
  
 
 
-	<form class="object-form" th:action="@{/encheres/modifier/ok}" method="post" th:object="${article}">
+	<form class="object-form" th:action="@{/encheres/modifier/ok}" method="post" th:object="${article}" enctype="multipart/form-data">
 
 		<h1>Détail de la vente</h1>
 
@@ -36,17 +36,22 @@
 		<input type="hidden" name="utilisateurEnSession" th:value="${utilisateurEnSession}" />
 		 -->
 
-
 		<h2 th:text="*{nomArticle}"></h2> 
-
 
 		<ul class="form-list">
 
 			<li>
 
-			<img class="img-enchere" th:src="@{${'/images/'+ article.image}}" alt="photo de la catégorie de l'article" width="100"/>
+			<img class="img-enchere" th:src="@{${'/images/'+ article.image}}" alt="photo de l'article" width="100"/>
 
-			</li>
+      </li>
+			
+			<li>
+	 			<label for="fichier">Fichier</label>
+   				<input type="file" id="fichier" name="fichier">
+   				<div class="preview"></div>
+   			</li>
+			
 			<!-- 
 			<li>
 				<div th:if="${#fields.hasErrors('global')}" class="erreur">
@@ -72,7 +77,9 @@
 			
 			<li>
 		  		<label for="idCategorie">Catégorie</label>
-		  		<select id="idCategorie" name="idCategorie" th:field="*{categorie.idCategorie}">
+
+		  		<select class="selectCategorie" id="idCategorie" name="idCategorie" th:field="*{categorie.idCategorie}">
+
 		    	  	<option value =0 disabled> Choisir une catégorie</option>
 		    		<option th:each="c : ${categorie}" 
 		            	th:value="${c.idCategorie}" 
@@ -116,13 +123,10 @@
 	    		<input type="text" id="ville"  th:field="*{retrait.ville}">
 	    	</li>  
 			
-			
-
 			<li>
 				<label for="vendeur">Vendeur : </label>
 
 				<span>
-
 
 				<a id="utilisateur" th:text="*{utilisateur.pseudo}"th:href="@{'/encheres/profil'(pseudo=${article.utilisateur.pseudo})}"></a>
 				</span>
@@ -195,7 +199,33 @@
 				 	});
 				
 				 	
-				 </script>
+</script>
+<script>
+
+input = document.querySelector("input");
+preview = document.querySelector(".preview");
+
+input.addEventListener("change", viderAppercu);
+
+function viderAppercu() {
+  preview.innerHTML = "";
+
+  fichierSelection = input.files;
+  if (fichierSelection.length === 0) {
+	return
+  }
+  
+  fichier = fichierSelection[0];
+
+
+    image = document.createElement("img");
+    image.width = 150;
+    image.src = window.URL.createObjectURL(fichier);
+    preview.appendChild(image);
+}
+
+</script>
+		
 
 </body>
 </html>>
