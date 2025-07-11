@@ -3,6 +3,7 @@ package fr.eni.encheres.bo;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Article {
 
@@ -156,6 +157,18 @@ public class Article {
 		this.image = image;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) return true;
+	    if (obj == null || getClass() != obj.getClass()) return false;
+	    Article article = (Article) obj;
+	    return idArticle == article.idArticle; // ou getId() si vous utilisez un getter
+	}
+ 
+	@Override
+	public int hashCode() {
+	    return Objects.hash(idArticle); // id doit être l'identifiant unique de l'article
+	}
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

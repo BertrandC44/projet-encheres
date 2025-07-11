@@ -2,7 +2,9 @@ package fr.eni.encheres.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.time.LocalDate;
 
 import org.springframework.stereotype.Controller;
@@ -63,66 +65,69 @@ public class EncheresController {
 			@RequestParam(name = "ventes", required = false) List<String> ventes,
 			@RequestParam(name = "categorie", required = false) String categorie,
 			@RequestParam(name = "motCle", required = false) String motCle) {
-
+ 
 		List<Categorie> categories = encheresService.consulterCategories();
-		List<Article> articles = new ArrayList<Article>();
+		//List<Article> articles = new ArrayList<Article>();
+		Set<Article> articlesSet = new HashSet<>();
 		
 		if (achats == null && ventes == null && categorie.equals("0") && motCle.equals("")) {
 					return "redirect:/encheres";	
 		}
-
+ 
 		if (utilisateurEnSession.getIdUtilisateur() != 0) {
 			if (achats != null) {
 				for (String a : achats) {
 					if ("eO".equals(a)) {
-						articles.addAll(encheresService
+						articlesSet.addAll(encheresService
 								.consulterArticleEncheresEnCours(utilisateurEnSession.getIdUtilisateur()));
 					}
 					if ("eEc".equals(a)) {
-						articles.addAll(encheresService
+						articlesSet.addAll(encheresService
 								.consulterArticleMesEncheresEnCours(utilisateurEnSession.getIdUtilisateur()));
 					}
 					if ("eE".equals(a)) {
-						articles.addAll(encheresService
+						articlesSet.addAll(encheresService
 								.consulterArticleMesEncheresRemportees(utilisateurEnSession.getIdUtilisateur()));
 					}
 				}
 			}
-
+ 
 			if (ventes != null) {
 				for (String v : ventes) {
-
+ 
 					if ("vEc".equals(v)) {
-						articles.addAll(encheresService
+						articlesSet.addAll(encheresService
 								.consulterArticleMesVentesEnCours(utilisateurEnSession.getIdUtilisateur()));
 					}
 					if ("vNd".equals(v)) {
-						articles.addAll(encheresService
+						articlesSet.addAll(encheresService
 								.consulterArticleMesVentesFutures(utilisateurEnSession.getIdUtilisateur()));
 					}
 					if ("vT".equals(v)) {
-						articles.addAll(encheresService
+						articlesSet.addAll(encheresService
 								.consulterArticleMesVentesTerminees(utilisateurEnSession.getIdUtilisateur()));
 					}
 				}
 			}
-
+ 
 		}
-
+ 
 		if (categorie != null && categorie != "0") {
-			articles.addAll(encheresService.consulterArticleParIdCategorie(Long.parseLong(categorie)));
-
+			articlesSet.addAll(encheresService.consulterArticleParIdCategorie(Long.parseLong(categorie)));
+ 
 		}
-
+ 
 		if (motCle != null && motCle != "") {
-			articles.addAll(encheresService.consulterArticleParMotCle(motCle));
-
+			articlesSet.addAll(encheresService.consulterArticleParMotCle(motCle));
+ 
 		}
-
+		
+	    List<Article> articles = new ArrayList<>(articlesSet);
+		
 		model.addAttribute("articles", articles);
 		model.addAttribute("categorie", categories);
 		return "encheres";
-
+ 
 	}
 
 	@GetMapping("/encheres/encherir")
