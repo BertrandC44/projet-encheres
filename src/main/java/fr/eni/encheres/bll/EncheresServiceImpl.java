@@ -41,7 +41,31 @@ public class EncheresServiceImpl implements EncheresService{
 		this.utilisateurDAO = utilisateurDAO;
 		this.retraitDAO = retraitDAO;
 	}
+
+
+
+	// méthode pour assigner l'image en fonction de l'id de la catégorie
 	
+    /**
+     * Assigne une image à une catégorie en fonction de son ID.
+     * 
+     * @param c La catégorie à laquelle assigner une image.
+     */
+	private void assignerImageCategorie(Categorie c) {
+	    if (c != null) {
+	        switch ((int) c.getIdCategorie()) {
+	            case 1 -> c.setImage("clavier.jpg");
+	            case 2 -> c.setImage("chaise-en-bois.jpg");
+	            case 3 -> c.setImage("tondeuse.png");
+	            case 4 -> c.setImage("tennis.png");
+	            default -> c.setImage("default.jpg");
+	        }
+	    }
+	}
+	
+
+	
+
 
 
     /**
@@ -170,7 +194,7 @@ public class EncheresServiceImpl implements EncheresService{
 		Retrait retrait = article.getRetrait();
 		retraitDAO.supprimerRetrait(retrait, article.getIdArticle());
 		articleDAO.annulerVente(article);
-		
+
 	}
 	
 	/**
@@ -188,6 +212,7 @@ public class EncheresServiceImpl implements EncheresService{
 		retraitDAO.modifierRetrait(retrait, article.getIdArticle());
 		
 	}
+
 
 
    /**
@@ -526,6 +551,28 @@ public class EncheresServiceImpl implements EncheresService{
 	@Override
 	public void majEtatVente(long idArticle) {
 		enchereDAO.majEtatVente(idArticle);
+		
+	}
+
+
+
+	@Override
+	public void creditervendeur(int montantEnchere, long idArticle) {
+		utilisateurDAO.majCredit(montantEnchere, idArticle);
+	}
+
+
+
+	@Override
+	public int creditUtilisateurVendeur(long idUtilisateur) {
+		return enchereDAO.creditUtilisateurVendeur(idUtilisateur);
+	}
+
+
+
+	@Override
+	public void deleteEnchere(long idArticle) {
+		enchereDAO.deleteEnchere(idArticle);
 		
 	}
 
