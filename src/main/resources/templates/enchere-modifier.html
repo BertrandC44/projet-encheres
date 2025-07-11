@@ -22,13 +22,16 @@
 <main>
  
 
+
 	<form class="object-form" th:action="@{/encheres/modifier/ok}" method="post" th:object="${article}" enctype="multipart/form-data">
+
 		<h1>Détail de la vente</h1>
 
 		<input type="hidden" name="dateEnchere" th:value="${dateEnchere}" /> 
 
 		
 		  <input type="hidden" name="idArticle" th:value="*{idArticle}" />
+
 		 <!--
 		<input type="hidden" name="utilisateurEnSession" th:value="${utilisateurEnSession}" />
 		 -->
@@ -38,8 +41,10 @@
 		<ul class="form-list">
 
 			<li>
+
 			<img class="img-enchere" th:src="@{${'/images/'+ article.image}}" alt="photo de l'article" width="100"/>
-			</li>
+
+      </li>
 			
 			<li>
 	 			<label for="fichier">Fichier</label>
@@ -57,6 +62,7 @@
 	    		</div>
 	    	</li>
 	    	 -->
+
 	    	 <li>
     			<label for="nomArticle">Article : </label>
     			<input type="text" id="article" name="nomArticle" th:field="*{nomArticle}">
@@ -71,7 +77,9 @@
 			
 			<li>
 		  		<label for="idCategorie">Catégorie</label>
+
 		  		<select class="selectCategorie" id="idCategorie" name="idCategorie" th:field="*{categorie.idCategorie}">
+
 		    	  	<option value =0 disabled> Choisir une catégorie</option>
 		    		<option th:each="c : ${categorie}" 
 		            	th:value="${c.idCategorie}" 
@@ -115,7 +123,6 @@
 	    		<input type="text" id="ville"  th:field="*{retrait.ville}">
 	    	</li>  
 			
-			
 			<li>
 				<label for="vendeur">Vendeur : </label>
 
@@ -147,9 +154,7 @@
 			</form>
 			
 			</ul>	
-			
-		
-	
+
 </main>
 
 <script>
