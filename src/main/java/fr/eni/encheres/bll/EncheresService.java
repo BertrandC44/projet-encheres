@@ -67,5 +67,13 @@ public interface EncheresService {
 	
 	void majEtatVente(long idArticle);
 
+	
+	void creditervendeur(int montantEnchere,long idArticle);
+	
+	int creditUtilisateurVendeur(long idUtilisateur);
+	
+	void deleteEnchere(long idArticle);
+
+
 }
 
