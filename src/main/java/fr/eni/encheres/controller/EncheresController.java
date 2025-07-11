@@ -150,9 +150,6 @@ public class EncheresController {
 		    }
 
 		    String telephone = utilisateur.getTelephone();
-
-
-		    String telephone = utilisateur.getTelephone();
 		    model.addAttribute("miseAPrix", miseAPrix);
 		    LocalDate now = LocalDate.now();
 		    LocalDate debut = article.getDateDebutEncheres();
@@ -230,6 +227,7 @@ public class EncheresController {
 				model.addAttribute("utilisateurMontantMax", utilisateurMontantMax);
 				    return "encherir";
 				}
+	}
 
 
 	@PostMapping("/encheres/acquisition")
