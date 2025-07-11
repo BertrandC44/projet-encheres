@@ -167,8 +167,10 @@ display:inline-block;
 }
 	
 .card_image img{
+
 	height: 150px;
 	width: auto;
+
 	object-fit: contain;
 	max-width:12rem;
 	max-height: 12rem;
@@ -233,6 +235,7 @@ display:inline-block;
 	margin: 0.4rem;
 }
 
+
 .selectCategorie{
 	width:63%;
 	padding: 0;
@@ -241,7 +244,6 @@ display:inline-block;
 	border-radius: 0px;
 	max-width:18rem;
 }
-
 
 @media screen and (min-width: 600px) {
   .cards_item {

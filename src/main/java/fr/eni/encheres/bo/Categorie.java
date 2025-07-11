@@ -23,7 +23,6 @@ public class Categorie {
 
 
 	public Categorie(long idCategorie, String libelle, String image, List<Article> articles) {
-		super();
 		this.idCategorie = idCategorie;
 		this.libelle = libelle;
 		this.image = image;
